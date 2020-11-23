@@ -1,0 +1,23 @@
+{
+  "name": "buttsbot",
+  "version": "1.0.0",
+  "description": "I'm Buttbot! I say butt!",
+  "main": "./src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ducktrshessami/buttsbot.git"
+  },
+  "author": "ducktrshessami",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ducktrshessami/buttsbot/issues"
+  },
+  "homepage": "https://github.com/ducktrshessami/buttsbot#readme",
+  "dependencies": {
+    "bufferutil": "^4.0.2",
+    "discord-bot": "github:ducktrshessami/discord-bot",
+    "erlpack": "github:discord/erlpack",
+    "utf-8-validate": "^5.0.3",
+    "zlib-sync": "^0.1.7"
+  }
+}
