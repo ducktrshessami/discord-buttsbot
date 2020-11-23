@@ -14,8 +14,10 @@
   },
   "homepage": "https://github.com/ducktrshessami/buttsbot#readme",
   "dependencies": {
+    "discord-bot": "github:ducktrshessami/discord-bot"
+  },
+  "optionalDependencies": {
     "bufferutil": "^4.0.2",
-    "discord-bot": "github:ducktrshessami/discord-bot",
     "erlpack": "github:discord/erlpack",
     "utf-8-validate": "^5.0.3",
     "zlib-sync": "^0.1.7"
