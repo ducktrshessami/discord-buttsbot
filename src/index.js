@@ -1,19 +1,31 @@
+const fs = require("fs").promises;
 const readline = require("readline");
 const DiscordBot = require("discord-bot");
-const config = require("../cfg/config.json");
+var config = require("../cfg/config.json");
 
 const ios = new readline.Interface({
     input: process.stdin,
     output: process.stdout
 });
 
-let restartCmd = new DiscordBot.Command("restart", restart, { admin: true });
-let client = new DiscordBot(config, [ restartCmd ]);
+let commands = [
+    new DiscordBot.Command("restart", restart, { admin: true }),
+    new DiscordBot.Command("rate", changeRate, { usage: "@buttsbot rate [number]" })
+];
+let responses = [
+    new DiscordBot.Response(["buttsbot", "yes"], ":)"),
+    new DiscordBot.Response(["buttsbot", "no"], ":("),
+    new DiscordBot.Response("", "", checkButt, sendButt)
+];
+let client = new DiscordBot(config, commands, responses);
 
 // Client event handling
 client.on("ready", () => {
-    console.info("I'm logged in");
+    console.info(`Logged in as ${client.user.username}#${client.user.discriminator}`);
 });
+client.on("guildCreate", handleNewGuild);
+client.on("configUpdate", updateConfig);
+client.on("error", console.error);
 client.on("shardDisconnect", restart);
 
 // ios event handling
@@ -23,7 +35,52 @@ ios.on("line", (line) => {
     }
 });
 
+function handleNewGuild(guild) {
+    if (!config.servers[guild.id]) {
+        config.servers[guild.id] = { rate: config.defaultRate };
+    }
+}
+
+function updateConfig(cfg) {
+    config = cfg;
+    return fs.writeFile(`${__dirname}/../cfg/config.json`, JSON.stringify(config, null, 4) + "\n").catch(console.error);
+}
+
+function logMessage(message) {
+    console.log(`[${message.channel.guild.id}] ${message.author.username}#${message.author.discriminator}: ${message.cleanContent}`);
+}
+
+function sendMessage(channel, ...content) {
+    return channel.send(...content).then(logMessage).catch(console.error);
+}
+
 function restart() {
     ios.close();
-    this.client.destroy();
+    client.destroy();
+    throw "Logging off";
+}
+
+function changeRate(message, args) {
+    let n = parseInt(args[1]);
+    if (n && n > 0) {
+        config.servers[message.guild.id].rate = n;
+        updateConfig(config);
+        sendMessage(message.channel, `Buttify rate changed to one in every \`${config.servers[message.guild.id].rate}\` messages!`);
+    }
+    else {
+        sendMessage(message.channel, `I buttify roughly one in every \`${config.servers[message.guild.id].rate}\` messages!\nTo change this rate, use \`${this.usage}\`.\nDefault: \`${config.defaultRate}\``);
+    }
+}
+
+function checkButt(message) {
+    return !message.author.bot && message.guild && message.cleanContent && (Math.random() < (1 / config.servers[message.guild.id].rate));
+}
+
+function sendButt(message) {
+    logMessage(message);
+    sendMessage(message.channel, buttify(message.cleanContent));
+}
+
+function buttify(text) {
+    return "butts";
 }
