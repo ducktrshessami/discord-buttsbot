@@ -3,11 +3,16 @@ const syllablize = require("syllablize");
 // Main
 function buttify(original, rate) {
     const originWords = formatWords(original);
-    let buttWords;
-    do {
-        buttWords = originWords.map(wordObj => wordObj.type == "word" ? chanceButt(wordObj, rate) : copyObj(wordObj));
-    } while (compareWords(originWords, buttWords));
-    return handleCaps(originWords, buttWords).map(item => item.chars).join("");
+    if (originWords.some(item => item.type == "word")) {
+        let buttWords;
+        do {
+            buttWords = originWords.map(wordObj => wordObj.type == "word" ? chanceButt(wordObj, rate) : copyObj(wordObj));
+        } while (compareWords(originWords, buttWords));
+        return handleCaps(originWords, buttWords).map(item => item.chars).join("");
+    }
+    else {
+        return original;
+    }
 }
 
 // Roughly capitalize letters like the original
