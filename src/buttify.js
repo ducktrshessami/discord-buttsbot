@@ -1,42 +1,47 @@
 const syllablize = require("syllablize");
 
 function buttify(original, rate) {
-    const originWords = original.split(' ');
-    let buttWords = insertButt(originWords, rate);
-    return handleCaps(originWords, buttWords);
+    const originWords = formatWords(original);
+    let buttWords;
+    do {
+        buttWords = originWords.map(wordObj => wordObj.type == "word" ? chanceButt(wordObj, rate) : copyObj(wordObj));
+    } while (compareWords(originWords, buttWords));
+    return handleCaps(originWords, buttWords).map(item => item.chars).join("");
 }
 
 function handleCaps(originWords, buttWords) {
     for (let i = 0; i < originWords.length && i < buttWords.length; i++) {
-        let buttChars = buttWords[i].split("");
-        for (let j = 0; j < originWords[i].length && j < buttChars.length; j++) {
-            if (originWords[i].charCodeAt(j) >= 65 && originWords[i].charCodeAt(j) <= 90) {
-                buttChars[j] = buttChars[j].toUpperCase();
+        if (originWords[i].type == "word") {
+            let buttChars = buttWords[i].chars.split("");
+            for (let j = 0; j < originWords[i].chars.length && j < buttChars.length; j++) {
+                if (originWords[i].chars.charCodeAt(j) >= 65 && originWords[i].chars.charCodeAt(j) <= 90) {
+                    buttChars[j] = buttChars[j].toUpperCase();
+                }
             }
+            buttWords[i].chars = buttChars.join("");
         }
-        buttWords[i] = buttChars.join("");
     }
     return buttWords;
 }
 
-function insertButt(originWords, rate) {
-    const originSyl = originWords.map(syllablize);
+function chanceButt(wordObj, rate) {
+    const originSyl = syllablize(wordObj.chars);
     let buttSyl;
-    do {
-        buttSyl = originSyl.map(word => word.map(syl => {
-            if (Math.random() < 1 / rate) {
-                switch (syl[syl.length - 1]) {
-                    case 's':
-                    case 'z':
-                        return "butt" + syl[syl.length - 1];
-                    default:
-                        return "butt";
-                }
+    wordObj = copyObj(wordObj);
+    buttSyl = originSyl.map(syl => {
+        if (Math.random() < 1 / rate) {
+            switch (syl[syl.length - 1]) {
+                case 's':
+                case 'z':
+                    return "butt" + syl[syl.length - 1];
+                default:
+                    return "butt";
             }
-            return syl;
-        }));
-    } while (arrEqual(originSyl, buttSyl));
-    return buttSyl.map(syl => syl.join(""));
+        }
+        return syl;
+    });
+    wordObj.chars = buttSyl.join("");
+    return wordObj;
 }
 
 function formatWords(str) {
@@ -74,13 +79,16 @@ function formatWords(str) {
     return result;
 }
 
-function arrEqual(a, b) {
-    if (a.length === b.length) {
-        return a.every((n, i) => Array.isArray(n) && Array.isArray(b[i]) ? arrEqual(n, b[i]) : n === b[i]);
+function copyObj(obj) {
+    let foo = {};
+    for (let key in obj) {
+        foo[key] = obj[key];
     }
-    else {
-        return false;
-    }
+    return foo;
+}
+
+function compareWords(a, b) {
+    return a.map(item => item.chars).join("").toLowerCase() === b.map(item => item.chars).join("").toLowerCase();
 }
 
 module.exports = buttify;
