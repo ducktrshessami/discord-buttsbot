@@ -1,21 +1,8 @@
 const syllablize = require("syllablize");
 
 function buttify(original, rate) {
-    const original = message.cleanContent.split(' ');
-    let butts = Math.ceil(Math.random() * config.servers[message.guild.id].max);
-    let syllables = original.map(syllablize);
-    let buttified;
-    for (let i = 0; i < butts; i++) {
-        let x, y, check;
-        do {
-            check = syllables.every(word => word.every(syl => syl.includes("butt")));
-            x = Math.floor(Math.random() * syllables.length);
-            y = Math.floor(Math.random() * syllables[x].length);
-        } while (!check && syllables[x][y].includes("butt"));
-        if (!check) {
-            syllables[x][y] = syllables[x][y][syllables[x][y].length - 1] == "s" ? "butts" : "butt";
-        }
-    }
+    const originWords = message.cleanContent.split(' ');
+    let syllables = originWords.map(syllablize);
     buttified = syllables.map(word => word.join("").split(""));
     for (let i = 0; i < original.length && i < buttified.length; i++) {
         for (let j = 0; j < original[i].length && j < buttified[i].length; j++) {
@@ -23,6 +10,35 @@ function buttify(original, rate) {
                 buttified[i][j] = buttified[i][j].toUpperCase();
             }
         }
+    }
+}
+
+function insertButt(originWords, rate) {
+    const originSyl = originWords.map(syllablize);
+    let buttSyl;
+    do {
+        buttSyl = originSyl.map(word => word.map(syl => {
+            if (Math.random() < 1 / rate) {
+                switch (syl[syl.length - 1]) {
+                    case 's':
+                    case 'z':
+                        return "butt" + syl[syl.length - 1];
+                    default:
+                        return "butt";
+                }
+            }
+            return syl;
+        }));
+    } while (arrEqual(originSyl, buttSyl));
+    return buttSyl.map(syl => syl.join(""));
+}
+
+function arrEqual(a, b) {
+    if (a.length === b.length) {
+        return a.every((n, i) => Array.isArray(n) && Array.isArray(b[i]) ? arrEqual(n, b[i]) : n === b[i]);
+    }
+    else {
+        return false;
     }
 }
 
