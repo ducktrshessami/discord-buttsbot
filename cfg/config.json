@@ -2,5 +2,9 @@
     "token": "",
     "admin": [
         ""
-    ]
+    ],
+    "default": {
+        "rate": 30,
+        "max": 10
+    }
 }
