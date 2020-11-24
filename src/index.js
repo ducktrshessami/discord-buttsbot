@@ -87,8 +87,14 @@ function checkButt(message) {
 
 function sendButt(message) {
     let buttified = buttify(message.cleanContent, config.servers[message.guild.id].max)
-    if (buttified != message.cleanContent && buttified.toLowerCase() != "butt" && buttified.toLowerCase() != "butts") {
+    if (verifyButt(buttified)) {
         logMessage(message);
-        sendMessage(message.channel, buttified.map(butt => butt.join("")).join(' '));
+        sendMessage(message.channel, buttified);
     }
+}
+
+function verifyButt(original, buttified) {
+    original = original.toLowerCase();
+    buttified = buttified.toLowerCase();
+    return original != buttified && buttified != "butt" && buttified != "butts";
 }
