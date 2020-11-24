@@ -39,6 +39,41 @@ function insertButt(originWords, rate) {
     return buttSyl.map(syl => syl.join(""));
 }
 
+function formatWords(str) {
+    let result = [], stack = { chars: "" };
+    for (let i = 0; i < str.length; i++) {
+        if (" \n\t".includes(str[i])) {
+            if (!stack.type) {
+                stack.type = "blank";
+            }
+            else if (stack.type != "blank") {
+                result.push(stack);
+                stack = {
+                    type: "blank",
+                    chars: ""
+                };
+            }
+        }
+        else {
+            if (!stack.type) {
+                stack.type = "word";
+            }
+            else if (stack.type != "word") {
+                result.push(stack);
+                stack = {
+                    type: "word",
+                    chars: ""
+                };
+            }
+        }
+        stack.chars += str[i];
+    }
+    if (stack.chars.length) {
+        result.push(stack);
+    }
+    return result;
+}
+
 function arrEqual(a, b) {
     if (a.length === b.length) {
         return a.every((n, i) => Array.isArray(n) && Array.isArray(b[i]) ? arrEqual(n, b[i]) : n === b[i]);
