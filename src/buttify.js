@@ -1,16 +1,22 @@
 const syllablize = require("syllablize");
 
 function buttify(original, rate) {
-    const originWords = message.cleanContent.split(' ');
-    let syllables = originWords.map(syllablize);
-    buttified = syllables.map(word => word.join("").split(""));
-    for (let i = 0; i < original.length && i < buttified.length; i++) {
-        for (let j = 0; j < original[i].length && j < buttified[i].length; j++) {
-            if (original[i].charCodeAt(j) >= 65 && original[i].charCodeAt(j) <= 90) {
-                buttified[i][j] = buttified[i][j].toUpperCase();
+    const originWords = original.split(' ');
+    let buttWords = insertButt(originWords, rate);
+    return handleCaps(originWords, buttWords);
+}
+
+function handleCaps(originWords, buttWords) {
+    for (let i = 0; i < originWords.length && i < buttWords.length; i++) {
+        let buttChars = buttWords[i].split("");
+        for (let j = 0; j < originWords[i].length && j < buttChars.length; j++) {
+            if (originWords[i].charCodeAt(j) >= 65 && originWords[i].charCodeAt(j) <= 90) {
+                buttChars[j] = buttChars[j].toUpperCase();
             }
         }
+        buttWords[i] = buttChars.join("");
     }
+    return buttWords;
 }
 
 function insertButt(originWords, rate) {
