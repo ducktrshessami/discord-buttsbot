@@ -51,14 +51,14 @@ function chanceButt(wordObj, rate) {
 function formatWords(str) {
     let result = [], stack = { chars: "" };
     for (let i = 0; i < str.length; i++) {
-        if (" \n\t".includes(str[i])) {
+        if (`!"#$%&'()*+,-./:;<=>?@[]^_\`{|}~ \n\t`.includes(str[i])) {
             if (!stack.type) {
-                stack.type = "blank";
+                stack.type = "misc";
             }
-            else if (stack.type != "blank") {
+            else if (stack.type != "misc") {
                 result.push(stack);
                 stack = {
-                    type: "blank",
+                    type: "misc",
                     chars: ""
                 };
             }
