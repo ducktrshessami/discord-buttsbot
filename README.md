@@ -2,4 +2,6 @@
 
 I'm Buttbot! I say butt!
 
-Based on the [Twitch bot of the same name](https://www.twitch.tv/buttsbot/about)
+A Discord bot based on the [Twitch bot of the same name](https://www.twitch.tv/buttsbot/about)
+
+Powered by [discord.js](https://discord.js.org/#/)
