@@ -1,5 +1,6 @@
 const syllablize = require("syllablize");
 
+// Main
 function buttify(original, rate) {
     const originWords = formatWords(original);
     let buttWords;
@@ -9,6 +10,7 @@ function buttify(original, rate) {
     return handleCaps(originWords, buttWords).map(item => item.chars).join("");
 }
 
+// Roughly capitalize letters like the original
 function handleCaps(originWords, buttWords) {
     for (let i = 0; i < originWords.length && i < buttWords.length; i++) {
         if (originWords[i].type == "word") {
@@ -24,6 +26,7 @@ function handleCaps(originWords, buttWords) {
     return buttWords;
 }
 
+// Possibly replace syllables in a word with "butt"
 function chanceButt(wordObj, rate) {
     const originSyl = syllablize(wordObj.chars);
     let buttSyl;
@@ -44,6 +47,7 @@ function chanceButt(wordObj, rate) {
     return wordObj;
 }
 
+// Format a string into whitespace and words
 function formatWords(str) {
     let result = [], stack = { chars: "" };
     for (let i = 0; i < str.length; i++) {
@@ -79,6 +83,7 @@ function formatWords(str) {
     return result;
 }
 
+// Deep copy object
 function copyObj(obj) {
     let foo = {};
     for (let key in obj) {
@@ -87,6 +92,7 @@ function copyObj(obj) {
     return foo;
 }
 
+// Compare word objects
 function compareWords(a, b) {
     return a.map(item => item.chars).join("").toLowerCase() === b.map(item => item.chars).join("").toLowerCase();
 }
