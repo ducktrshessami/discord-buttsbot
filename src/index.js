@@ -24,7 +24,6 @@ let client = new DiscordBot(config, commands, responses);
 client.on("ready", () => {
     console.info(`Logged in as ${client.user.username}#${client.user.discriminator}`);
 });
-client.on("guildCreate", handleNewGuild);
 client.on("configUpdate", updateConfig);
 client.on("error", console.error);
 client.on("shardDisconnect", restart);
@@ -35,12 +34,6 @@ ios.on("line", (line) => {
         restart();
     }
 });
-
-function handleNewGuild(guild) {
-    if (!config.servers[guild.id]) {
-        config.servers[guild.id] = { rate: config.default.rate };
-    }
-}
 
 function updateConfig(cfg) {
     config = cfg;
@@ -63,6 +56,7 @@ function restart() {
 
 function changeRate(message, args) {
     let n = parseInt(args[1]);
+    logMessage(message);
     if (n && n > 0) {
         config.servers[message.guild.id].rate = n;
         updateConfig(config);
@@ -74,15 +68,40 @@ function changeRate(message, args) {
 }
 
 function checkButt(message) {
+    let change = false;
+    if (!config.servers[message.guild.id].rate) {
+        change = true;
+        config.servers[message.guild.id].rate = config.default.rate;
+    }
+    if (!config.servers[message.guild.id].max) {
+        change = true;
+        config.servers[message.guild.id].max = config.default.max;
+    }
+    if (change) {
+        updateConfig(config);
+    }
     return !message.author.bot && message.guild && message.cleanContent && (Math.random() < (1 / config.servers[message.guild.id].rate));
 }
 
 function sendButt(message) {
-    logMessage(message);
-    sendMessage(message.channel, buttify(message.cleanContent));
-}
-
-function buttify(text) {
-    console.log(syllablize(text));
-    return "butts";
+    const original = message.cleanContent.split(' ');
+    let butts = Math.ceil(Math.random() * config.servers[message.guild.id].max);
+    let syllables = original.map(syllablize);
+    let buttified;
+    for (let i = 0; i < butts; i++) {
+        let x, y, check;
+        do {
+            check = syllables.every(word => word.every(syl => syl.includes("butt")));
+            x = Math.floor(Math.random() * syllables.length);
+            y = Math.floor(Math.random() * syllables[x].length);
+        } while (!check && syllables[x][y].includes("butt"));
+        if (!check) {
+            syllables[x][y] = syllables[x][y][syllables[x][y].length - 1] == "s" ? "butts" : "butt";
+        }
+    }
+    buttified = syllables.map(word => word.join("")).join(' ');
+    if (buttified != message.cleanContent) {
+        logMessage(message);
+        sendMessage(message.channel, buttified);
+    }
 }
