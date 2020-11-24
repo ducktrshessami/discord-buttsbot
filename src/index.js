@@ -1,6 +1,7 @@
 const fs = require("fs").promises;
 const readline = require("readline");
 const DiscordBot = require("discord-bot");
+const syllablize = require("syllablize");
 var config = require("../cfg/config.json");
 
 const ios = new readline.Interface({
@@ -37,7 +38,7 @@ ios.on("line", (line) => {
 
 function handleNewGuild(guild) {
     if (!config.servers[guild.id]) {
-        config.servers[guild.id] = { rate: config.defaultRate };
+        config.servers[guild.id] = { rate: config.default.rate };
     }
 }
 
@@ -68,7 +69,7 @@ function changeRate(message, args) {
         sendMessage(message.channel, `Buttify rate changed to one in every \`${config.servers[message.guild.id].rate}\` messages!`);
     }
     else {
-        sendMessage(message.channel, `I buttify roughly one in every \`${config.servers[message.guild.id].rate}\` messages!\nTo change this rate, use \`${this.usage}\`.\nDefault: \`${config.defaultRate}\``);
+        sendMessage(message.channel, `I buttify roughly one in every \`${config.servers[message.guild.id].rate}\` messages!\nTo change this rate, use \`${this.usage}\`.\nDefault: \`${config.default.rate}\``);
     }
 }
 
@@ -82,5 +83,6 @@ function sendButt(message) {
 }
 
 function buttify(text) {
+    console.log(syllablize(text));
     return "butts";
 }
