@@ -35,6 +35,7 @@ ios.on("line", (line) => {
     }
 });
 
+// Bot utils
 function updateConfig(cfg) {
     config = cfg;
     return fs.writeFile(`${__dirname}/../cfg/config.json`, JSON.stringify(config, null, 4) + "\n").catch(console.error);
@@ -48,6 +49,7 @@ function sendMessage(channel, ...content) {
     return channel.send(...content).then(logMessage).catch(console.error);
 }
 
+// Commands, responses, and helpers
 function restart() {
     ios.close();
     client.destroy();
@@ -99,9 +101,16 @@ function sendButt(message) {
             syllables[x][y] = syllables[x][y][syllables[x][y].length - 1] == "s" ? "butts" : "butt";
         }
     }
-    buttified = syllables.map(word => word.join("")).join(' ');
+    buttified = syllables.map(word => word.join("").split(""));
+    for (let i = 0; i < original.length && i < buttified.length; i++) {
+        for (let j = 0; j < original[i].length && j < buttified[i].length; j++) {
+            if (original[i].charCodeAt(j) >= 65 && original[i].charCodeAt(j) <= 90) {
+                buttified[i][j] = buttified[i][j].toUpperCase();
+            }
+        }
+    }
     if (buttified != message.cleanContent) {
         logMessage(message);
-        sendMessage(message.channel, buttified);
+        sendMessage(message.channel, buttified.map(butt => butt.join("")).join(' '));
     }
 }
