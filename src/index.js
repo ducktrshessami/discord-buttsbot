@@ -10,9 +10,22 @@ const ios = new readline.Interface({
 });
 
 let commands = [
-    new DiscordBot.Command("restart", restart, { admin: true }),
-    new DiscordBot.Command("frequency", changeFreq, { usage: "@buttsbot frequency [number]" }),
-    new DiscordBot.Command("rate", changeRate, { usage: "@buttsbot rate [number]" })
+    new DiscordBot.Command("restart", restart, {
+        admin: true,
+        usage: "@buttsbot restart",
+        description: "I go to sleep, and then (hopefully 😟) get right back up!",
+        subtitle: "I only do this for my botmin though."
+    }),
+    new DiscordBot.Command("frequency", changeFreq, {
+        usage: "@buttsbot frequency [number]",
+        description: `Use this command to show or change how often I buttify messages!`,
+        subtitle: `The default frequency is ${config.default.freq}.`
+    }),
+    new DiscordBot.Command("rate", changeRate, {
+        usage: "@buttsbot rate [number]",
+        description: `Use this command to show or change the amount of syllables buttified when I buttify a message!`,
+        subtitle: `The default rate is ${config.default.rate}.`
+    })
 ];
 let responses = [
     new DiscordBot.Response(["buttsbot", "yes"], ":)"),
