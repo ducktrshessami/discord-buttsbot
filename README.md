@@ -12,6 +12,8 @@ A [Discord](https://discord.com/) bot based on the [Twitch bot of the same name]
 
 Powered by [discord.js](https://discord.js.org/#/), a [Node.js](https://nodejs.org/)
 
+Avatar by Julia Rolon
+
 # Usage
 
 ## Invite to Your Server
