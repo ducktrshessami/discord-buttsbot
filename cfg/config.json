@@ -6,5 +6,6 @@
     "default": {
         "rate": 30,
         "max": 10
-    }
+    },
+    "generateHelp": true
 }
