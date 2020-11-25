@@ -16,14 +16,22 @@ let commands = [
         description: "I go to sleep, and then (hopefully 😟) get right back up!",
         subtitle: "I only do this for my botmin though."
     }),
+    new DiscordBot.Command("word", changeWord, {
+        owner: true,
+        usage: "@buttsbot word [word]",
+        description: "Use this command to show or change what word I buttify messages with!",
+        subtitle: "I guess that only makes sense if the word is butt."
+    }),
     new DiscordBot.Command("frequency", changeFreq, {
+        owner: true,
         usage: "@buttsbot frequency [number]",
-        description: `Use this command to show or change how often I buttify messages!`,
+        description: "Use this command to show or change how often I buttify messages!",
         subtitle: `The default frequency is ${config.default.freq}.`
     }),
     new DiscordBot.Command("rate", changeRate, {
+        owner: true,
         usage: "@buttsbot rate [number]",
-        description: `Use this command to show or change the amount of syllables buttified when I buttify a message!`,
+        description: "Use this command to show or change the amount of syllables buttified when I buttify a message!",
         subtitle: `The default rate is ${config.default.rate}.`
     }),
     new DiscordBot.Command("ignoreme", ignore, {
@@ -48,12 +56,12 @@ client.on("ready", () => {
 });
 client.on("configUpdate", updateConfig);
 client.on("error", console.error);
-client.on("shardDisconnect", restart);
+client.on("shardDisconnect", disconnect);
 
 // ios event handling
 ios.on("line", (line) => {
     if (line.toLowerCase().trim() == "exit") {
-        restart();
+        disconnect();
     }
 });
 
@@ -71,15 +79,28 @@ function sendMessage(channel, ...content) {
     return channel.send(...content).then(logMessage).catch(console.error);
 }
 
+function disconnect() {
+    ios.close();
+    client.destroy();
+    throw "Logging off";
+}
+
 // Commands, responses, and helpers
 function restart(message) {
-    if (message) {
-        sendMessage(message.channel, "Be right back!").then(() => restart());
+    sendMessage(message.channel, "Be right back!").then(() => {
+        client.destroy();
+    });
+}
+
+function changeWord(message, args) {
+    logMessage(message);
+    if (args.length > 1) {
+        config.servers[message.guild.id].word = args[1].toLowerCase();
+        updateConfig(config);
+        sendMessage(message.channel, `Buttification word changed to \`${config.servers[message.guild.id].word}\`!`);
     }
     else {
-        ios.close();
-        client.destroy();
-        throw "Logging off";
+        sendMessage(message.channel, `I buttify messages with the word \`${config.servers[message.guild.id].word}\`!`);
     }
 }
 
@@ -136,6 +157,10 @@ function unignore(message) {
 
 function checkButt(message) {
     let change = false;
+    if (!config.servers[message.guild.id].word) {
+        change = true;
+        config.servers[message.guild.id].word = config.default.word;
+    }
     if (!config.servers[message.guild.id].freq) {
         change = true;
         config.servers[message.guild.id].freq = config.default.freq;
@@ -151,15 +176,15 @@ function checkButt(message) {
 }
 
 function sendButt(message) {
-    let buttified = buttify(message.cleanContent, config.servers[message.guild.id].rate);
-    if (verifyButt(message.cleanContent, buttified)) {
+    let buttified = buttify(message.cleanContent, config.servers[message.guild.id].word, config.servers[message.guild.id].rate);
+    if (verifyButt(message.cleanContent, buttified, config.servers[message.guild.id].word)) {
         logMessage(message);
         sendMessage(message.channel, buttified);
     }
 }
 
-function verifyButt(original, buttified) {
+function verifyButt(original, buttified, word) {
     original = original.toLowerCase();
     buttified = buttified.toLowerCase();
-    return original != buttified && buttified != "butt" && buttified != "butts";
+    return original != buttified && buttified != word && buttified != `${word}s`;
 }
