@@ -20,19 +20,19 @@ let commands = [
         owner: true,
         usage: "@buttsbot word [word]",
         description: "Use this command to show or change what word I buttify messages with!",
-        subtitle: "I guess that only makes sense if the word is butt."
+        subtitle: "I guess that only makes sense if the word is butt. Also I only do this for the server owner."
     }),
     new DiscordBot.Command("frequency", changeFreq, {
         owner: true,
         usage: "@buttsbot frequency [number]",
         description: "Use this command to show or change how often I buttify messages!",
-        subtitle: `The default frequency is ${config.default.freq}.`
+        subtitle: `The default frequency is ${config.default.freq}. Also I only do this for the server owner.`
     }),
     new DiscordBot.Command("rate", changeRate, {
         owner: true,
         usage: "@buttsbot rate [number]",
         description: "Use this command to show or change the amount of syllables buttified when I buttify a message!",
-        subtitle: `The default rate is ${config.default.rate}.`
+        subtitle: `The default rate is ${config.default.rate}. Also I only do this for the server owner.`
     }),
     new DiscordBot.Command("ignoreme", ignore, {
         usage: "@buttsbot ignoreme",
