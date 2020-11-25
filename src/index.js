@@ -53,6 +53,9 @@ let client = new DiscordBot(config, commands, responses);
 // Client event handling
 client.on("ready", () => {
     console.info(`Logged in as ${client.user.username}#${client.user.discriminator}`);
+    if (config.presence.presences.length) {
+        client.loopPresences(config.presence.presences, config.presence.minutes);
+    }
 });
 client.on("configUpdate", updateConfig);
 client.on("error", console.error);

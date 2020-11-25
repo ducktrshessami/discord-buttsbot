@@ -3,12 +3,16 @@
     "admin": [
         ""
     ],
+    "presence": {
+        "minutes": 20,
+        "presences": []
+    },
     "default": {
         "word": "butt",
         "rate": 30,
         "max": 10
     },
     "generateHelp": true,
-    "embedColor": "44BEC7",
+    "embedColor": "RANDOM",
     "ignoreList": []
 }
