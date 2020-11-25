@@ -25,6 +25,14 @@ let commands = [
         usage: "@buttsbot rate [number]",
         description: `Use this command to show or change the amount of syllables buttified when I buttify a message!`,
         subtitle: `The default rate is ${config.default.rate}.`
+    }),
+    new DiscordBot.Command("ignoreme", ignore, {
+        usage: "@buttsbot ignoreme",
+        description: "I will never buttify anything you say."
+    }),
+    new DiscordBot.Command("unignoreme", unignore, {
+        usage: "@buttsbot unignoreme",
+        description: "Undo ignoreme!"
     })
 ];
 let responses = [
@@ -64,13 +72,15 @@ function sendMessage(channel, ...content) {
 }
 
 // Commands, responses, and helpers
-async function restart(message) {
+function restart(message) {
     if (message) {
-        await sendMessage(message.channel, "Be right back!");
+        sendMessage(message.channel, "Be right back!").then(() => restart());
     }
-    ios.close();
-    client.destroy();
-    throw "Logging off";
+    else {
+        ios.close();
+        client.destroy();
+        throw "Logging off";
+    }
 }
 
 function changeFreq(message, args) {
@@ -99,6 +109,31 @@ function changeRate(message, args) {
     }
 }
 
+function ignore(message) {
+    logMessage(message);
+    if (!config.ignoreList.includes(message.author.id)) {
+        config.ignoreList.push(message.author.id);
+        updateConfig(config);
+        sendMessage(message.channel, `<@${message.author.id}> Okay :(`);
+    }
+    else {
+        sendMessage(message.channel, `<@${message.author.id}> I'm already ignoring you.`);
+    }
+}
+
+function unignore(message) {
+    let i = config.ignoreList.indexOf(message.author.id);
+    logMessage(message);
+    if (i !== -1) {
+        config.ignoreList.splice(i, 1);
+        updateConfig(config);
+        sendMessage(message.channel, `<@${message.author.id}> Okay :)`);
+    }
+    else {
+        sendMessage(message.channel, `<@${message.author.id}> I'm not ignoring you!`);
+    }
+}
+
 function checkButt(message) {
     let change = false;
     if (!config.servers[message.guild.id].freq) {
@@ -112,7 +147,7 @@ function checkButt(message) {
     if (change) {
         updateConfig(config);
     }
-    return !message.author.bot && message.guild && message.cleanContent && (Math.random() < (1 / config.servers[message.guild.id].freq));
+    return !message.author.bot && message.guild && message.cleanContent && !config.ignoreList.includes(message.author.id) && (Math.random() < (1 / config.servers[message.guild.id].freq));
 }
 
 function sendButt(message) {
