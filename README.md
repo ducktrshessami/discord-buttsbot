@@ -1,6 +1,12 @@
+![buttsbot Avatar](./assets/images/avatar-small.png)
+
 # buttsbot
 
-"I'm Buttbot! I say butt!" -buttsbot
+> I'm Buttbot! I say butt!
+> 
+> I'll buttify roughly one in every 30 messages by replacing some of the syllables in the message with the word "butt". If the result is the same message or just "butt" I throw it out. The word used as well as the frequency and rate of buttification can be changed.
+> 
+> -buttsbot
 
 A [Discord](https://discord.com/) bot based on the [Twitch bot of the same name](https://www.twitch.tv/buttsbot/about)
 
