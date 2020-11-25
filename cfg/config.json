@@ -4,6 +4,7 @@
         ""
     ],
     "default": {
+        "word": "butt",
         "rate": 30,
         "max": 10
     },
