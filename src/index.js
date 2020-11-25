@@ -64,7 +64,10 @@ function sendMessage(channel, ...content) {
 }
 
 // Commands, responses, and helpers
-function restart() {
+async function restart(message) {
+    if (message) {
+        await sendMessage(message.channel, "Be right back!");
+    }
     ios.close();
     client.destroy();
     throw "Logging off";
