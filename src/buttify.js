@@ -1,12 +1,12 @@
 const syllablize = require("syllablize");
 
 // Main
-function buttify(original, rate) {
+function buttify(original, buttWord = "butt", rate) {
     const originWords = formatWords(original);
     if (originWords.some(item => item.type == "word")) {
         let buttWords;
         do {
-            buttWords = originWords.map(wordObj => wordObj.type == "word" ? chanceButt(wordObj, rate) : copyObj(wordObj));
+            buttWords = originWords.map(wordObj => wordObj.type == "word" ? chanceButt(wordObj, buttWord, rate) : copyObj(wordObj));
         } while (compareWords(originWords, buttWords));
         return handleCaps(originWords, buttWords).map(item => item.chars).join("");
     }
@@ -32,7 +32,7 @@ function handleCaps(originWords, buttWords) {
 }
 
 // Possibly replace syllables in a word with "butt"
-function chanceButt(wordObj, rate) {
+function chanceButt(wordObj, buttWord, rate) {
     const originSyl = syllablize(wordObj.chars);
     let buttSyl;
     wordObj = copyObj(wordObj);
@@ -41,9 +41,9 @@ function chanceButt(wordObj, rate) {
             switch (syl[syl.length - 1]) {
                 case 's':
                 case 'z':
-                    return "butt" + syl[syl.length - 1];
+                    return buttWord + syl[syl.length - 1];
                 default:
-                    return "butt";
+                    return buttWord;
             }
         }
         return syl;
