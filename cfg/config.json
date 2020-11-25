@@ -7,5 +7,6 @@
         "rate": 30,
         "max": 10
     },
-    "generateHelp": true
+    "generateHelp": true,
+    "embedColor": "44BEC7"
 }
