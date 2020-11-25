@@ -8,5 +8,6 @@
         "max": 10
     },
     "generateHelp": true,
-    "embedColor": "44BEC7"
+    "embedColor": "44BEC7",
+    "ignoreList": []
 }
