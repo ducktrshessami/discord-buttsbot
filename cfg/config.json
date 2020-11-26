@@ -9,8 +9,8 @@
     },
     "default": {
         "word": "butt",
-        "rate": 30,
-        "max": 10
+        "freq": 30,
+        "rate": 10
     },
     "generateHelp": true,
     "embedColor": "RANDOM",
