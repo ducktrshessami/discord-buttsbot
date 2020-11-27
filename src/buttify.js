@@ -5,7 +5,7 @@ function buttify(original, buttWord, rate) {
     const originWords = formatWords(original);
     if (originWords.some(item => item.type == "word")) {
         let buttWords;
-        for (let i = 0; compareWords(originWords, buttWords) && i < rate * 1000; i++) { // Set limit to avoid user setting based infinite loop
+        for (let i = 0;  i < rate * 1000 && (!buttWords || compareWords(originWords, buttWords)); i++) { // Set limit to avoid user setting based infinite loop
             buttWords = originWords.map(wordObj => wordObj.type == "word" ? chanceButt(wordObj, buttWord, rate) : copyObj(wordObj));
         }
         return handleCaps(originWords, buttWords).map(item => item.chars).join("");
@@ -103,7 +103,7 @@ function copyObj(obj) {
 
 // Compare word objects
 function compareWords(a, b) {
-    return a && b && a.map(item => item.chars).join("").toLowerCase() === b.map(item => item.chars).join("").toLowerCase();
+    return a.map(item => item.chars).join("").toLowerCase() === b.map(item => item.chars).join("").toLowerCase();
 }
 
 module.exports = buttify;
