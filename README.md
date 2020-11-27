@@ -40,7 +40,7 @@ node .
 
 ###### Personally, I run an external script to automatically restart the program in case the bot disconnects.
 
-### `./cfg/config.json`
+### `./cfg/config.json`:
 
 - `token`: String containing the bot token obtained from the [Discord Developer Portal](https://discord.com/developers/applications)
 - `admin`: Array\<[Snowflake](https://discord.js.org/#/docs/main/stable/typedef/Snowflake)> containing the IDs of botmin users. User IDs can be obtained by right clicking users in Discord with developer mode on.
