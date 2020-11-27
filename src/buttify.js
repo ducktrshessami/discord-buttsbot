@@ -1,13 +1,13 @@
 const syllablize = require("syllablize");
 
 // Main
-function buttify(original, buttWord = "butt", rate) {
+function buttify(original, buttWord, rate) {
     const originWords = formatWords(original);
     if (originWords.some(item => item.type == "word")) {
         let buttWords;
-        do {
+        for (let i = 0; compareWords(originWords, buttWords) && i < rate * 1000; i++) { // Set limit to avoid user setting based infinite loop
             buttWords = originWords.map(wordObj => wordObj.type == "word" ? chanceButt(wordObj, buttWord, rate) : copyObj(wordObj));
-        } while (compareWords(originWords, buttWords));
+        }
         return handleCaps(originWords, buttWords).map(item => item.chars).join("");
     }
     else {
@@ -52,23 +52,15 @@ function chanceButt(wordObj, buttWord, rate) {
     return wordObj;
 }
 
-// Format a string into whitespace and words
+// Format a string into words, emoji, and miscellaneous characters
 function formatWords(str) {
-    let result = [], stack = { chars: "" };
+    let result = [], stack = { chars: "" }, emojiList = str.matchAll(/<:[0-9a-z_]+:[0-9]+>/gi), emoji = emojiList.next();
     for (let i = 0; i < str.length; i++) {
-        if (`!"#$%&'()*+,-./:;<=>?@[]^_\`{|}~ \n\t`.includes(str[i])) {
-            if (!stack.type) {
-                stack.type = "misc";
-            }
-            else if (stack.type != "misc") {
-                result.push(stack);
-                stack = {
-                    type: "misc",
-                    chars: ""
-                };
-            }
+        let code = str[i].toUpperCase().charCodeAt(0);
+        if (!emoji.done && i >= emoji.value.index + emoji.value[0].length) {
+            emoji = emojiList.next();
         }
-        else {
+        if (code >= 65 && code <= 90 && (emoji.done || i < emoji.value.index)) {
             if (!stack.type) {
                 stack.type = "word";
             }
@@ -76,6 +68,18 @@ function formatWords(str) {
                 result.push(stack);
                 stack = {
                     type: "word",
+                    chars: ""
+                };
+            }
+        }
+        else {
+            if (!stack.type) {
+                stack.type = "misc";
+            }
+            else if (stack.type != "misc") {
+                result.push(stack);
+                stack = {
+                    type: "misc",
                     chars: ""
                 };
             }
@@ -99,7 +103,7 @@ function copyObj(obj) {
 
 // Compare word objects
 function compareWords(a, b) {
-    return a.map(item => item.chars).join("").toLowerCase() === b.map(item => item.chars).join("").toLowerCase();
+    return a && b && a.map(item => item.chars).join("").toLowerCase() === b.map(item => item.chars).join("").toLowerCase();
 }
 
 module.exports = buttify;
