@@ -12,7 +12,9 @@
         "freq": 30,
         "rate": 10
     },
-    "generateHelp": true,
+    "generateCmd": {
+        "help": true
+    },
     "embedColor": "RANDOM",
     "ignoreList": []
 }
