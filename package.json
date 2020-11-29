@@ -1,6 +1,6 @@
 {
   "name": "buttsbot",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "I'm Buttbot! I say butt!",
   "main": "./src/index.js",
   "repository": {
