@@ -20,7 +20,7 @@ function handleCaps(originWords, buttWords) {
     for (let i = 0; i < originWords.length && i < buttWords.length; i++) {
         if (originWords[i].type == "word") {
             if (originWords[i].chars === originWords[i].chars.toUpperCase()) {
-                buttWords[i].chars = buttWords.chars.toUpperCase();
+                buttWords[i].chars = buttWords[i].chars.toUpperCase();
             }
             else {
                 let buttChars = buttWords[i].chars.split("");
