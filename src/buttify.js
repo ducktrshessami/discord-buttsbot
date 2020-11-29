@@ -19,13 +19,18 @@ function buttify(original, buttWord, rate) {
 function handleCaps(originWords, buttWords) {
     for (let i = 0; i < originWords.length && i < buttWords.length; i++) {
         if (originWords[i].type == "word") {
-            let buttChars = buttWords[i].chars.split("");
-            for (let j = 0; j < originWords[i].chars.length && j < buttChars.length; j++) {
-                if (originWords[i].chars.charCodeAt(j) >= 65 && originWords[i].chars.charCodeAt(j) <= 90) {
-                    buttChars[j] = buttChars[j].toUpperCase();
-                }
+            if (originWords[i].chars === originWords[i].chars.toUpperCase()) {
+                buttWords[i].chars = buttWords.chars.toUpperCase();
             }
-            buttWords[i].chars = buttChars.join("");
+            else {
+                let buttChars = buttWords[i].chars.split("");
+                for (let j = 0; j < originWords[i].chars.length && j < buttChars.length; j++) {
+                    if (originWords[i].chars.charCodeAt(j) >= 65 && originWords[i].chars.charCodeAt(j) <= 90) {
+                        buttChars[j] = buttChars[j].toUpperCase();
+                    }
+                }
+                buttWords[i].chars = buttChars.join("");
+            }
         }
     }
     return buttWords;
