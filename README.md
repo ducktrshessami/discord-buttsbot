@@ -51,6 +51,7 @@ node .
     - `word`: String with the word to insert into messages
     - `freq`: Number with the frequency at which messages are buttified (roughly 1 message in `freq`)
     - `rate`: Number with the rate at which syllables are buttified in a buttified message (roughly 1 syllable in `rate`)
-- `generateHelp`: Boolean that tells `discord-bot` to generate a help command when set to `true`
+- `generateCmd`: Object:
+    - `help`: Boolean that tells `discord-bot` to generate a help command when set to `true`
 - `embedColor`: [ColorResolvable](https://discord.js.org/#/docs/main/stable/typedef/ColorResolvable) for the `@buttsbot help` command list embed color
 - `ignoreList`: Array\<[Snowflake](https://discord.js.org/#/docs/main/stable/typedef/Snowflake)> containing the IDs of users that used `@buttsbot ignoreme`
