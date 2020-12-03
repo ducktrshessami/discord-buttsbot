@@ -57,15 +57,15 @@ function chanceButt(wordObj, buttWord, rate) {
     return wordObj;
 }
 
-// Format a string into words, emoji, and miscellaneous characters
+// Format a string into words, special, and miscellaneous characters
 function formatWords(str) {
-    let result = [], stack = { chars: "" }, emojiList = str.matchAll(/<:[0-9a-z_]+:[0-9]+>/gi), emoji = emojiList.next();
+    let result = [], stack = { chars: "" }, specialList = str.matchAll(/(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))|(<:[0-9a-z_]+:[0-9]+>)/gi), special = specialList.next();
     for (let i = 0; i < str.length; i++) {
         let code = str[i].toUpperCase().charCodeAt(0);
-        if (!emoji.done && i >= emoji.value.index + emoji.value[0].length) {
-            emoji = emojiList.next();
+        if (!special.done && i >= special.value.index + special.value[0].length) {
+            special = specialList.next();
         }
-        if (code >= 65 && code <= 90 && (emoji.done || i < emoji.value.index)) {
+        if (code >= 65 && code <= 90 && (special.done || i < special.value.index)) {
             if (!stack.type) {
                 stack.type = "word";
             }
