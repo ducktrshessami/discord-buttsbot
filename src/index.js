@@ -84,12 +84,6 @@ function updateConfig(cfg) {
     return fs.writeFile(`${__dirname}/../cfg/config.json`, JSON.stringify(config, null, 4) + "\n").catch(console.error);
 }
 
-function chanIgnoreListCheck(guild) {
-    if (!config.servers[guild].ignoreList) {
-        config.servers[guild].ignoreList = [];
-    }
-}
-
 function logMessage(message) {
     console.log(`[${message.channel.guild.id}] ${message.author.username}#${message.author.discriminator}: ${message.cleanContent}`);
 }
@@ -176,7 +170,6 @@ function unignoreme(message) {
 
 function ignorechannel(message) {
     logMessage(message);
-    chanIgnoreListCheck(message.guild.id);
     if (!config.servers[message.guild.id].ignoreList.includes(message.channel.id)) {
         config.servers[message.guild.id].ignoreList.push(message.author.id);
         updateConfig(config);
@@ -188,7 +181,6 @@ function ignorechannel(message) {
 }
 
 function unignorechannel(message) {
-    chanIgnoreListCheck(message.guild.id);
     let i = config.servers[message.guild.id].ignoreList.indexOf(message.author.id);
     logMessage(message);
     if (i !== -1) {
@@ -215,10 +207,21 @@ function checkButt(message) {
         change = true;
         config.servers[message.guild.id].rate = config.default.rate;
     }
+    if (!config.servers[message.guild.id].ignoreList) {
+        change = true;
+        config.servers[message.guild.id].ignoreList = [];
+    }
     if (change) {
         updateConfig(config);
     }
-    return !message.author.bot && message.guild && message.cleanContent && !config.ignoreList.includes(message.author.id) && (Math.random() < (1 / config.servers[message.guild.id].freq));
+    return (
+        !message.author.bot &&
+        message.guild &&
+        message.cleanContent &&
+        !config.servers[message.guild.id].ignoreList.includes(message.channel.id) &&
+        !config.ignoreList.includes(message.author.id) &&
+        (Math.random() < (1 / config.servers[message.guild.id].freq))
+    );
 }
 
 function sendButt(message) {
