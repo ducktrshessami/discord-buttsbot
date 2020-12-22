@@ -34,13 +34,23 @@ let commands = [
         description: "Use this command to show or change the amount of syllables buttified when I buttify a message!",
         subtitle: `The default rate is ${config.default.rate}. Also I only do this for the server owner.`
     }),
-    new DiscordBot.Command("ignoreme", ignore, {
+    new DiscordBot.Command("ignoreme", ignoreme, {
         usage: "@buttsbot ignoreme",
         description: "I will never buttify anything you say."
     }),
-    new DiscordBot.Command("unignoreme", unignore, {
+    new DiscordBot.Command("unignoreme", unignoreme, {
         usage: "@buttsbot unignoreme",
         description: "Undo ignoreme!"
+    }),
+    new DiscordBot.Command("ignorechannel", ignorechannel, {
+        owner: true,
+        usage: "@buttsbot ignorechannel",
+        description: "I won't buttify in this channel.",
+    }),
+    new DiscordBot.Command("unignorechannel", unignorechannel, {
+        owner: true,
+        usage: "@buttsbot unignorechannel",
+        description: "Undo ignorechannel!"
     })
 ];
 let responses = [
@@ -72,6 +82,12 @@ ios.on("line", (line) => {
 function updateConfig(cfg) {
     config = cfg;
     return fs.writeFile(`${__dirname}/../cfg/config.json`, JSON.stringify(config, null, 4) + "\n").catch(console.error);
+}
+
+function chanIgnoreListCheck(guild) {
+    if (!config.servers[guild].ignoreList) {
+        config.servers[guild].ignoreList = [];
+    }
 }
 
 function logMessage(message) {
@@ -133,7 +149,7 @@ function changeRate(message, args) {
     }
 }
 
-function ignore(message) {
+function ignoreme(message) {
     logMessage(message);
     if (!config.ignoreList.includes(message.author.id)) {
         config.ignoreList.push(message.author.id);
@@ -145,11 +161,38 @@ function ignore(message) {
     }
 }
 
-function unignore(message) {
+function unignoreme(message) {
     let i = config.ignoreList.indexOf(message.author.id);
     logMessage(message);
     if (i !== -1) {
         config.ignoreList.splice(i, 1);
+        updateConfig(config);
+        sendMessage(message.channel, `<@${message.author.id}> Okay :)`);
+    }
+    else {
+        sendMessage(message.channel, `<@${message.author.id}> I'm not ignoring you!`);
+    }
+}
+
+function ignorechannel(message) {
+    logMessage(message);
+    chanIgnoreListCheck(message.guild.id);
+    if (!config.servers[message.guild.id].ignoreList.includes(message.channel.id)) {
+        config.servers[message.guild.id].ignoreList.push(message.author.id);
+        updateConfig(config);
+        sendMessage(message.channel, `<@${message.author.id}> Okay.`);
+    }
+    else {
+        sendMessage(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
+    }
+}
+
+function unignorechannel(message) {
+    chanIgnoreListCheck(message.guild.id);
+    let i = config.servers[message.guild.id].ignoreList.indexOf(message.author.id);
+    logMessage(message);
+    if (i !== -1) {
+        config.servers[message.guild.id].ignoreList.splice(i, 1);
         updateConfig(config);
         sendMessage(message.channel, `<@${message.author.id}> Okay :)`);
     }
