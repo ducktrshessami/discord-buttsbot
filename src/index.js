@@ -171,7 +171,7 @@ function unignoreme(message) {
 function ignorechannel(message) {
     logMessage(message);
     if (!config.servers[message.guild.id].ignoreList.includes(message.channel.id)) {
-        config.servers[message.guild.id].ignoreList.push(message.author.id);
+        config.servers[message.guild.id].ignoreList.push(message.channel.id);
         updateConfig(config);
         sendMessage(message.channel, `<@${message.author.id}> Okay.`);
     }
@@ -181,7 +181,7 @@ function ignorechannel(message) {
 }
 
 function unignorechannel(message) {
-    let i = config.servers[message.guild.id].ignoreList.indexOf(message.author.id);
+    let i = config.servers[message.guild.id].ignoreList.indexOf(message.channel.id);
     logMessage(message);
     if (i !== -1) {
         config.servers[message.guild.id].ignoreList.splice(i, 1);
@@ -189,7 +189,7 @@ function unignorechannel(message) {
         sendMessage(message.channel, `<@${message.author.id}> Okay :)`);
     }
     else {
-        sendMessage(message.channel, `<@${message.author.id}> I'm not ignoring you!`);
+        sendMessage(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
     }
 }
 
