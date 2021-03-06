@@ -233,7 +233,7 @@ function sendButt(message) {
 }
 
 function verifyButt(original, buttified, word) {
-    original = original.toLowerCase();
-    buttified = buttified.toLowerCase();
+    original = original.match(/[a-z]+/gi).join("").toLowerCase();
+    buttified = buttified.match(/[a-z]+/gi).join("").toLowerCase();
     return original != buttified && buttified != word && buttified != `${word}s`;
 }
