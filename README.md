@@ -18,7 +18,7 @@ Avatar by Julia Rolon
 
 ## Invite to Your Server
 
-### [Invite buttsbot](https://discord.com/api/oauth2/authorize?client_id=780539847764082768&permissions=0&scope=bot)
+### [Invite buttsbot](https://discord.com/api/oauth2/authorize?client_id=780539847764082768&permissions=3072&scope=bot)
 
 buttsbot can be invited to your server with the above link.
 
