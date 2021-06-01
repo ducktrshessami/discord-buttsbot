@@ -1,6 +1,6 @@
 {
   "name": "buttsbot",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "I'm Buttbot! I say butt!",
   "main": "./src/index.js",
   "repository": {
@@ -18,9 +18,9 @@
     "syllablize": "github:ducktrshessami/syllablize"
   },
   "optionalDependencies": {
-    "bufferutil": "^4.0.2",
+    "bufferutil": "^4.0.3",
     "erlpack": "github:discord/erlpack",
-    "utf-8-validate": "^5.0.3",
+    "utf-8-validate": "^5.0.5",
     "zlib-sync": "^0.1.7"
   }
 }
