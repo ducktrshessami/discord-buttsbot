@@ -22,5 +22,8 @@
     "erlpack": "github:discord/erlpack",
     "utf-8-validate": "^5.0.5",
     "zlib-sync": "^0.1.7"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0"
   }
 }
