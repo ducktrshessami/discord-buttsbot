@@ -9,7 +9,7 @@ const fs = require("fs").promises;
 const readline = require("readline");
 const DiscordBot = require("discord-bot");
 const buttify = require("./buttify");
-var config = require("../cfg/config.json");
+var config = require("../config/bot.json");
 
 const ios = new readline.Interface({
     input: process.stdin,
@@ -89,7 +89,7 @@ ios.on("line", (line) => {
 // Bot utils
 function updateConfig(cfg) {
     config = cfg;
-    return fs.writeFile(`${__dirname}/../cfg/config.json`, JSON.stringify(config, null, 4) + "\n").catch(console.error);
+    return fs.writeFile(`${__dirname}/../config/bot.json`, JSON.stringify(config, null, 4) + "\n").catch(console.error);
 }
 
 function logMessage(message) {

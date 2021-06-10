@@ -13,8 +13,9 @@
         "rate": 10
     },
     "generateCmd": {
-        "help": true
+        "help": true,
+        "prefix": true
     },
-    "embedColor": "RANDOM",
+    "embedColor": "44BEC7",
     "ignoreList": []
 }
