@@ -22,6 +22,11 @@ Avatar by Julia Rolon
 
 buttsbot can be invited to your server with the above link.
 
+Use the help command to see what other commands are available:
+```
+@buttsbot help
+```
+
 ## Install to Your Machine
 
 Alternatively you can run your own version of buttsbot by cloning this repository and installing the required dependencies.
