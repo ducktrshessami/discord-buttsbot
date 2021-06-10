@@ -2,11 +2,12 @@
   "name": "buttsbot",
   "version": "1.2.3",
   "description": "I'm Buttbot! I say butt!",
-  "main": "./src/index.js",
+  "main": "server.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ducktrshessami/buttsbot.git"
   },
+  "keywords": [],
   "author": "ducktrshessami",
   "license": "MIT",
   "bugs": {
@@ -28,5 +29,9 @@
   },
   "devDependencies": {
     "dotenv": "^10.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   }
 }
