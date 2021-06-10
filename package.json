@@ -15,6 +15,9 @@
   "homepage": "https://github.com/ducktrshessami/buttsbot#readme",
   "dependencies": {
     "discord-bot": "github:ducktrshessami/discord-bot",
+    "pg": "^8.6.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.6.2",
     "syllablize": "github:ducktrshessami/syllablize"
   },
   "optionalDependencies": {
