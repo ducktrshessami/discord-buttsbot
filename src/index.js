@@ -54,9 +54,9 @@ let commands = [
     })
 ];
 let responses = [
-    new DiscordBot.Response(["buttsbot", "yes"], ":)"),
-    new DiscordBot.Response(["buttsbot", "no"], ":("),
-    new DiscordBot.Response(["buttsbot", "please"], ";)"),
+    new DiscordBot.Response(["buttsbot", "yes"], process.env.SMILE || ":D"),
+    new DiscordBot.Response(["buttsbot", "no"], process.env.FROWN || ":("),
+    new DiscordBot.Response(["buttsbot", "please"], process.env.WINK || ";)"),
     new DiscordBot.Response("", "", checkButt, sendButt)
 ];
 let client = new DiscordBot(config, commands, responses);
