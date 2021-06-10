@@ -1,3 +1,10 @@
+try {
+    require("dotenv").config();
+}
+catch {
+    console.warn("Not using dotenv");
+}
+
 const fs = require("fs").promises;
 const readline = require("readline");
 const DiscordBot = require("discord-bot");
