@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const defaultConfig = require("../config/butt.json").default;
 module.exports = (sequelize, DataTypes) => {
   class Guild extends Model {
     /**
@@ -14,11 +15,27 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Guild.init({
-    id: DataTypes.UUID,
-    name: DataTypes.STRING,
-    word: DataTypes.STRING,
-    frequency: DataTypes.INTEGER,
-    rate: DataTypes.INTEGER
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      allowNull: false
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    word: {
+      type: DataTypes.STRING,
+      defaultValue: defaultConfig.word
+    },
+    frequency: {
+      type: DataTypes.INTEGER,
+      defaultValue: defaultConfig.freqency
+    },
+    rate: {
+      type: DataTypes.INTEGER,
+      defaultValue: defaultConfig.rate
+    }
   }, {
     sequelize,
     modelName: 'Guild',
