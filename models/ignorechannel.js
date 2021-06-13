@@ -10,11 +10,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      models.IgnoreChannel.belongsTo(models.Guild);
     }
   };
   IgnoreChannel.init({
-    id: DataTypes.STRING
+    id: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'IgnoreChannel',
