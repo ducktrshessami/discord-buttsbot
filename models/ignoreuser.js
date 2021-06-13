@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   IgnoreUser.init({
-    id: DataTypes.UUID
+    id: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'IgnoreUser',

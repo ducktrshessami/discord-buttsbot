@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   IgnoreChannel.init({
-    id: DataTypes.UUID
+    id: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'IgnoreChannel',
