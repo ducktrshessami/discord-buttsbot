@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   Guild.init({
     id: {
-      type: DataTypes.UUID,
+      type: DataTypes.STRING,
       primaryKey: true,
       allowNull: false
     },
