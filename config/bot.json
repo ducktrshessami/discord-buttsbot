@@ -7,11 +7,6 @@
         "minutes": 20,
         "presences": []
     },
-    "default": {
-        "word": "butt",
-        "freq": 30,
-        "rate": 10
-    },
     "generateCmd": {
         "help": true,
         "prefix": true
