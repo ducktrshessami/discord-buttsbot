@@ -61,9 +61,9 @@ let commands = [
     })
 ];
 let responses = [
-    new DiscordBot.Response(["buttsbot", "yes"], process.env.SMILE || ":D"),
-    new DiscordBot.Response(["buttsbot", "no"], process.env.FROWN || ":("),
-    new DiscordBot.Response(["buttsbot", "please"], process.env.WINK || ";)"),
+    new DiscordBot.Response(["buttsbot", "yes"], process.env.SMILE || ":D", responseCheck),
+    new DiscordBot.Response(["buttsbot", "no"], process.env.FROWN || ":(", responseCheck),
+    new DiscordBot.Response(["buttsbot", "please"], process.env.WINK || ";)", responseCheck),
     new DiscordBot.Response("", "", checkButt, sendButt)
 ];
 let client = new DiscordBot(config, commands, responses);
@@ -244,4 +244,9 @@ function verifyButt(original, buttified, word) {
     original = (original.match(/[a-z]+/gi) || []).join("").toLowerCase();
     buttified = (buttified.match(/[a-z]+/gi) || []).join("").toLowerCase();
     return original != buttified && buttified != word && buttified != `${word}s`;
+}
+
+function responseCheck(message, trigger) {
+    let splitContent = message.content.toLowerCase().trim().split(/\s/g);
+    return trigger.every(tr => splitContent.includes(tr));
 }
