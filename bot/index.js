@@ -1,6 +1,6 @@
-const fs = require("fs").promises;
 const DiscordBot = require("discord-bot");
 const buttify = require("./buttify");
+const db = require("../models");
 const botConfig = require("../config/bot.json");
 const presenceConfig = require("../config/presence.json");
 const defaultButt = require("../config/butt.json").default;
@@ -55,7 +55,10 @@ let responses = [
     new DiscordBot.Response(["buttsbot", "please"], process.env.WINK || ";)", responseCheck),
     new DiscordBot.Response("", "", checkButt, sendButt)
 ];
-let client = new DiscordBot(botConfig, commands, responses);
+let client = new DiscordBot({
+    ...botConfig,
+    token: process.env.BOT_TOKEN || botConfig.token
+}, commands, responses);
 
 // Client event handling
 client.on("ready", () => {
@@ -67,116 +70,110 @@ client.on("error", console.error);
 client.on("shardDisconnect", disconnect);
 
 // Bot utils
-function updateConfig(cfg) {
-    botConfig = cfg;
-    return fs.writeFile(`${__dirname}/../config/bot.json`, JSON.stringify(botConfig, null, 4) + "\n").catch(console.error);
-}
-
-function logMessage(message) {
-    console.log(`[${message.channel.guild.id}] ${message.author.username}#${message.author.discriminator}: ${message.cleanContent}`);
-}
-
-function sendMessage(channel, ...content) {
-    return channel.send(...content).then(logMessage).catch(console.error);
+function updateConfig(config) {
+    for (let id in config.servers) {
+        console.log(id);
+    }
 }
 
 function disconnect() {
     client.destroy();
-    throw "Logging off";
+    console.log("Logging off");
+    process.exit();
 }
 
 // Commands, responses, and helpers
 function restart(message) {
-    sendMessage(message.channel, "Be right back!").then(() => {
+    DiscordBot.utils.sendVerbose(message.channel, "Be right back!").then(() => {
         client.destroy();
     });
 }
 
 function changeWord(message, args) {
-    logMessage(message);
+    DiscordBot.utils.logMessage(message);
     if (args.length > 1) {
         botConfig.servers[message.guild.id].word = args[1].toLowerCase();
         updateConfig(botConfig);
-        sendMessage(message.channel, `Buttification word changed to \`${botConfig.servers[message.guild.id].word}\`!`);
+        DiscordBot.utils.sendVerbose(message.channel, `Buttification word changed to \`${botConfig.servers[message.guild.id].word}\`!`);
     }
     else {
-        sendMessage(message.channel, `I buttify messages with the word \`${botConfig.servers[message.guild.id].word}\`!`);
+        DiscordBot.utils.sendVerbose(message.channel, `I buttify messages with the word \`${botConfig.servers[message.guild.id].word}\`!`);
     }
 }
 
 function changeFreq(message, args) {
     let n = parseInt(args[1]);
-    logMessage(message);
+    DiscordBot.utils.logMessage(message);
     if (n && n > 0) {
         botConfig.servers[message.guild.id].freq = n;
         updateConfig(botConfig);
-        sendMessage(message.channel, `Buttify frequency changed to one in every \`${botConfig.servers[message.guild.id].freq}\` messages!`);
+        DiscordBot.utils.sendVerbose(message.channel, `Buttify frequency changed to one in every \`${botConfig.servers[message.guild.id].freq}\` messages!`);
     }
     else {
-        sendMessage(message.channel, `I buttify roughly one in every \`${botConfig.servers[message.guild.id].freq}\` messages!\nTo change the frequency, use \`${this.usage}\`.\nDefault: \`${defaultButt.frequency}\``);
+        DiscordBot.utils.sendVerbose(message.channel, `I buttify roughly one in every \`${botConfig.servers[message.guild.id].freq}\` messages!\nTo change the frequency, use \`${this.usage}\`.\nDefault: \`${defaultButt.frequency}\``);
     }
 }
 
 function changeRate(message, args) {
     let n = parseInt(args[1]);
-    logMessage(message);
+    DiscordBot.utils.logMessage(message);
     if (n && n > 0) {
         botConfig.servers[message.guild.id].rate = n;
         updateConfig(botConfig);
-        sendMessage(message.channel, `Buttify rate changed to one in every \`${botConfig.servers[message.guild.id].rate}\` syllables per buttified message!`);
+        DiscordBot.utils.sendVerbose(message.channel, `Buttify rate changed to one in every \`${botConfig.servers[message.guild.id].rate}\` syllables per buttified message!`);
     }
     else {
-        sendMessage(message.channel, `I buttify roughly one in every \`${botConfig.servers[message.guild.id].rate}\` syllables per buttified message!\nTo change this rate, use \`${this.usage}\`.\nDefault: \`${defaultButt.rate}\``);
+        DiscordBot.utils.sendVerbose(message.channel, `I buttify roughly one in every \`${botConfig.servers[message.guild.id].rate}\` syllables per buttified message!\nTo change this rate, use \`${this.usage}\`.\nDefault: \`${defaultButt.rate}\``);
     }
 }
 
 function ignoreme(message) {
-    logMessage(message);
+    DiscordBot.utils.logMessage(message);
     if (!botConfig.ignoreList.includes(message.author.id)) {
         botConfig.ignoreList.push(message.author.id);
         updateConfig(botConfig);
-        sendMessage(message.channel, `<@${message.author.id}> Okay :(`);
+        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay :(`);
     }
     else {
-        sendMessage(message.channel, `<@${message.author.id}> I'm already ignoring you.`);
+        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm already ignoring you.`);
     }
 }
 
 function unignoreme(message) {
     let i = botConfig.ignoreList.indexOf(message.author.id);
-    logMessage(message);
+    DiscordBot.utils.logMessage(message);
     if (i !== -1) {
         botConfig.ignoreList.splice(i, 1);
         updateConfig(botConfig);
-        sendMessage(message.channel, `<@${message.author.id}> Okay :)`);
+        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay :)`);
     }
     else {
-        sendMessage(message.channel, `<@${message.author.id}> I'm not ignoring you!`);
+        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring you!`);
     }
 }
 
 function ignorechannel(message) {
-    logMessage(message);
+    DiscordBot.utils.logMessage(message);
     if (!botConfig.servers[message.guild.id].ignoreList.includes(message.channel.id)) {
         botConfig.servers[message.guild.id].ignoreList.push(message.channel.id);
         updateConfig(botConfig);
-        sendMessage(message.channel, `<@${message.author.id}> Okay.`);
+        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay.`);
     }
     else {
-        sendMessage(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
+        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
     }
 }
 
 function unignorechannel(message) {
     let i = botConfig.servers[message.guild.id].ignoreList.indexOf(message.channel.id);
-    logMessage(message);
+    DiscordBot.utils.logMessage(message);
     if (i !== -1) {
         botConfig.servers[message.guild.id].ignoreList.splice(i, 1);
         updateConfig(botConfig);
-        sendMessage(message.channel, `<@${message.author.id}> Okay :)`);
+        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay :)`);
     }
     else {
-        sendMessage(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
+        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
     }
 }
 
@@ -214,8 +211,8 @@ function checkButt(message) {
 function sendButt(message) {
     let buttified = buttify(message.cleanContent, botConfig.servers[message.guild.id].word, botConfig.servers[message.guild.id].rate);
     if (verifyButt(message.cleanContent, buttified, botConfig.servers[message.guild.id].word)) {
-        logMessage(message);
-        sendMessage(message.channel, buttified);
+        DiscordBot.utils.logMessage(message);
+        DiscordBot.utils.sendVerbose(message.channel, buttified);
     }
 }
 
