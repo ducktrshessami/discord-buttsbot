@@ -12,6 +12,11 @@ let commands = [
         description: "I go to sleep, and then (hopefully 😟) get right back up!",
         subtitle: "I only do this for my botmin though."
     }),
+    new DiscordBot.Command("prefix", prefix, {
+        usage: "@buttsbot prefix [prefix]",
+        description: "View or change the command prefix",
+        subtitle: "Only the server owner can change the prefix"
+    }),
     new DiscordBot.Command("word", changeWord, {
         owner: true,
         usage: "@buttsbot word [word]",
@@ -99,6 +104,26 @@ function restart(message) {
     DiscordBot.utils.sendVerbose(message.channel, "Be right back!").then(() => {
         client.destroy();
     });
+}
+
+function prefix(message, args) {
+    db.Guild.findByPk(message.guild.id)
+        .then(guild => {
+            if (args.length > 1 && message.author.id === message.guild.ownerID) {
+                this.client.config.servers[message.guild.id].prefix = args[1];
+                return guild.update({ prefix: args[1] })
+                    .then(() => utils.sendVerbose(message.channel, `Custom prefix set to \`${args[1]}\``));
+            }
+            else {
+                if (guild.prefix) {
+                    return utils.sendVerbose(message.channel, `Current custom prefix: \`${guild.prefix}\``);
+                }
+                else {
+                    return utils.sendVerbose(message.channel, "Custom prefix not set");
+                }
+            }
+        })
+        .catch(console.error);
 }
 
 function changeWord(message, args) {
