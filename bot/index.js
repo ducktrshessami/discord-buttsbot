@@ -185,16 +185,18 @@ function ignorechannel(message) {
 }
 
 function unignorechannel(message) {
-    let i = botConfig.servers[message.guild.id].ignoreList.indexOf(message.channel.id);
     DiscordBot.utils.logMessage(message);
-    if (i !== -1) {
-        botConfig.servers[message.guild.id].ignoreList.splice(i, 1);
-        updateConfig(botConfig);
-        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay :)`);
-    }
-    else {
-        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
-    }
+    db.IgnoreChannel.findByPk(message.channel.id)
+        .then(ignoredChannel => {
+            if (ignoredChannel) {
+                return ignoredChannel.destroy()
+                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay :)`));
+            }
+            else {
+                return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
+            }
+        })
+        .catch(console.error);
 }
 
 function checkButt(message) {
