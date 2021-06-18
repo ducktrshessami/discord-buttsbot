@@ -152,16 +152,18 @@ function ignoreme(message) {
 }
 
 function unignoreme(message) {
-    let i = botConfig.ignoreList.indexOf(message.author.id);
     DiscordBot.utils.logMessage(message);
-    if (i !== -1) {
-        botConfig.ignoreList.splice(i, 1);
-        updateConfig(botConfig);
-        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay :)`);
-    }
-    else {
-        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring you!`);
-    }
+    db.IgnoreUser.findByPk(message.author.id)
+        .then(ignoredUser => {
+            if (ignoredUser) {
+                return ignoredUser.destroy()
+                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay :)`));
+            }
+            else {
+                return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring you!`);
+            }
+        })
+        .catch(console.error);
 }
 
 function ignorechannel(message) {
