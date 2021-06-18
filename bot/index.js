@@ -200,34 +200,20 @@ function unignorechannel(message) {
 }
 
 function checkButt(message) {
-    let change = false;
-    if (!botConfig.servers[message.guild.id].word) {
-        change = true;
-        botConfig.servers[message.guild.id].word = defaultButt.word;
-    }
-    if (!botConfig.servers[message.guild.id].freq) {
-        change = true;
-        botConfig.servers[message.guild.id].freq = defaultButt.frequency;
-    }
-    if (!botConfig.servers[message.guild.id].rate) {
-        change = true;
-        botConfig.servers[message.guild.id].rate = defaultButt.rate;
-    }
-    if (!botConfig.servers[message.guild.id].ignoreList) {
-        change = true;
-        botConfig.servers[message.guild.id].ignoreList = [];
-    }
-    if (change) {
-        updateConfig(botConfig);
-    }
-    return (
-        !message.author.bot &&
-        message.guild &&
-        message.cleanContent &&
-        !botConfig.servers[message.guild.id].ignoreList.includes(message.channel.id) &&
-        !botConfig.ignoreList.includes(message.author.id) &&
-        (Math.random() < (1 / botConfig.servers[message.guild.id].freq))
-    );
+    return Promise.all([
+        db.IgnoreChannel.findByPk(message.channel.id),
+        db.IgnoreUser.findByPk(message.author.id),
+        db.Guild.findByPk(message.guild.id)
+    ])
+        .then(([ignoredChannel, ignoredUser]) =>
+            !message.author.bot &&
+            message.guild &&
+            message.cleanContent &&
+            !ignoredChannel &&
+            !ignoredUser &&
+            (Math.random() < (1 / guild.frequency))
+        )
+        .catch(console.error);
 }
 
 function sendButt(message) {
