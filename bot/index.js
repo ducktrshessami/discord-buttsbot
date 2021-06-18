@@ -168,14 +168,20 @@ function unignoreme(message) {
 
 function ignorechannel(message) {
     DiscordBot.utils.logMessage(message);
-    if (!botConfig.servers[message.guild.id].ignoreList.includes(message.channel.id)) {
-        botConfig.servers[message.guild.id].ignoreList.push(message.channel.id);
-        updateConfig(botConfig);
-        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay.`);
-    }
-    else {
-        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
-    }
+    db.IgnoreChannel.findByPk(message.channel.id)
+        .then(ignoredChannel => {
+            if (!ignoredChannel) {
+                return db.IgnoreChannel.create({
+                    id: message.channel.id,
+                    GuildId: message.guild.id
+                })
+                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay.`));
+            }
+            else {
+                return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
+            }
+        })
+        .catch(console.error);
 }
 
 function unignorechannel(message) {
