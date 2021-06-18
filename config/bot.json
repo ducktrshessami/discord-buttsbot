@@ -4,8 +4,7 @@
         ""
     ],
     "generateCmd": {
-        "help": true,
-        "prefix": true
+        "help": true
     },
     "embedColor": "44BEC7"
 }
