@@ -1,0 +1,29 @@
+{
+    "minutes": 20,
+    "activities": [
+        {
+            "activity": {
+                "type": "PLAYING",
+                "name": "games of love and deceit"
+            }
+        },
+        {
+            "activity": {
+                "type": "LISTENING",
+                "name": "your mom get absolutely plowed"
+            }
+        },
+        {
+            "activity": {
+                "type": "LISTENING",
+                "name": "the sound of his own fears"
+            }
+        },
+        {
+            "activity": {
+                "type": "PLAYING",
+                "name": "hard to get"
+            }
+        }
+    ]
+}

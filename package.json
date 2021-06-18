@@ -2,11 +2,12 @@
   "name": "buttsbot",
   "version": "1.2.3",
   "description": "I'm Buttbot! I say butt!",
-  "main": "./src/index.js",
+  "main": "server.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ducktrshessami/buttsbot.git"
   },
+  "keywords": [],
   "author": "ducktrshessami",
   "license": "MIT",
   "bugs": {
@@ -15,6 +16,11 @@
   "homepage": "https://github.com/ducktrshessami/buttsbot#readme",
   "dependencies": {
     "discord-bot": "github:ducktrshessami/discord-bot",
+    "express": "^4.17.1",
+    "express-cycle": "github:ducktrshessami/express-cycle",
+    "pg": "^8.6.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.6.2",
     "syllablize": "github:ducktrshessami/syllablize"
   },
   "optionalDependencies": {
@@ -25,5 +31,9 @@
   },
   "devDependencies": {
     "dotenv": "^10.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   }
 }
