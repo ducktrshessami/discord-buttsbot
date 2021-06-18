@@ -238,3 +238,5 @@ function responseCheck(message, trigger) {
     let splitContent = message.content.toLowerCase().trim().split(/\s/g);
     return trigger.every(tr => splitContent.includes(tr));
 }
+
+module.exports = client;

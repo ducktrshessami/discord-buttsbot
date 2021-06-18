@@ -20,6 +20,7 @@ db.sequelize.sync({ force: process.env.DB_FORCE && process.env.DB_FORCE.trim().t
         app.listen(PORT, function () {
             console.log(`Listening on PORT ${PORT}`);
             cycler.startLoop();
+            process.bot = require("./bot");
         });
     })
     .catch(err => {
