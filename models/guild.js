@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    prefix: DataTypes.STRING,
     word: {
       type: DataTypes.STRING,
       defaultValue: defaultConfig.word
