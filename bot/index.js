@@ -6,12 +6,6 @@ const presenceConfig = require("../config/presence.json");
 const defaultButt = require("../config/butt.json").default;
 
 let commands = [
-    new DiscordBot.Command("restart", restart, {
-        admin: true,
-        usage: "@buttsbot restart",
-        description: "I go to sleep, and then (hopefully 😟) get right back up!",
-        subtitle: "I only do this for my botmin though."
-    }),
     new DiscordBot.Command("prefix", prefix, {
         usage: "@buttsbot prefix [prefix]",
         description: "View or change the command prefix",
@@ -62,7 +56,8 @@ let responses = [
 ];
 let client = new DiscordBot({
     ...botConfig,
-    token: process.env.BOT_TOKEN || botConfig.token
+    token: process.env.BOT_TOKEN || botConfig.token,
+    admin: process.env.BOT_ADMINS ? JSON.parse(process.env.BOT_ADMINS) : botConfig.admin
 }, commands, responses);
 
 // Client event handling
@@ -101,12 +96,6 @@ function disconnect() {
 }
 
 // Commands, responses, and helpers
-function restart(message) {
-    DiscordBot.utils.sendVerbose(message.channel, "Be right back!").then(() => {
-        client.destroy();
-    });
-}
-
 function prefix(message, args) {
     db.Guild.findByPk(message.guild.id)
         .then(guild => {
