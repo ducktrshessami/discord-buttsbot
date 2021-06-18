@@ -12,7 +12,7 @@ A [Discord](https://discord.com/) bot based on the [Twitch bot of the same name]
 
 Powered by [discord.js](https://discord.js.org/#/), a [Node.js](https://nodejs.org/) module
 
-Avatar by Julia Rolon
+Avatar and presence activities by Julia Rolon
 
 # Usage
 
