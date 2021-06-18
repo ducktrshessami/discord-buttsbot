@@ -123,14 +123,17 @@ function changeFreq(message, args) {
 function changeRate(message, args) {
     let n = parseInt(args[1]);
     DiscordBot.utils.logMessage(message);
-    if (n && n > 0) {
-        botConfig.servers[message.guild.id].rate = n;
-        updateConfig(botConfig);
-        DiscordBot.utils.sendVerbose(message.channel, `Buttify rate changed to one in every \`${botConfig.servers[message.guild.id].rate}\` syllables per buttified message!`);
-    }
-    else {
-        DiscordBot.utils.sendVerbose(message.channel, `I buttify roughly one in every \`${botConfig.servers[message.guild.id].rate}\` syllables per buttified message!\nTo change this rate, use \`${this.usage}\`.\nDefault: \`${defaultButt.rate}\``);
-    }
+    db.Guild.findByPk(message.guild.id)
+        .then(guild => {
+            if (n && n > 0) {
+                return guild.update({ rate: n })
+                    .then(updated => DiscordBot.utils.sendVerbose(message.channel, `Buttify rate changed to one in every \`${updated.rate}\` syllables per buttified message!`));
+            }
+            else {
+                return DiscordBot.utils.sendVerbose(message.channel, `I buttify roughly one in every \`${guild.rate}\` syllables per buttified message!\nTo change this rate, use \`${this.usage}\`.\nDefault: \`${defaultButt.rate}\``);
+            }
+        })
+        .catch(console.error);
 }
 
 function ignoreme(message) {
