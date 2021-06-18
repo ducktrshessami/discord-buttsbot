@@ -1,15 +1,9 @@
 const fs = require("fs").promises;
-const readline = require("readline");
 const DiscordBot = require("discord-bot");
 const buttify = require("./buttify");
 const botConfig = require("../config/bot.json");
 const presenceConfig = require("../config/presence.json");
 const defaultButt = require("../config/butt.json").default;
-
-const ios = new readline.Interface({
-    input: process.stdin,
-    output: process.stdout
-});
 
 let commands = [
     new DiscordBot.Command("restart", restart, {
@@ -72,13 +66,6 @@ client.on("configUpdate", updateConfig);
 client.on("error", console.error);
 client.on("shardDisconnect", disconnect);
 
-// ios event handling
-ios.on("line", (line) => {
-    if (line.toLowerCase().trim() == "exit") {
-        disconnect();
-    }
-});
-
 // Bot utils
 function updateConfig(cfg) {
     botConfig = cfg;
@@ -94,7 +81,6 @@ function sendMessage(channel, ...content) {
 }
 
 function disconnect() {
-    ios.close();
     client.destroy();
     throw "Logging off";
 }
