@@ -107,14 +107,17 @@ function changeWord(message, args) {
 function changeFreq(message, args) {
     let n = parseInt(args[1]);
     DiscordBot.utils.logMessage(message);
-    if (n && n > 0) {
-        botConfig.servers[message.guild.id].freq = n;
-        updateConfig(botConfig);
-        DiscordBot.utils.sendVerbose(message.channel, `Buttify frequency changed to one in every \`${botConfig.servers[message.guild.id].freq}\` messages!`);
-    }
-    else {
-        DiscordBot.utils.sendVerbose(message.channel, `I buttify roughly one in every \`${botConfig.servers[message.guild.id].freq}\` messages!\nTo change the frequency, use \`${this.usage}\`.\nDefault: \`${defaultButt.frequency}\``);
-    }
+    db.Guild.findByPk(message.guild.id)
+        .then(guild => {
+            if (n && n > 0) {
+                return guild.update({ frequency: n })
+                    .then(updated => DiscordBot.utils.sendVerbose(message.channel, `Buttify frequency changed to one in every \`${updated.frequency}\` messages!`));
+            }
+            else {
+                return DiscordBot.utils.sendVerbose(message.channel, `I buttify roughly one in every \`${guild.frequency}\` messages!\nTo change the frequency, use \`${this.usage}\`.\nDefault: \`${defaultButt.frequency}\``);
+            }
+        })
+        .catch(console.error);
 }
 
 function changeRate(message, args) {
