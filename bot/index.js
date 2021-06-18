@@ -5,6 +5,10 @@ const botConfig = require("../config/bot.json");
 const presenceConfig = require("../config/presence.json");
 const defaultButt = require("../config/butt.json").default;
 
+const smile = process.env.SMILE || ":D";
+const frown = process.env.FROWN || ":(";
+const wink = process.env.WINK || ";)";
+
 let commands = [
     new DiscordBot.Command("prefix", prefix, {
         usage: "@buttsbot prefix [prefix]",
@@ -49,9 +53,9 @@ let commands = [
     })
 ];
 let responses = [
-    new DiscordBot.Response(["buttsbot", "yes"], process.env.SMILE || ":D", responseCheck),
-    new DiscordBot.Response(["buttsbot", "no"], process.env.FROWN || ":(", responseCheck),
-    new DiscordBot.Response(["buttsbot", "please"], process.env.WINK || ";)", responseCheck),
+    new DiscordBot.Response(["buttsbot", "yes"], smile, responseCheck),
+    new DiscordBot.Response(["buttsbot", "no"], frown, responseCheck),
+    new DiscordBot.Response(["buttsbot", "please"], wink, responseCheck),
     new DiscordBot.Response("", "", checkButt, sendButt)
 ];
 let client = new DiscordBot({
@@ -169,7 +173,7 @@ function ignoreme(message) {
         .then(ignoredUser => {
             if (!ignoredUser) {
                 return db.IgnoreUser.create({ id: message.author.id })
-                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay :(`));
+                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay ${frown}`));
             }
             else {
                 return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm already ignoring you.`);
@@ -184,7 +188,7 @@ function unignoreme(message) {
         .then(ignoredUser => {
             if (ignoredUser) {
                 return ignoredUser.destroy()
-                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay :)`));
+                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay ${smile}`));
             }
             else {
                 return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring you!`);
@@ -217,7 +221,7 @@ function unignorechannel(message) {
         .then(ignoredChannel => {
             if (ignoredChannel) {
                 return ignoredChannel.destroy()
-                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay :)`));
+                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay ${smile}`));
             }
             else {
                 return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
