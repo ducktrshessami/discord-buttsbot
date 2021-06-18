@@ -3,14 +3,9 @@
     "admin": [
         ""
     ],
-    "presence": {
-        "minutes": 20,
-        "presences": []
-    },
     "generateCmd": {
         "help": true,
         "prefix": true
     },
-    "embedColor": "44BEC7",
-    "ignoreList": []
+    "embedColor": "44BEC7"
 }
