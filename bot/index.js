@@ -80,6 +80,7 @@ function updateConfig(config) {
         db.Guild.findByPk(id)
             .then(guild => {
                 if (guild) {
+                    client.config.servers[id].prefix = guild.prefix;
                     return guild.update({ name: config.servers[id].name });
                 }
                 else {
