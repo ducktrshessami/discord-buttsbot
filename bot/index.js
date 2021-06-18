@@ -91,14 +91,17 @@ function restart(message) {
 
 function changeWord(message, args) {
     DiscordBot.utils.logMessage(message);
-    if (args.length > 1) {
-        botConfig.servers[message.guild.id].word = args[1].toLowerCase();
-        updateConfig(botConfig);
-        DiscordBot.utils.sendVerbose(message.channel, `Buttification word changed to \`${botConfig.servers[message.guild.id].word}\`!`);
-    }
-    else {
-        DiscordBot.utils.sendVerbose(message.channel, `I buttify messages with the word \`${botConfig.servers[message.guild.id].word}\`!`);
-    }
+    db.Guild.findByPk(message.guild.id)
+        .then(guild => {
+            if (args.length > 1) {
+                return guild.update({ word: args[1].toLowerCase() })
+                    .then(updated => DiscordBot.utils.sendVerbose(message.channel, `Buttification word changed to \`${updated.word}\`!`));
+            }
+            else {
+                return DiscordBot.utils.sendVerbose(message.channel, `I buttify messages with the word \`${guild.word}\`!`);
+            }
+        })
+        .catch(console.error);
 }
 
 function changeFreq(message, args) {
