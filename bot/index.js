@@ -112,14 +112,14 @@ function prefix(message, args) {
             if (args.length > 1 && message.author.id === message.guild.ownerID) {
                 this.client.config.servers[message.guild.id].prefix = args[1];
                 return guild.update({ prefix: args[1] })
-                    .then(() => utils.sendVerbose(message.channel, `Custom prefix set to \`${args[1]}\``));
+                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `Custom prefix set to \`${args[1]}\``));
             }
             else {
                 if (guild.prefix) {
-                    return utils.sendVerbose(message.channel, `Current custom prefix: \`${guild.prefix}\``);
+                    return DiscordBot.utils.sendVerbose(message.channel, `Current custom prefix: \`${guild.prefix}\``);
                 }
                 else {
-                    return utils.sendVerbose(message.channel, "Custom prefix not set");
+                    return DiscordBot.utils.sendVerbose(message.channel, "Custom prefix not set");
                 }
             }
         })
