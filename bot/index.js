@@ -72,7 +72,19 @@ client.on("shardDisconnect", disconnect);
 // Bot utils
 function updateConfig(config) {
     for (let id in config.servers) {
-        console.log(id);
+        db.Guild.findByPk(id)
+            .then(guild => {
+                if (guild) {
+                    return guild.update({ name: config.servers[id].name });
+                }
+                else {
+                    return db.Guild.create({
+                        ...config.servers[id],
+                        id
+                    });
+                }
+            })
+            .catch(console.error);
     }
 }
 
