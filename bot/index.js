@@ -2,7 +2,9 @@ const fs = require("fs").promises;
 const readline = require("readline");
 const DiscordBot = require("discord-bot");
 const buttify = require("./buttify");
-var config = require("../config/bot.json");
+const botConfig = require("../config/bot.json");
+const presenceConfig = require("../config/presence.json");
+const defaultButt = require("../config/butt.json").default;
 
 const ios = new readline.Interface({
     input: process.stdin,
@@ -26,13 +28,13 @@ let commands = [
         owner: true,
         usage: "@buttsbot frequency [number]",
         description: "Use this command to show or change how often I buttify messages!",
-        subtitle: `The default frequency is ${config.default.freq}. Also I only do this for the server owner.`
+        subtitle: `The default frequency is ${defaultButt.frequency}. Also I only do this for the server owner.`
     }),
     new DiscordBot.Command("rate", changeRate, {
         owner: true,
         usage: "@buttsbot rate [number]",
         description: "Use this command to show or change the amount of syllables buttified when I buttify a message!",
-        subtitle: `The default rate is ${config.default.rate}. Also I only do this for the server owner.`
+        subtitle: `The default rate is ${defaultButt.rate}. Also I only do this for the server owner.`
     }),
     new DiscordBot.Command("ignoreme", ignoreme, {
         usage: "@buttsbot ignoreme",
@@ -59,13 +61,13 @@ let responses = [
     new DiscordBot.Response(["buttsbot", "please"], process.env.WINK || ";)", responseCheck),
     new DiscordBot.Response("", "", checkButt, sendButt)
 ];
-let client = new DiscordBot(config, commands, responses);
+let client = new DiscordBot(botConfig, commands, responses);
 
 // Client event handling
 client.on("ready", () => {
     console.info(`Logged in as ${client.user.username}#${client.user.discriminator}`);
-    if (config.presence.presences.length) {
-        client.loopPresences(config.presence.presences, config.presence.minutes);
+    if (botConfig.presence.presences.length) {
+        client.loopPresences(botConfig.presence.presences, botConfig.presence.minutes);
     }
 });
 client.on("configUpdate", updateConfig);
@@ -81,8 +83,8 @@ ios.on("line", (line) => {
 
 // Bot utils
 function updateConfig(cfg) {
-    config = cfg;
-    return fs.writeFile(`${__dirname}/../config/bot.json`, JSON.stringify(config, null, 4) + "\n").catch(console.error);
+    botConfig = cfg;
+    return fs.writeFile(`${__dirname}/../config/bot.json`, JSON.stringify(botConfig, null, 4) + "\n").catch(console.error);
 }
 
 function logMessage(message) {
@@ -109,12 +111,12 @@ function restart(message) {
 function changeWord(message, args) {
     logMessage(message);
     if (args.length > 1) {
-        config.servers[message.guild.id].word = args[1].toLowerCase();
-        updateConfig(config);
-        sendMessage(message.channel, `Buttification word changed to \`${config.servers[message.guild.id].word}\`!`);
+        botConfig.servers[message.guild.id].word = args[1].toLowerCase();
+        updateConfig(botConfig);
+        sendMessage(message.channel, `Buttification word changed to \`${botConfig.servers[message.guild.id].word}\`!`);
     }
     else {
-        sendMessage(message.channel, `I buttify messages with the word \`${config.servers[message.guild.id].word}\`!`);
+        sendMessage(message.channel, `I buttify messages with the word \`${botConfig.servers[message.guild.id].word}\`!`);
     }
 }
 
@@ -122,12 +124,12 @@ function changeFreq(message, args) {
     let n = parseInt(args[1]);
     logMessage(message);
     if (n && n > 0) {
-        config.servers[message.guild.id].freq = n;
-        updateConfig(config);
-        sendMessage(message.channel, `Buttify frequency changed to one in every \`${config.servers[message.guild.id].freq}\` messages!`);
+        botConfig.servers[message.guild.id].freq = n;
+        updateConfig(botConfig);
+        sendMessage(message.channel, `Buttify frequency changed to one in every \`${botConfig.servers[message.guild.id].freq}\` messages!`);
     }
     else {
-        sendMessage(message.channel, `I buttify roughly one in every \`${config.servers[message.guild.id].freq}\` messages!\nTo change the frequency, use \`${this.usage}\`.\nDefault: \`${config.default.freq}\``);
+        sendMessage(message.channel, `I buttify roughly one in every \`${botConfig.servers[message.guild.id].freq}\` messages!\nTo change the frequency, use \`${this.usage}\`.\nDefault: \`${defaultButt.frequency}\``);
     }
 }
 
@@ -135,20 +137,20 @@ function changeRate(message, args) {
     let n = parseInt(args[1]);
     logMessage(message);
     if (n && n > 0) {
-        config.servers[message.guild.id].rate = n;
-        updateConfig(config);
-        sendMessage(message.channel, `Buttify rate changed to one in every \`${config.servers[message.guild.id].rate}\` syllables per buttified message!`);
+        botConfig.servers[message.guild.id].rate = n;
+        updateConfig(botConfig);
+        sendMessage(message.channel, `Buttify rate changed to one in every \`${botConfig.servers[message.guild.id].rate}\` syllables per buttified message!`);
     }
     else {
-        sendMessage(message.channel, `I buttify roughly one in every \`${config.servers[message.guild.id].rate}\` syllables per buttified message!\nTo change this rate, use \`${this.usage}\`.\nDefault: \`${config.default.rate}\``);
+        sendMessage(message.channel, `I buttify roughly one in every \`${botConfig.servers[message.guild.id].rate}\` syllables per buttified message!\nTo change this rate, use \`${this.usage}\`.\nDefault: \`${defaultButt.rate}\``);
     }
 }
 
 function ignoreme(message) {
     logMessage(message);
-    if (!config.ignoreList.includes(message.author.id)) {
-        config.ignoreList.push(message.author.id);
-        updateConfig(config);
+    if (!botConfig.ignoreList.includes(message.author.id)) {
+        botConfig.ignoreList.push(message.author.id);
+        updateConfig(botConfig);
         sendMessage(message.channel, `<@${message.author.id}> Okay :(`);
     }
     else {
@@ -157,11 +159,11 @@ function ignoreme(message) {
 }
 
 function unignoreme(message) {
-    let i = config.ignoreList.indexOf(message.author.id);
+    let i = botConfig.ignoreList.indexOf(message.author.id);
     logMessage(message);
     if (i !== -1) {
-        config.ignoreList.splice(i, 1);
-        updateConfig(config);
+        botConfig.ignoreList.splice(i, 1);
+        updateConfig(botConfig);
         sendMessage(message.channel, `<@${message.author.id}> Okay :)`);
     }
     else {
@@ -171,9 +173,9 @@ function unignoreme(message) {
 
 function ignorechannel(message) {
     logMessage(message);
-    if (!config.servers[message.guild.id].ignoreList.includes(message.channel.id)) {
-        config.servers[message.guild.id].ignoreList.push(message.channel.id);
-        updateConfig(config);
+    if (!botConfig.servers[message.guild.id].ignoreList.includes(message.channel.id)) {
+        botConfig.servers[message.guild.id].ignoreList.push(message.channel.id);
+        updateConfig(botConfig);
         sendMessage(message.channel, `<@${message.author.id}> Okay.`);
     }
     else {
@@ -182,11 +184,11 @@ function ignorechannel(message) {
 }
 
 function unignorechannel(message) {
-    let i = config.servers[message.guild.id].ignoreList.indexOf(message.channel.id);
+    let i = botConfig.servers[message.guild.id].ignoreList.indexOf(message.channel.id);
     logMessage(message);
     if (i !== -1) {
-        config.servers[message.guild.id].ignoreList.splice(i, 1);
-        updateConfig(config);
+        botConfig.servers[message.guild.id].ignoreList.splice(i, 1);
+        updateConfig(botConfig);
         sendMessage(message.channel, `<@${message.author.id}> Okay :)`);
     }
     else {
@@ -196,38 +198,38 @@ function unignorechannel(message) {
 
 function checkButt(message) {
     let change = false;
-    if (!config.servers[message.guild.id].word) {
+    if (!botConfig.servers[message.guild.id].word) {
         change = true;
-        config.servers[message.guild.id].word = config.default.word;
+        botConfig.servers[message.guild.id].word = defaultButt.word;
     }
-    if (!config.servers[message.guild.id].freq) {
+    if (!botConfig.servers[message.guild.id].freq) {
         change = true;
-        config.servers[message.guild.id].freq = config.default.freq;
+        botConfig.servers[message.guild.id].freq = defaultButt.frequency;
     }
-    if (!config.servers[message.guild.id].rate) {
+    if (!botConfig.servers[message.guild.id].rate) {
         change = true;
-        config.servers[message.guild.id].rate = config.default.rate;
+        botConfig.servers[message.guild.id].rate = defaultButt.rate;
     }
-    if (!config.servers[message.guild.id].ignoreList) {
+    if (!botConfig.servers[message.guild.id].ignoreList) {
         change = true;
-        config.servers[message.guild.id].ignoreList = [];
+        botConfig.servers[message.guild.id].ignoreList = [];
     }
     if (change) {
-        updateConfig(config);
+        updateConfig(botConfig);
     }
     return (
         !message.author.bot &&
         message.guild &&
         message.cleanContent &&
-        !config.servers[message.guild.id].ignoreList.includes(message.channel.id) &&
-        !config.ignoreList.includes(message.author.id) &&
-        (Math.random() < (1 / config.servers[message.guild.id].freq))
+        !botConfig.servers[message.guild.id].ignoreList.includes(message.channel.id) &&
+        !botConfig.ignoreList.includes(message.author.id) &&
+        (Math.random() < (1 / botConfig.servers[message.guild.id].freq))
     );
 }
 
 function sendButt(message) {
-    let buttified = buttify(message.cleanContent, config.servers[message.guild.id].word, config.servers[message.guild.id].rate);
-    if (verifyButt(message.cleanContent, buttified, config.servers[message.guild.id].word)) {
+    let buttified = buttify(message.cleanContent, botConfig.servers[message.guild.id].word, botConfig.servers[message.guild.id].rate);
+    if (verifyButt(message.cleanContent, buttified, botConfig.servers[message.guild.id].word)) {
         logMessage(message);
         sendMessage(message.channel, buttified);
     }
