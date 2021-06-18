@@ -138,14 +138,17 @@ function changeRate(message, args) {
 
 function ignoreme(message) {
     DiscordBot.utils.logMessage(message);
-    if (!botConfig.ignoreList.includes(message.author.id)) {
-        botConfig.ignoreList.push(message.author.id);
-        updateConfig(botConfig);
-        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay :(`);
-    }
-    else {
-        DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm already ignoring you.`);
-    }
+    db.IgnoreUser.findByPk(message.author.id)
+        .then(ignoredUser => {
+            if (!ignoredUser) {
+                return db.IgnoreUser.create({ id: message.author.id })
+                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay :(`));
+            }
+            else {
+                return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm already ignoring you.`);
+            }
+        })
+        .catch(console.error);
 }
 
 function unignoreme(message) {
