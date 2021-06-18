@@ -217,11 +217,15 @@ function checkButt(message) {
 }
 
 function sendButt(message) {
-    let buttified = buttify(message.cleanContent, botConfig.servers[message.guild.id].word, botConfig.servers[message.guild.id].rate);
-    if (verifyButt(message.cleanContent, buttified, botConfig.servers[message.guild.id].word)) {
-        DiscordBot.utils.logMessage(message);
-        DiscordBot.utils.sendVerbose(message.channel, buttified);
-    }
+    db.Guild.findByPk(message.guild.id)
+        .then(guild => {
+            let buttified = buttify(message.cleanContent, guild.word, guild.rate);
+            if (verifyButt(message.cleanContent, buttified, guild.word)) {
+                DiscordBot.utils.logMessage(message);
+                return DiscordBot.utils.sendVerbose(message.channel, buttified);
+            }
+        })
+        .catch(console.error);
 }
 
 function verifyButt(original, buttified, word) {
