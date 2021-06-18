@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     frequency: {
       type: DataTypes.INTEGER,
-      defaultValue: defaultConfig.freqency
+      defaultValue: defaultConfig.frequency
     },
     rate: {
       type: DataTypes.INTEGER,
