@@ -205,7 +205,7 @@ function checkButt(message) {
         db.IgnoreUser.findByPk(message.author.id),
         db.Guild.findByPk(message.guild.id)
     ])
-        .then(([ignoredChannel, ignoredUser]) =>
+        .then(([ignoredChannel, ignoredUser, guild]) =>
             !message.author.bot &&
             message.guild &&
             message.cleanContent &&
