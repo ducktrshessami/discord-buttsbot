@@ -11,7 +11,10 @@ const db = require("./models");
 
 const app = express();
 const PORT = process.env.PORT || 8080;
-const cycler = cycle({ origin: process.env.PUBLIC_ORIGIN || `http://localhost:${PORT}` });
+const cycler = cycle({
+    origin: process.env.PUBLIC_ORIGIN || `http://localhost:${PORT}`,
+    verbose: true
+});
 
 app.use(cycler);
 
