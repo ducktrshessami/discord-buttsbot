@@ -6,5 +6,6 @@
     "generateCmd": {
         "help": true
     },
-    "embedColor": "44BEC7"
+    "embedColor": "44BEC7",
+    "responseCooldown": 30000
 }
