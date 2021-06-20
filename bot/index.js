@@ -8,6 +8,7 @@ const defaultButt = require("../config/butt.json").default;
 const smile = process.env.SMILE || ":D";
 const frown = process.env.FROWN || ":(";
 const wink = process.env.WINK || ";)";
+const weird = process.env.WEIRD || "O_o";
 
 let commands = [
     new DiscordBot.Command("prefix", prefix, {
@@ -56,6 +57,7 @@ let responses = [
     new DiscordBot.Response(["buttsbot", "yes"], smile, responseCheck),
     new DiscordBot.Response(["buttsbot", "no"], frown, responseCheck),
     new DiscordBot.Response(["buttsbot", "please"], wink, responseCheck),
+    new DiscordBot.Response(["buttsbot", "why"], weird, responseCheck),
     new DiscordBot.Response("", "", checkButt, sendButt)
 ];
 let client = new DiscordBot({
