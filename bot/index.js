@@ -5,10 +5,10 @@ const botConfig = require("../config/bot.json");
 const presenceConfig = require("../config/presence.json");
 const defaultButt = require("../config/butt.json").default;
 
-const smile = process.env.SMILE || ":D";
-const frown = process.env.FROWN || ":(";
-const wink = process.env.WINK || ";)";
-const weird = process.env.WEIRD || "O_o";
+const smile = process.env.RES_SMILE || ":D";
+const frown = process.env.RES_FROWN || ":(";
+const wink = process.env.RES_WINK || ";)";
+const weird = process.env.RES_WEIRD || "O_o";
 
 let commands = [
     new DiscordBot.Command("prefix", prefix, {
