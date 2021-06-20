@@ -54,10 +54,10 @@ let commands = [
     })
 ];
 let responses = [
-    new DiscordBot.Response(["buttsbot", "yes"], smile, responseCheck),
-    new DiscordBot.Response(["buttsbot", "no"], frown, responseCheck),
-    new DiscordBot.Response(["buttsbot", "please"], wink, responseCheck),
-    new DiscordBot.Response(["buttsbot", "why"], weird, responseCheck),
+    new DiscordBot.Response(["buttsbot", "yes"], smile, responseCheck, responseSender()),
+    new DiscordBot.Response(["buttsbot", "no"], frown, responseCheck, responseSender()),
+    new DiscordBot.Response(["buttsbot", "please"], wink, responseCheck, responseSender()),
+    new DiscordBot.Response(["buttsbot", "why"], weird, responseCheck, responseSender()),
     new DiscordBot.Response("", "", checkButt, sendButt)
 ];
 let client = new DiscordBot({
@@ -270,6 +270,18 @@ function verifyButt(original, buttified, word) {
 function responseCheck(message, trigger) {
     let splitContent = message.content.toLowerCase().trim().split(/\s/g);
     return trigger.every(tr => splitContent.includes(tr));
+}
+
+function responseSender() {
+    let ready = true;
+    return (message, response) => {
+        if (ready) {
+            ready = false;
+            setTimeout(() => ready = true, botConfig.responseCooldown);
+            return DiscordBot.utils.sendVerbose(message.channel, response)
+                .catch(console.error);
+        }
+    };
 }
 
 module.exports = client;
