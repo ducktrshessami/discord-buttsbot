@@ -7,6 +7,7 @@ catch {
 
 const express = require("express");
 const cycle = require("express-cycle");
+const { resolve } = require("path");
 const db = require("./models");
 
 const app = express();
@@ -17,6 +18,7 @@ const cycler = cycle({
 });
 
 app.use(cycler);
+app.use(express.static(resolve(__dirname, "public")));
 
 db.sequelize.sync({ force: process.env.DB_FORCE && process.env.DB_FORCE.trim().toLowerCase() !== "false" })
     .then(() => {
