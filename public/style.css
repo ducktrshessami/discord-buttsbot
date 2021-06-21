@@ -1,8 +1,14 @@
 body {
     font-family: 'Raleway', sans-serif;
+    background-color: #2C2F33;
+    color: #fff;
 }
 
-a:active {
+a {
+    color: #8ed8dd;
+}
+
+a:active, a:visited {
     color: #44BEC7;
 }
 
@@ -26,7 +32,7 @@ a:active {
     color: #fff!important;
     text-decoration: none;
     padding: 0.33rem 0.5rem;
-    box-shadow: 0.1ch 0.1ch 0.5ch #000;
+    box-shadow: 0 0.15ch 0.5ch #000;
 }
 
 .invite-button:hover {
