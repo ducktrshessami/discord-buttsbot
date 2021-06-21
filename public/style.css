@@ -14,3 +14,12 @@ a:active {
     margin: 4rem auto;
     max-width: 75ch;
 }
+
+.link-list {
+    list-style: none;
+    padding: 0;
+}
+
+.link-list > li {
+    margin: 0.5rem 0;
+}
