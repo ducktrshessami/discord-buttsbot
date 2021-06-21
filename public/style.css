@@ -15,6 +15,35 @@ a:active {
     max-width: 75ch;
 }
 
+.invite-wrapper {
+    margin: 2rem 0;
+}
+
+.invite-button {
+    border: none;
+    border-radius: 3px;
+    background-color: #7289DA;
+    color: #fff!important;
+    text-decoration: none;
+    padding: 0.33rem 0.5rem;
+    box-shadow: 0.1ch 0.1ch 0.5ch #000;
+}
+
+.invite-button:hover {
+    background-color: #8ea1e1;
+}
+
+.invite-button:hover:focus {
+    background-color: #4e5d94;
+}
+
+.discord-logo {
+    content: url("/Discord-Logo-White.svg");
+    height: 1.25rem;
+    position: relative;
+    top: 0.3rem;
+}
+
 .link-list {
     list-style: none;
     padding: 0;
