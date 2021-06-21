@@ -98,7 +98,6 @@ function updateConfig(config) {
 function disconnect() {
     client.destroy();
     console.log("Logging off");
-    process.exit();
 }
 
 // Commands, responses, and helpers
