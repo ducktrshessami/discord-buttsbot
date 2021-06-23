@@ -51,6 +51,10 @@ let commands = [
         owner: true,
         usage: "@buttsbot unignorechannel",
         description: "Undo ignorechannel!"
+    }),
+    new DiscordBot.Command("invite", inviteLink, {
+        usage: "@buttsbot invite",
+        description: "I'll send a link so you can invite me somewhere else!"
     })
 ];
 let responses = [
@@ -229,6 +233,10 @@ function unignorechannel(message) {
             }
         })
         .catch(console.error);
+}
+
+function inviteLink(message) {
+
 }
 
 function checkButt(message) {
