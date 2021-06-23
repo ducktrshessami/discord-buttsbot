@@ -51,6 +51,10 @@ let commands = [
         owner: true,
         usage: "@buttsbot unignorechannel",
         description: "Undo ignorechannel!"
+    }),
+    new DiscordBot.Command("invite", inviteLink, {
+        usage: "@buttsbot invite",
+        description: "I'll send a link so you can invite me somewhere else!"
     })
 ];
 let responses = [
@@ -228,6 +232,11 @@ function unignorechannel(message) {
                 return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
             }
         })
+        .catch(console.error);
+}
+
+function inviteLink(message) {
+    DiscordBot.utils.sendVerbose(message.channel, `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=265216&scope=bot`)
         .catch(console.error);
 }
 
