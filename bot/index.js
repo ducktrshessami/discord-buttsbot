@@ -236,7 +236,8 @@ function unignorechannel(message) {
 }
 
 function inviteLink(message) {
-
+    DiscordBot.utils.sendVerbose(message.channel, `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=265216&scope=bot`)
+        .catch(console.error);
 }
 
 function checkButt(message) {
