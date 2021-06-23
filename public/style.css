@@ -35,6 +35,7 @@ a:active, a:visited {
 
 .info-wrapper {
     margin: 4rem auto;
+    padding: 0 1.5ch;
     max-width: 75ch;
 }
 
