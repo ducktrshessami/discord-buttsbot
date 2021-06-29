@@ -67,7 +67,7 @@ let responses = [
 let client = new DiscordBot({
     ...botConfig,
     token: process.env.BOT_TOKEN || botConfig.token,
-    admin: process.env.BOT_ADMINS ? JSON.parse(process.env.BOT_ADMINS) : botConfig.admin
+    botmins: process.env.BOT_ADMINS ? JSON.parse(process.env.BOT_ADMINS) : botConfig.botmins
 }, commands, responses);
 
 // Client event handling
