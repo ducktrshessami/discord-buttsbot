@@ -110,7 +110,7 @@ function disconnect() {
 function prefix(message, args) {
     db.Guild.findByPk(message.guild.id)
         .then(guild => {
-            if (args.length > 1 && message.author.id === message.guild.ownerID) {
+            if (args.length > 1 && message.member.hasPermission("ADMINISTRATOR")) {
                 this.client.config.servers[message.guild.id].prefix = args[1];
                 return guild.update({ prefix: args[1] })
                     .then(() => DiscordBot.utils.sendVerbose(message.channel, `Custom prefix set to \`${args[1]}\``));
