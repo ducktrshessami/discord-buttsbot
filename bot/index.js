@@ -13,26 +13,26 @@ const weird = process.env.RES_WEIRD || "O_o";
 let commands = [
     new DiscordBot.Command("prefix", prefix, {
         usage: "@buttsbot prefix [prefix]",
-        description: "View or change the command prefix",
-        subtitle: "Only the server owner can change the prefix"
+        description: "View or change the command prefix!",
+        subtitle: "Only admins can change it."
     }),
     new DiscordBot.Command("word", changeWord, {
-        owner: true,
+        requirePerms: "ADMINISTRATOR",
         usage: "@buttsbot word [word]",
         description: "Use this command to show or change what word I buttify messages with!",
-        subtitle: "I guess that only makes sense if the word is butt. Also I only do this for the server owner."
+        subtitle: "I guess that only makes sense if the word is butt. Also I only do this for admins."
     }),
     new DiscordBot.Command("frequency", changeFreq, {
-        owner: true,
+        requirePerms: "ADMINISTRATOR",
         usage: "@buttsbot frequency [number]",
         description: "Use this command to show or change how often I buttify messages!",
-        subtitle: `The default frequency is ${defaultButt.frequency}. Also I only do this for the server owner.`
+        subtitle: `The default frequency is ${defaultButt.frequency}. Also I only do this for admins.`
     }),
     new DiscordBot.Command("rate", changeRate, {
-        owner: true,
+        requirePerms: "ADMINISTRATOR",
         usage: "@buttsbot rate [number]",
         description: "Use this command to show or change the amount of syllables buttified when I buttify a message!",
-        subtitle: `The default rate is ${defaultButt.rate}. Also I only do this for the server owner.`
+        subtitle: `The default rate is ${defaultButt.rate}. Also I only do this for admins.`
     }),
     new DiscordBot.Command("ignoreme", ignoreme, {
         usage: "@buttsbot ignoreme",
@@ -43,14 +43,16 @@ let commands = [
         description: "Undo ignoreme!"
     }),
     new DiscordBot.Command("ignorechannel", ignorechannel, {
-        owner: true,
+        requirePerms: "MANAGE_CHANNELS",
         usage: "@buttsbot ignorechannel",
         description: "I won't buttify in this channel.",
+        subtitle: "I only do this for people who manage this channel."
     }),
     new DiscordBot.Command("unignorechannel", unignorechannel, {
-        owner: true,
+        requirePerms: "MANAGE_CHANNELS",
         usage: "@buttsbot unignorechannel",
-        description: "Undo ignorechannel!"
+        description: "Undo ignorechannel!",
+        subtitle: "I only do this for people who manage this channel."
     }),
     new DiscordBot.Command("invite", inviteLink, {
         usage: "@buttsbot invite",
