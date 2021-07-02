@@ -61,8 +61,11 @@ let commands = [
 ];
 let responses = [
     new DiscordBot.Response(["buttsbot", "yes"], smile, responseCheck, responseSender()),
+    new DiscordBot.Response(["buttsbot", "yeah"], smile, responseCheck, responseSender()),
+    new DiscordBot.Response(["buttsbot", "yea"], smile, responseCheck, responseSender()),
     new DiscordBot.Response(["buttsbot", "no"], frown, responseCheck, responseSender()),
     new DiscordBot.Response(["buttsbot", "please"], wink, responseCheck, responseSender()),
+    new DiscordBot.Response(["buttsbot", "pls"], wink, responseCheck, responseSender()),
     new DiscordBot.Response(["buttsbot", "why"], weird, responseCheck, responseSender()),
     new DiscordBot.Response("", "", checkButt, sendButt)
 ];
