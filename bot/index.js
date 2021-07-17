@@ -54,6 +54,18 @@ const commands = [
         description: "Undo ignorechannel!",
         subtitle: "I only do this for people who manage this channel."
     }),
+    new DiscordBot.Command("ignoreall", ignoreall, {
+        requirePerms: "ADMINISTRATOR",
+        usage: "@buttsbot ignoreall",
+        description: "I won't buttify in any channel.",
+        subtitle: "I only do this for admins."
+    }),
+    new DiscordBot.Command("unignoreall", unignoreall, {
+        requirePerms: "ADMINISTRATOR",
+        usage: "@buttsbot unignoreall",
+        description: "I'll buttify in every channel!",
+        subtitle: "I only do this for admins."
+    }),
     new DiscordBot.Command("invite", inviteLink, {
         usage: "@buttsbot invite",
         description: "I'll send a link so you can invite me somewhere else!"
@@ -238,6 +250,14 @@ function unignorechannel(message) {
             }
         })
         .catch(console.error);
+}
+
+function ignoreall(message) {
+
+}
+
+function unignoreall(message) {
+
 }
 
 function inviteLink(message) {
