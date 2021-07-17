@@ -1,16 +1,16 @@
 const DiscordBot = require("discord-bot");
-const buttify = require("./buttify");
 const db = require("../models");
+const buttify = require("./buttify");
 const botConfig = require("../config/bot.json");
 const presenceConfig = require("../config/presence.json");
-const defaultButt = require("../config/butt.json").default;
+const { default: defaultButt } = require("../config/butt.json");
 
 const smile = process.env.RES_SMILE || ":D";
 const frown = process.env.RES_FROWN || ":(";
 const wink = process.env.RES_WINK || ";)";
 const weird = process.env.RES_WEIRD || "O_o";
 
-let commands = [
+const commands = [
     new DiscordBot.Command("prefix", prefix, {
         usage: "@buttsbot prefix [prefix]",
         description: "View or change the command prefix!",
@@ -59,7 +59,7 @@ let commands = [
         description: "I'll send a link so you can invite me somewhere else!"
     })
 ];
-let responses = [
+const responses = [
     new DiscordBot.Response(["buttsbot", "yes"], smile, responseCheck, responseSender()),
     new DiscordBot.Response(["buttsbot", "yeah"], smile, responseCheck, responseSender()),
     new DiscordBot.Response(["buttsbot", "yea"], smile, responseCheck, responseSender()),
@@ -69,7 +69,7 @@ let responses = [
     new DiscordBot.Response(["buttsbot", "why"], weird, responseCheck, responseSender()),
     new DiscordBot.Response("", "", checkButt, sendButt)
 ];
-let client = new DiscordBot({
+const client = new DiscordBot({
     ...botConfig,
     token: process.env.BOT_TOKEN || botConfig.token,
     botmins: process.env.BOT_ADMINS ? JSON.parse(process.env.BOT_ADMINS) : botConfig.botmins
