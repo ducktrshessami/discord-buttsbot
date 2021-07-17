@@ -219,16 +219,41 @@ function unignoreme(message) {
         .catch(console.error);
 }
 
-function ignorechannel(message) {
-    DiscordBot.utils.logMessage(message);
-    db.IgnoreChannel.findByPk(message.channel.id)
+function createIgnoreChannel(guildID, channelID) {
+    return db.IgnoreChannel.findByPk(channelID)
         .then(ignoredChannel => {
             if (!ignoredChannel) {
                 return db.IgnoreChannel.create({
-                    id: message.channel.id,
-                    GuildId: message.guild.id
+                    id: channelID,
+                    GuildId: guildID
                 })
-                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay.`));
+                    .then(() => true);
+            }
+            else {
+                return false;
+            }
+        });
+}
+
+function destroyIgnoreChannel(channelID) {
+    return db.IgnoreChannel.findByPk(channelID)
+        .then(ignoredChannel => {
+            if (ignoredChannel) {
+                return ignoredChannel.destroy()
+                    .then(() => true);
+            }
+            else {
+                return false;
+            }
+        });
+}
+
+function ignorechannel(message) {
+    DiscordBot.utils.logMessage(message);
+    createIgnoreChannel(message.guild.id, message.channel.id)
+        .then(res => {
+            if (res) {
+                return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay.`);
             }
             else {
                 return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
@@ -239,11 +264,10 @@ function ignorechannel(message) {
 
 function unignorechannel(message) {
     DiscordBot.utils.logMessage(message);
-    db.IgnoreChannel.findByPk(message.channel.id)
-        .then(ignoredChannel => {
-            if (ignoredChannel) {
-                return ignoredChannel.destroy()
-                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay ${smile}`));
+    destroyIgnoreChannel(message.channel.id)
+        .then(res => {
+            if (res) {
+                return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay ${smile}`);
             }
             else {
                 return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
