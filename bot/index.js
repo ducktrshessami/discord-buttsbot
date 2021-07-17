@@ -1,16 +1,16 @@
 const DiscordBot = require("discord-bot");
-const buttify = require("./buttify");
 const db = require("../models");
+const buttify = require("./buttify");
 const botConfig = require("../config/bot.json");
 const presenceConfig = require("../config/presence.json");
-const defaultButt = require("../config/butt.json").default;
+const { default: defaultButt } = require("../config/butt.json");
 
 const smile = process.env.RES_SMILE || ":D";
 const frown = process.env.RES_FROWN || ":(";
 const wink = process.env.RES_WINK || ";)";
 const weird = process.env.RES_WEIRD || "O_o";
 
-let commands = [
+const commands = [
     new DiscordBot.Command("prefix", prefix, {
         usage: "@buttsbot prefix [prefix]",
         description: "View or change the command prefix!",
@@ -54,12 +54,24 @@ let commands = [
         description: "Undo ignorechannel!",
         subtitle: "I only do this for people who manage this channel."
     }),
+    new DiscordBot.Command("ignoreall", ignoreall, {
+        requirePerms: "ADMINISTRATOR",
+        usage: "@buttsbot ignoreall",
+        description: "I won't buttify in any channel.",
+        subtitle: "I only do this for admins."
+    }),
+    new DiscordBot.Command("unignoreall", unignoreall, {
+        requirePerms: "ADMINISTRATOR",
+        usage: "@buttsbot unignoreall",
+        description: "I'll buttify in every channel!",
+        subtitle: "I only do this for admins."
+    }),
     new DiscordBot.Command("invite", inviteLink, {
         usage: "@buttsbot invite",
         description: "I'll send a link so you can invite me somewhere else!"
     })
 ];
-let responses = [
+const responses = [
     new DiscordBot.Response(["buttsbot", "yes"], smile, responseCheck, responseSender()),
     new DiscordBot.Response(["buttsbot", "yeah"], smile, responseCheck, responseSender()),
     new DiscordBot.Response(["buttsbot", "yea"], smile, responseCheck, responseSender()),
@@ -69,7 +81,7 @@ let responses = [
     new DiscordBot.Response(["buttsbot", "why"], weird, responseCheck, responseSender()),
     new DiscordBot.Response("", "", checkButt, sendButt)
 ];
-let client = new DiscordBot({
+const client = new DiscordBot({
     ...botConfig,
     token: process.env.BOT_TOKEN || botConfig.token,
     botmins: process.env.BOT_ADMINS ? JSON.parse(process.env.BOT_ADMINS) : botConfig.botmins
@@ -207,16 +219,28 @@ function unignoreme(message) {
         .catch(console.error);
 }
 
-function ignorechannel(message) {
-    DiscordBot.utils.logMessage(message);
-    db.IgnoreChannel.findByPk(message.channel.id)
+function createIgnoreChannel(guildID, channelID) {
+    return db.IgnoreChannel.findByPk(channelID)
         .then(ignoredChannel => {
             if (!ignoredChannel) {
                 return db.IgnoreChannel.create({
-                    id: message.channel.id,
-                    GuildId: message.guild.id
+                    id: channelID,
+                    GuildId: guildID
                 })
-                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay.`));
+                    .then(() => true);
+            }
+            else {
+                return false;
+            }
+        });
+}
+
+function ignorechannel(message) {
+    DiscordBot.utils.logMessage(message);
+    createIgnoreChannel(message.guild.id, message.channel.id)
+        .then(res => {
+            if (res) {
+                return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay.`);
             }
             else {
                 return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
@@ -237,6 +261,23 @@ function unignorechannel(message) {
                 return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
             }
         })
+        .catch(console.error);
+}
+
+function ignoreall(message) {
+    Promise.all(
+        message.guild.channels.cache.filter(channel => channel.type === "text")
+            .map(channel => createIgnoreChannel(channel.guild.id, channel.id))
+    )
+        .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay.`))
+        .catch(console.error);
+}
+
+function unignoreall(message) {
+    db.IgnoreChannel.destroy({
+        where: { GuildId: message.guild.id }
+    })
+        .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay ${smile}`))
         .catch(console.error);
 }
 
