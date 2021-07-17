@@ -277,7 +277,12 @@ function unignorechannel(message) {
 }
 
 function ignoreall(message) {
-
+    Promise.all(
+        message.guild.channels.cache.filter(channel => channel.type === "text")
+            .map(channel => createIgnoreChannel(channel.guild.id, channel.id))
+    )
+        .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay.`))
+        .catch(console.error);
 }
 
 function unignoreall(message) {
