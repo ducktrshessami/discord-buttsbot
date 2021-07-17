@@ -235,19 +235,6 @@ function createIgnoreChannel(guildID, channelID) {
         });
 }
 
-function destroyIgnoreChannel(channelID) {
-    return db.IgnoreChannel.findByPk(channelID)
-        .then(ignoredChannel => {
-            if (ignoredChannel) {
-                return ignoredChannel.destroy()
-                    .then(() => true);
-            }
-            else {
-                return false;
-            }
-        });
-}
-
 function ignorechannel(message) {
     DiscordBot.utils.logMessage(message);
     createIgnoreChannel(message.guild.id, message.channel.id)
@@ -264,10 +251,11 @@ function ignorechannel(message) {
 
 function unignorechannel(message) {
     DiscordBot.utils.logMessage(message);
-    destroyIgnoreChannel(message.channel.id)
-        .then(res => {
-            if (res) {
-                return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay ${smile}`);
+    db.IgnoreChannel.findByPk(message.channel.id)
+        .then(ignoredChannel => {
+            if (ignoredChannel) {
+                return ignoredChannel.destroy()
+                    .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay ${smile}`));
             }
             else {
                 return DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> I'm not ignoring this channel!`);
