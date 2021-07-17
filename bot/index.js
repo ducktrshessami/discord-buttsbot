@@ -286,7 +286,11 @@ function ignoreall(message) {
 }
 
 function unignoreall(message) {
-
+    db.IgnoreChannel.destroy({
+        where: { GuildId: message.guild.id }
+    })
+        .then(() => DiscordBot.utils.sendVerbose(message.channel, `<@${message.author.id}> Okay ${smile}`))
+        .catch(console.error);
 }
 
 function inviteLink(message) {
