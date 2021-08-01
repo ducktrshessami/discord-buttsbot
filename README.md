@@ -12,7 +12,7 @@ A [Discord](https://discord.com/) bot based on the [Twitch bot of the same name]
 
 Original bot created by [pinguino](https://www.twitch.tv/pinguino) and maintained by [tininsteelian](https://www.twitch.tv/tininsteelian)
 
-Avatar and presence activities by Julia Rolon
+Avatar and presence activities by Entrop
 
 ### Powered by:
 
