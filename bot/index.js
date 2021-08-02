@@ -92,6 +92,7 @@ const client = new DiscordBot({
 client.on("ready", () => {
     console.info(`Logged in as ${client.user.username}#${client.user.discriminator}`);
     client.loopPresences(presenceConfig.activities, presenceConfig.minutes);
+    postServerCount(client);
 })
     .on("configUpdate", updateConfig)
     .on("guildCreate", () => postServerCount(client))
