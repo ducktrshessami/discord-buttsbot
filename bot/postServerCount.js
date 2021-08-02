@@ -1,6 +1,7 @@
 const phin = require("phin");
 
 function postServerCount(client) {
+    console.log("Posting server count to Top.gg");
     phin({
         url: `https://top.gg/api/bots/${client.user.id}/stats`,
         method: "POST",
