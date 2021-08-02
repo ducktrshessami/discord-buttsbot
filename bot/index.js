@@ -1,6 +1,7 @@
 const DiscordBot = require("discord-bot");
 const db = require("../models");
 const buttify = require("./buttify");
+const postServerCount = require("./postServerCount");
 const botConfig = require("../config/bot.json");
 const presenceConfig = require("../config/presence.json");
 const { default: defaultButt } = require("../config/butt.json");
@@ -91,10 +92,12 @@ const client = new DiscordBot({
 client.on("ready", () => {
     console.info(`Logged in as ${client.user.username}#${client.user.discriminator}`);
     client.loopPresences(presenceConfig.activities, presenceConfig.minutes);
-});
-client.on("configUpdate", updateConfig);
-client.on("error", console.error);
-client.on("shardDisconnect", disconnect);
+})
+    .on("configUpdate", updateConfig)
+    .on("guildCreate", () => postServerCount(client))
+    .on("guildDelete", () => postServerCount(client))
+    .on("error", console.error)
+    .on("shardDisconnect", disconnect);
 
 // Bot utils
 function updateConfig(config) {
