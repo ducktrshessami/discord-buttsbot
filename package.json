@@ -20,6 +20,7 @@
     "express-cycle": "github:ducktrshessami/express-cycle",
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.4",
+    "phin": "^3.6.0",
     "sequelize": "^6.6.2",
     "syllablize": "github:ducktrshessami/syllablize"
   },
