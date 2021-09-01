@@ -1,7 +1,8 @@
 const DiscordBot = require("discord-bot");
 const db = require("../models");
-const buttify = require("./buttify");
-const postServerCount = require("./postServerCount");
+const buttify = require("./utils/buttify");
+const postServerCount = require("./utils/postServerCount");
+const initGuild = require("./utils/initGuild");
 const botConfig = require("../config/bot.json");
 const presenceConfig = require("../config/presence.json");
 const defaultButt = require("../config/default.json");
@@ -85,52 +86,53 @@ const responses = [
 const client = new DiscordBot({
     ...botConfig,
     token: process.env.BOT_TOKEN || botConfig.token,
-    botmins: process.env.BOT_ADMINS ? JSON.parse(process.env.BOT_ADMINS) : botConfig.botmins
-}, commands, responses);
+    botmins: process.env.BOT_ADMINS ? JSON.parse(process.env.BOT_ADMINS) : botConfig.botmins,
+    getPrefix
+}, commands, undefined, responses);
 
 // Client event handling
 client.on("ready", () => {
-    console.info(`Logged in as ${client.user.username}#${client.user.discriminator}`);
+    console.info(`Logged in as ${client.user.tag}`);
     client.loopPresences(presenceConfig.presences, presenceConfig.minutes);
+    initAll();
     postServerCount(client);
 })
-    .on("configUpdate", updateConfig)
-    .on("guildCreate", () => postServerCount(client))
+    .on("guildCreate", guild => {
+        postServerCount(client);
+        initGuild(guild);
+    })
     .on("guildDelete", () => postServerCount(client))
     .on("error", console.error)
     .on("shardDisconnect", disconnect);
 
-// Bot utils
-function updateConfig(config) {
-    for (let id in config.servers) {
-        db.Guild.findByPk(id)
-            .then(guild => {
-                if (guild) {
-                    client.config.servers[id].prefix = guild.prefix;
-                    return guild.update({ name: config.servers[id].name });
-                }
-                else {
-                    return db.Guild.create({
-                        ...config.servers[id],
-                        id
-                    });
-                }
-            })
-            .catch(console.error);
-    }
+// Minor bot utils
+function initAll() {
+    Promise.all(client.guilds.cache.map(initGuild))
+        .catch(console.error);
+}
+
+function getPrefix(message) {
+    return db.Guild.findByPk(message.guildId)
+        .then(guild => {
+            if (guild && guild.prefix && message.content.toLowerCase().startsWith(guild.prefix.toLowerCase())) {
+                return guild.prefix;
+            }
+            else {
+                return (message.content.match(new RegExp(`^(<@!${this.user.id}>\\s|<@${this.user.id}>\\s)`, "i")) || [])[0];
+            }
+        });
 }
 
 function disconnect() {
-    client.destroy();
     console.log("Logging off");
+    client.destroy();
 }
 
 // Commands, responses, and helpers
 function prefix(message, args) {
     db.Guild.findByPk(message.guild.id)
         .then(guild => {
-            if (args.length > 1 && message.member.hasPermission("ADMINISTRATOR")) {
-                this.client.config.servers[message.guild.id].prefix = args[1];
+            if (args.length > 1 && message.member.permissions.has("ADMINISTRATOR")) {
                 return guild.update({ prefix: args[1] })
                     .then(() => DiscordBot.utils.sendVerbose(message.channel, `Custom prefix set to \`${args[1]}\``));
             }
