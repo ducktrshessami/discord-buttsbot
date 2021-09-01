@@ -14,6 +14,6 @@ const commands = fs
     )
     .map(file => require(path.join(__dirname, file)));
 
-commands.push(help(commands));
+help(commands);
 
 module.exports = commands;
