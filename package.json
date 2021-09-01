@@ -18,17 +18,11 @@
     "discord-bot": "github:ducktrshessami/discord-bot",
     "express": "^4.17.1",
     "express-cycle": "github:ducktrshessami/express-cycle",
-    "pg": "^8.6.0",
+    "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "phin": "^3.6.0",
-    "sequelize": "^6.6.2",
+    "sequelize": "^6.6.5",
     "syllablize": "github:ducktrshessami/syllablize"
-  },
-  "optionalDependencies": {
-    "bufferutil": "^4.0.3",
-    "erlpack": "github:discord/erlpack",
-    "utf-8-validate": "^5.0.5",
-    "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
     "dotenv": "^10.0.0"
