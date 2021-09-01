@@ -2,7 +2,7 @@
 const {
   Model
 } = require('sequelize');
-const defaultConfig = require("../config/butt.json").default;
+const defaultConfig = require("../config/default.json");
 module.exports = (sequelize, DataTypes) => {
   class Guild extends Model {
     /**
