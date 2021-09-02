@@ -19,6 +19,7 @@ module.exports = new Command("prefix", function (message, args) {
         })
         .catch(console.error);
 }, {
+    requireGuild: true,
     usage: "@buttsbot prefix [prefix]",
     description: "View or change the command prefix!",
     subtitle: "Only admins can change it."
