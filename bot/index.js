@@ -20,7 +20,7 @@ const responses = [
     new DiscordBot.Response(["buttsbot", "please"], wink, responseCheck, responseSender()),
     new DiscordBot.Response(["buttsbot", "pls"], wink, responseCheck, responseSender()),
     new DiscordBot.Response(["buttsbot", "why"], weird, responseCheck, responseSender()),
-    new DiscordBot.Response("", "", checkButt, sendButt)
+    new DiscordBot.Response("", "", checkButt, sendButt, { requireGuild: true })
 ];
 const client = new DiscordBot({
     ...botConfig,
