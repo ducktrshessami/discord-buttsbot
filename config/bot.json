@@ -3,9 +3,8 @@
     "botmins": [
         ""
     ],
-    "generateCmd": {
-        "help": true
-    },
+    "permissionValue": 103079480320,
     "embedColor": "44BEC7",
+    "helpDuration": 60000,
     "responseCooldown": 30000
 }
