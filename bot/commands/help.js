@@ -52,7 +52,8 @@ function helpCommand(commands) {
             embeds: [new MessageEmbed({
                 color: config.embedColor,
                 title: `${page} Commands`,
-                description: pages[page].map(cmdName => `**${cmdName}:** ${commands.find(command => command.name === cmdName).description}`)
+                description: pages[page].sort()
+                    .map(cmdName => `**${cmdName}:** ${commands.find(command => command.name === cmdName).description}`)
                     .join("\n")
             })]
         }));
