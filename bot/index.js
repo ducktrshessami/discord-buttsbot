@@ -1,6 +1,7 @@
 const DiscordBot = require("discord-bot");
 const db = require("../models");
 const commands = require("./commands");
+const slashes = require("./slashes");
 const buttify = require("./utils/buttify");
 const postServerCount = require("./utils/postServerCount");
 const initGuild = require("./utils/initGuild");
@@ -13,7 +14,6 @@ const emojis = {
     wink: process.env.RES_WINK || ";)",
     weird: process.env.RES_WEIRD || "O_o"
 };
-
 const responses = [
     new DiscordBot.Response(["buttsbot", "yes"], emojis.smile, responseCheck, responseSender()),
     new DiscordBot.Response(["buttsbot", "yeah"], emojis.smile, responseCheck, responseSender()),
@@ -30,7 +30,7 @@ const client = new DiscordBot({
     botmins: process.env.BOT_ADMINS ? JSON.parse(process.env.BOT_ADMINS) : botConfig.botmins,
     getPrefix,
     responseEmojis: emojis
-}, commands, undefined, responses);
+}, commands, slashes, responses);
 
 // Client event handling
 client.on("ready", () => {
