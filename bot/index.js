@@ -29,6 +29,7 @@ const client = new DiscordBot({
     token: process.env.BOT_TOKEN || botConfig.token,
     botmins: process.env.BOT_ADMINS ? JSON.parse(process.env.BOT_ADMINS) : botConfig.botmins,
     getPrefix,
+    slashForce: process.env.BOT_SLASHFORCE && process.env.BOT_SLASHFORCE.trim().toLowerCase() !== "false",
     responseEmojis: emojis
 }, commands, slashes, responses);
 
