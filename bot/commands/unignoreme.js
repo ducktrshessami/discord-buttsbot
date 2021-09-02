@@ -6,7 +6,7 @@ module.exports = new Command("unignoreme", function (message) {
         .then(ignoredUser => {
             if (ignoredUser) {
                 return ignoredUser.destroy()
-                    .then(() => utils.replyVerbose(message, `Okay ${smile}`));
+                    .then(() => utils.replyVerbose(message, `Okay ${this.client.config.responseEmojis.smile}`));
             }
             else {
                 return utils.replyVerbose(message, "I'm not ignoring you!");

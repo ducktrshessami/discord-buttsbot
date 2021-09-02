@@ -6,7 +6,7 @@ module.exports = new Command("ignoreme", function (message) {
         .then(ignoredUser => {
             if (!ignoredUser) {
                 return db.IgnoreUser.create({ id: message.author.id })
-                    .then(() => utils.replyVerbose(message, `Okay ${frown}`));
+                    .then(() => utils.replyVerbose(message, `Okay ${this.client.config.responseEmojis.frown}`));
             }
             else {
                 return utils.replyVerbose(message, "I'm already ignoring you.");

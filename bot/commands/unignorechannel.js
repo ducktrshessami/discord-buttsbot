@@ -6,7 +6,7 @@ module.exports = new Command("unignorechannel", function (message) {
         .then(ignoredChannel => {
             if (ignoredChannel) {
                 return ignoredChannel.destroy()
-                    .then(() => utils.replyVerbose(message, `Okay ${smile}`));
+                    .then(() => utils.replyVerbose(message, `Okay ${this.client.config.responseEmojis.smile}`));
             }
             else {
                 return utils.replyVerbose(message, "I'm not ignoring this channel!");

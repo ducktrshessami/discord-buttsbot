@@ -5,7 +5,7 @@ module.exports = new Command("unignoreall", function (message) {
     db.IgnoreChannel.destroy({
         where: { GuildId: message.guild.id }
     })
-        .then(() => utils.replyVerbose(message, `Okay ${smile}`))
+        .then(() => utils.replyVerbose(message, `Okay ${this.client.config.responseEmojis.smile}`))
         .catch(console.error);
 }, {
     requirePerms: "ADMINISTRATOR",
