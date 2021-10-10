@@ -21,7 +21,7 @@
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "phin": "^3.6.0",
-    "sequelize": "^6.6.5",
+    "sequelize": "^6.7.0",
     "syllablize": "github:ducktrshessami/syllablize"
   },
   "devDependencies": {
@@ -34,6 +34,6 @@
   },
   "engines": {
     "node": ">=16.6.0",
-    "npm": ">=7.0.0"
+    "npm": ">=7.24.1"
   }
 }
