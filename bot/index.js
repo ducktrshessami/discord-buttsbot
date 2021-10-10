@@ -21,6 +21,7 @@ const responses = [
     new DiscordBot.Response(["buttsbot", "no"], emojis.frown, responseCheck, responseSender()),
     new DiscordBot.Response(["buttsbot", "please"], emojis.wink, responseCheck, responseSender()),
     new DiscordBot.Response(["buttsbot", "pls"], emojis.wink, responseCheck, responseSender()),
+    new DiscordBot.Response(["buttsbot", "plz"], emojis.wink, responseCheck, responseSender()),
     new DiscordBot.Response(["buttsbot", "why"], emojis.weird, responseCheck, responseSender()),
     new DiscordBot.Response("", "", checkButt, sendButt, { requireGuild: true })
 ];
