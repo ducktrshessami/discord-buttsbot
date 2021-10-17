@@ -7,7 +7,7 @@ module.exports = new SlashCommand("ignoreme", function (interaction) {
         .then(ignoredUser => {
             if (!ignoredUser) {
                 return db.IgnoreUser.create({ id: interaction.user.id })
-                    .then(() => interaction.editReply(`Okay ${this.client.config.responseEmojis.frown}`));
+                    .then(() => interaction.editReply(`Okay ${process.bot.config.responseEmojis.frown}`));
             }
             else {
                 return interaction.editReply("I'm already ignoring you.");
