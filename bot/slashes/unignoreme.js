@@ -7,7 +7,7 @@ module.exports = new SlashCommand("unignoreme", function (interaction) {
         .then(ignoredUser => {
             if (ignoredUser) {
                 return ignoredUser.destroy()
-                    .then(() => interaction.editReply(`Okay ${this.client.config.responseEmojis.smile}`));
+                    .then(() => interaction.editReply(`Okay ${process.bot.config.responseEmojis.smile}`));
             }
             else {
                 return interaction.editReply("I'm not ignoring you!");

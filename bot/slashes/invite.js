@@ -9,7 +9,7 @@ module.exports = new SlashCommand("invite", function (interaction) {
             components: [new MessageButton({
                 style: "LINK",
                 label: "Invite",
-                url: `https://discord.com/api/oauth2/authorize?client_id=${this.client.user.id}&permissions=${permissionValue}&scope=bot%20applications.commands`
+                url: `https://discord.com/api/oauth2/authorize?client_id=${process.bot.user.id}&permissions=${permissionValue}&scope=bot%20applications.commands`
             })]
         })]
     })
