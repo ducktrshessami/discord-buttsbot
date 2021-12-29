@@ -16,12 +16,12 @@
   "homepage": "https://github.com/ducktrshessami/buttsbot#readme",
   "dependencies": {
     "discord-bot": "github:ducktrshessami/discord-bot",
-    "express": "^4.17.1",
+    "express": "^4.17.2",
     "express-cycle": "github:ducktrshessami/express-cycle",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
-    "phin": "^3.6.0",
-    "sequelize": "^6.9.0",
+    "phin": "^3.6.1",
+    "sequelize": "^6.12.4",
     "syllablize": "github:ducktrshessami/syllablize"
   },
   "devDependencies": {
