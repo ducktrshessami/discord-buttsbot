@@ -12,6 +12,8 @@ A [Discord](https://discord.com/) bot based on the [Twitch bot of the same name]
 
 Original bot created by [pinguino](https://www.twitch.tv/pinguino) and maintained by [tininsteelian](https://www.twitch.tv/tininsteelian)
 
+Emotes used in responses by this deployment are copies of [Twitch](https://www.twitch.tv/) global emotes in an attempt to reproduce the same experience
+
 Avatar and presence activities by Entrop
 
 ### Powered by:
