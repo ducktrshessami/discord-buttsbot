@@ -16,16 +16,16 @@
   "homepage": "https://github.com/ducktrshessami/buttsbot#readme",
   "dependencies": {
     "discord-bot": "github:ducktrshessami/discord-bot",
-    "express": "^4.17.2",
+    "express": "^4.17.3",
     "express-cycle": "github:ducktrshessami/express-cycle",
-    "pg": "^8.7.1",
+    "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "phin": "^3.6.1",
-    "sequelize": "^6.12.4",
+    "sequelize": "^6.17.0",
     "syllablize": "github:ducktrshessami/syllablize"
   },
   "devDependencies": {
-    "dotenv": "^10.0.0"
+    "dotenv": "^16.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
