@@ -87,16 +87,13 @@ async function checkButt(message) {
     }
 }
 
-function sendButt(message) {
-    db.Guild.findByPk(message.guildId)
-        .then(guild => {
-            let buttified = buttify(message.cleanContent, guild.word, guild.rate);
-            if (verifyButt(message.cleanContent, buttified, guild.word)) {
-                DiscordBot.utils.logMessage(message);
-                return DiscordBot.utils.sendVerbose(message.channel, buttified);
-            }
-        })
-        .catch(console.error);
+async function sendButt(message) {
+    let guild = await db.Guild.findByPk(message.guildId);
+    let buttified = buttify(message.cleanContent, guild.word, guild.rate);
+    if (verifyButt(message.cleanContent, buttified, guild.word)) {
+        DiscordBot.utils.logMessage(message);
+        return DiscordBot.utils.sendVerbose(message.channel, buttified);
+    }
 }
 
 function verifyButt(original, buttified, word) {
