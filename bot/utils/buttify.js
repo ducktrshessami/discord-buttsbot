@@ -5,7 +5,7 @@ function buttify(original, buttWord, rate) {
     const originWords = formatWords(original);
     if (originWords.some(item => item.type == "word")) {
         let buttWords;
-        for (let i = 0;  i < rate * 1000 && (!buttWords || compareWords(originWords, buttWords)); i++) { // Set limit to avoid user setting based infinite loop
+        for (let i = 0; i < rate * 1000 && (!buttWords || compareWords(originWords, buttWords)); i++) { // Set limit to avoid user setting based infinite loop
             buttWords = originWords.map(wordObj => wordObj.type == "word" ? chanceButt(wordObj, buttWord, rate) : copyObj(wordObj));
         }
         return handleCaps(originWords, buttWords).map(item => item.chars).join("");
@@ -39,9 +39,8 @@ function handleCaps(originWords, buttWords) {
 // Possibly replace syllables in a word with "butt"
 function chanceButt(wordObj, buttWord, rate) {
     const originSyl = syllablize(wordObj.chars);
-    let buttSyl;
     wordObj = copyObj(wordObj);
-    buttSyl = originSyl.map(syl => {
+    let buttSyl = originSyl.map(syl => {
         if (Math.random() < 1 / rate) {
             switch (syl[syl.length - 1]) {
                 case 's':
@@ -59,7 +58,10 @@ function chanceButt(wordObj, buttWord, rate) {
 
 // Format a string into words, special, and miscellaneous characters
 function formatWords(str) {
-    let result = [], stack = { chars: "" }, specialList = str.matchAll(/(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))|(<:[0-9a-z_]+:[0-9]+>)/gi), special = specialList.next();
+    let result = [];
+    let stack = { chars: "" };
+    let specialList = str.matchAll(/(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))|(<:[0-9a-z_]+:[0-9]+>)/gi);
+    let special = specialList.next();
     for (let i = 0; i < str.length; i++) {
         let code = str[i].toUpperCase().charCodeAt(0);
         if (!special.done && i >= special.value.index + special.value[0].length) {
