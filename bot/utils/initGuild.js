@@ -1,9 +1,10 @@
 const db = require("../../models");
 
 async function initGuild(guild) {
-    return (await db.Guild.findOrCreate({
+    let [model] = await db.Guild.findOrCreate({
         where: { id: guild.id }
-    }))[0];
+    });
+    return model;
 }
 
 module.exports = initGuild;
