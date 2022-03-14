@@ -55,16 +55,14 @@ function initAll() {
         .catch(console.error);
 }
 
-function getPrefix(message) {
-    return db.Guild.findByPk(message.guildId)
-        .then(guild => {
-            if (guild && guild.prefix && message.content.toLowerCase().startsWith(guild.prefix.toLowerCase())) {
-                return guild.prefix;
-            }
-            else {
-                return (message.content.match(new RegExp(`^(<@!${this.user.id}>\\s|<@${this.user.id}>\\s)`, "i")) || [])[0];
-            }
-        });
+async function getPrefix(message) {
+    let guild = await db.Guild.findByPk(message.guildId);
+    if (guild && guild.prefix && message.content.toLowerCase().startsWith(guild.prefix.toLowerCase())) {
+        return guild.prefix;
+    }
+    else {
+        return (message.content.match(new RegExp(`^(<@!${this.user.id}>\\s|<@${this.user.id}>\\s)`, "i")) || [])[0];
+    }
 }
 
 function disconnect() {
