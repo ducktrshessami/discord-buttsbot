@@ -71,22 +71,19 @@ function disconnect() {
 }
 
 // Resposnes and helpers
-function checkButt(message) {
+async function checkButt(message) {
     if (message.author.id !== message.client.user.id) {
-        return Promise.all([
+        let [ignoredChannel, ignoredUser, guild] = await Promise.all([
             db.IgnoreChannel.findByPk(message.channelId),
             db.IgnoreUser.findByPk(message.author.id),
             db.Guild.findByPk(message.guildId)
-        ])
-            .then(([ignoredChannel, ignoredUser, guild]) =>
-                !message.author.bot &&
-                message.guild &&
-                message.cleanContent &&
-                !ignoredChannel &&
-                !ignoredUser &&
-                (Math.random() < (1 / guild.frequency))
-            )
-            .catch(console.error);
+        ]);
+        return !message.author.bot &&
+            message.guild &&
+            message.cleanContent &&
+            !ignoredChannel &&
+            !ignoredUser &&
+            (Math.random() < (1 / guild.frequency));
     }
 }
 
