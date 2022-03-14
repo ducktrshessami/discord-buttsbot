@@ -33,7 +33,6 @@
     "build": "node build.js"
   },
   "engines": {
-    "node": ">=16.6.0",
-    "npm": ">=7.24.1"
+    "node": ">=16.9.0"
   }
 }
