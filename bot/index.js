@@ -109,12 +109,11 @@ function responseCheck(message, trigger) {
 
 function responseSender() {
     let ready = true;
-    return (message, response) => {
+    return async (message, response) => {
         if (ready) {
             ready = false;
             setTimeout(() => ready = true, botConfig.responseCooldown);
-            return DiscordBot.utils.sendVerbose(message.channel, response)
-                .catch(console.error);
+            return DiscordBot.utils.sendVerbose(message.channel, response);
         }
     };
 }
