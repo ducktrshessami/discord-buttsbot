@@ -1,7 +1,7 @@
 const { Command, utils } = require("discord-bot");
 const db = require("../../models");
 
-module.exports = new Command("word", function (message, args) {
+module.exports = new Command("word", async function (message, args) {
     let reply;
     let guild = await db.Guild.findByPk(message.guild.id);
     if (args.length > 1) {
