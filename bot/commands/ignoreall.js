@@ -13,7 +13,7 @@ module.exports = new Command("ignoreall", async function (message) {
         )
             .map(channel => createIgnoreChannel(channel.guild.id, channel.id))
     );
-    await utils.replyVerbose(message, "Okay.");
+    return utils.replyVerbose(message, "Okay.");
 }, {
     requirePerms: "ADMINISTRATOR",
     usage: "@buttsbot ignoreall",
