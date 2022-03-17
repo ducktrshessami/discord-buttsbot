@@ -2,19 +2,17 @@ const { Command, utils } = require("discord-bot");
 const db = require("../../models");
 const defaultButt = require("../../config/default.json");
 
-module.exports = new Command("rate", function (message, args) {
+module.exports = new Command("rate", async function (message, args) {
+    let reply;
     let n = parseInt(args[1]);
-    db.Guild.findByPk(message.guild.id)
-        .then(guild => {
-            if (n && n > 0) {
-                return guild.update({ rate: n })
-                    .then(updated => utils.replyVerbose(message, `Buttify rate changed to one in every \`${updated.rate}\` syllables per buttified message!`));
-            }
-            else {
-                return utils.replyVerbose(message, `I buttify roughly one in every \`${guild.rate}\` syllables per buttified message!\nTo change this rate, use \`${this.usage}\`.\nDefault: \`${defaultButt.rate}\``);
-            }
-        })
-        .catch(console.error);
+    let guild = await db.Guild.findByPk(message.guild.id);
+    if (n && n > 0) {
+        reply = `Buttify rate changed to one in every \`${(await guild.update({ rate: n })).rate}\` syllables per buttified message!`;
+    }
+    else {
+        reply = `I buttify roughly one in every \`${guild.rate}\` syllables per buttified message!\nTo change this rate, use \`${this.usage}\`.\nDefault: \`${defaultButt.rate}\``;
+    }
+    return utils.replyVerbose(message, reply);
 }, {
     requirePerms: "ADMINISTRATOR",
     usage: "@buttsbot rate [number]",
