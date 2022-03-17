@@ -1,12 +1,11 @@
 const { Command, utils } = require("discord-bot");
 const db = require("../../models");
 
-module.exports = new Command("unignoreall", function (message) {
-    db.IgnoreChannel.destroy({
+module.exports = new Command("unignoreall", async function (message) {
+    await db.IgnoreChannel.destroy({
         where: { GuildId: message.guild.id }
-    })
-        .then(() => utils.replyVerbose(message, `Okay ${this.client.config.responseEmojis.smile}`))
-        .catch(console.error);
+    });
+    return utils.replyVerbose(message, `Okay ${this.client.config.responseEmojis.smile}`);
 }, {
     requirePerms: "ADMINISTRATOR",
     usage: "@buttsbot unignoreall",
