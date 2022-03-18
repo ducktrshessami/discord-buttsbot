@@ -3,10 +3,10 @@ const syllablize = require("syllablize");
 // Main
 function buttify(original, buttWord, rate) {
     const originWords = formatWords(original);
-    if (originWords.some(item => item.type == "word")) {
+    if (originWords.some(item => item.type === 1)) {
         let buttWords;
         for (let i = 0; i < rate * 1000 && (!buttWords || compareWords(originWords, buttWords)); i++) { // Set limit to avoid user setting based infinite loop
-            buttWords = originWords.map(wordObj => wordObj.type == "word" ? chanceButt(wordObj, buttWord, rate) : copyObj(wordObj));
+            buttWords = originWords.map(wordObj => wordObj.type === 1 ? chanceButt(wordObj, buttWord, rate) : copyObj(wordObj));
         }
         return handleCaps(originWords, buttWords).map(item => item.chars).join("");
     }
@@ -18,7 +18,7 @@ function buttify(original, buttWord, rate) {
 // Roughly capitalize letters like the original
 function handleCaps(originWords, buttWords) {
     for (let i = 0; i < originWords.length && i < buttWords.length; i++) {
-        if (originWords[i].type == "word") {
+        if (originWords[i].type === 1) {
             if (originWords[i].chars === originWords[i].chars.toUpperCase()) {
                 buttWords[i].chars = buttWords[i].chars.toUpperCase();
             }
@@ -56,7 +56,13 @@ function chanceButt(wordObj, buttWord, rate) {
     return wordObj;
 }
 
-// Format a string into words, special, and miscellaneous characters
+/*
+Format a string into words, special, and miscellaneous characters
+
+type will be a Number:
+1 - word
+2 - misc
+*/
 function formatWords(str) {
     let result = [];
     let stack = { chars: "" };
@@ -69,24 +75,24 @@ function formatWords(str) {
         }
         if (code >= 65 && code <= 90 && (special.done || i < special.value.index)) {
             if (!stack.type) {
-                stack.type = "word";
+                stack.type = 1;
             }
-            else if (stack.type != "word") {
+            else if (stack.type !== 1) {
                 result.push(stack);
                 stack = {
-                    type: "word",
+                    type: 1,
                     chars: ""
                 };
             }
         }
         else {
             if (!stack.type) {
-                stack.type = "misc";
+                stack.type = 2;
             }
-            else if (stack.type != "misc") {
+            else if (stack.type !== 2) {
                 result.push(stack);
                 stack = {
-                    type: "misc",
+                    type: 2,
                     chars: ""
                 };
             }
