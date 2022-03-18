@@ -1,23 +1,22 @@
 const { Command, utils } = require("discord-bot");
 const db = require("../../models");
 
-module.exports = new Command("prefix", function (message, args) {
-    db.Guild.findByPk(message.guild.id)
-        .then(guild => {
-            if (args.length > 1 && message.member.permissions.has("ADMINISTRATOR")) {
-                return guild.update({ prefix: args[1] })
-                    .then(() => utils.replyVerbose(message, `Custom prefix set to \`${args[1]}\``));
-            }
-            else {
-                if (guild.prefix) {
-                    return utils.replyVerbose(message, `Current custom prefix: \`${guild.prefix}\``);
-                }
-                else {
-                    return utils.replyVerbose(message, "Custom prefix not set");
-                }
-            }
-        })
-        .catch(console.error);
+module.exports = new Command("prefix", async function (message, args) {
+    let reply;
+    let guild = await db.Guild.findByPk(message.guild.id);
+    if (args.length > 1 && message.member.permissions.has("ADMINISTRATOR")) {
+        await guild.update({ prefix: args[1] });
+        reply = `Custom prefix set to \`${args[1]}\``;
+    }
+    else {
+        if (guild.prefix) {
+            reply = `Current custom prefix: \`${guild.prefix}\``;
+        }
+        else {
+            reply = "Custom prefix not set";
+        }
+    }
+    return utils.replyVerbose(message, reply);
 }, {
     requireGuild: true,
     usage: "@buttsbot prefix [prefix]",

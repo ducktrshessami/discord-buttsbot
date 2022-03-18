@@ -22,25 +22,24 @@ const pages = {
 };
 
 function helpCommand(commands) {
-    var embedPages;
+    let embedPages;
     commands.push(new Command("help", function (message, args) {
         let cmd;
         if (args.length > 1) {
             cmd = commands.find(command => command.name.toLowerCase() === args[1].toLowerCase());
         }
         if (cmd) {
-            utils.replyVerbose(message, [
-                `\`${target.usage}\``,
-                target.description,
-                target.subtitle
+            let reply = [
+                `\`${cmd.usage}\``,
+                cmd.description,
+                cmd.subtitle
             ]
                 .filter(line => line)
-                .join("\n"))
-                .catch(console.error);
+                .join("\n");
+            return utils.replyVerbose(message, reply);
         }
         else {
-            utils.sendPages(message.channel, embedPages, config.helpDuration)
-                .catch(console.error);
+            return utils.sendPages(message.channel, embedPages, config.helpDuration)
         }
     }, {
         usage: "@buttsbot help [cmd]",

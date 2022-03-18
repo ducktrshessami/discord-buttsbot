@@ -1,18 +1,16 @@
 const { utils, SlashCommand } = require("discord-bot");
 const db = require("../../models");
 
-module.exports = new SlashCommand("unignoreme", function (interaction) {
-    interaction.deferReply()
-        .then(() => db.IgnoreUser.findByPk(interaction.user.id))
-        .then(ignoredUser => {
-            if (ignoredUser) {
-                return ignoredUser.destroy()
-                    .then(() => interaction.editReply(`Okay ${process.bot.config.responseEmojis.smile}`));
-            }
-            else {
-                return interaction.editReply("I'm not ignoring you!");
-            }
-        })
-        .then(utils.logMessage)
-        .catch(console.error);
+module.exports = new SlashCommand("unignoreme", async function (interaction) {
+    let reply;
+    await interaction.deferReply();
+    let ignoredUser = await db.IgnoreUser.findByPk(interaction.user.id);
+    if (ignoredUser) {
+        await ignoredUser.destroy();
+        reply = `Okay ${process.bot.config.responseEmojis.smile}`;
+    }
+    else {
+        reply = "I'm not ignoring you!";
+    }
+    utils.logMessage(await interaction.editReply(reply));
 }, { description: "Undo ignoreme!" });
