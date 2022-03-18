@@ -91,7 +91,6 @@ async function sendButt(message) {
     let guild = await db.Guild.findByPk(message.guildId);
     let buttified = buttify(message.cleanContent, guild.word, guild.rate);
     if (verifyButt(message.cleanContent, buttified, guild.word)) {
-        DiscordBot.utils.logMessage(message);
         return DiscordBot.utils.sendVerbose(message.channel, buttified);
     }
 }
