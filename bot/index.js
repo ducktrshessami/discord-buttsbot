@@ -72,7 +72,11 @@ function disconnect() {
 
 // Resposnes and helpers
 async function checkButt(message) {
-    if (message.author.id !== message.client.user.id) {
+    if (
+        message.author.id !== message.client.user.id &&
+        message.channel.permissionsFor(client.user.id)
+            .has("SEND_MESSAGES")
+    ) {
         let [ignoredChannel, ignoredUser, guild] = await Promise.all([
             db.IgnoreChannel.findByPk(message.channelId),
             db.IgnoreUser.findByPk(message.author.id),
@@ -85,6 +89,7 @@ async function checkButt(message) {
             !ignoredUser &&
             (Math.random() < (1 / guild.frequency));
     }
+    return false;
 }
 
 async function sendButt(message) {
@@ -102,8 +107,14 @@ function verifyButt(original, buttified, word) {
 }
 
 function responseCheck(message, trigger) {
-    let splitContent = message.content.toLowerCase().trim().split(/\s/g);
-    return trigger.every(tr => splitContent.includes(tr));
+    if (
+        message.channel.permissionsFor(client.user.id)
+            .has("SEND_MESSAGES")
+    ) {
+        let splitContent = message.content.toLowerCase().trim().split(/\s/g);
+        return trigger.every(tr => splitContent.includes(tr));
+    }
+    return false;
 }
 
 function responseSender() {
