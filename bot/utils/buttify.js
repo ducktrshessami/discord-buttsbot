@@ -66,7 +66,7 @@ type will be a Number:
 function formatWords(str) {
     let result = [];
     let stack = { chars: "" };
-    let specialList = str.matchAll(/(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))|(<:[0-9a-z_]+:[0-9]+>)/gi);
+    let specialList = str.matchAll(/(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))|((<a?)?:\w+:(\d{18}>)?)/gi);
     let special = specialList.next();
     for (let i = 0; i < str.length; i++) {
         let code = str[i].toUpperCase().charCodeAt(0);
