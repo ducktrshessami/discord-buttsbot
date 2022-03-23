@@ -8,7 +8,9 @@ function buttify(original, buttWord, rate) {
         for (let i = 0; i < rate * 1000 && (!buttWords || compareWords(originWords, buttWords)); i++) { // Set limit to avoid user setting based infinite loop
             buttWords = originWords.map(wordObj => wordObj.type === 1 ? chanceButt(wordObj, buttWord, rate) : copyObj(wordObj));
         }
-        return handleCaps(originWords, buttWords).map(item => item.chars).join("");
+        return handleCaps(originWords, buttWords)
+            .map(item => item.chars)
+            .join("");
     }
     else {
         return original;
@@ -69,7 +71,9 @@ function formatWords(str) {
     let specialList = str.matchAll(/(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))|((<a?)?:\w+:(\d{18}>)?)/gi);
     let special = specialList.next();
     for (let i = 0; i < str.length; i++) {
-        let code = str[i].toUpperCase().charCodeAt(0);
+        let code = str[i]
+            .toUpperCase()
+            .charCodeAt(0);
         if (!special.done && i >= special.value.index + special.value[0].length) {
             special = specialList.next();
         }
@@ -114,9 +118,17 @@ function copyObj(obj) {
     return foo;
 }
 
+// Words to strings
+function unformatWords(words) {
+    return words
+        .map(item => item.chars)
+        .join("")
+        .toLowerCase();
+}
+
 // Compare word objects
 function compareWords(a, b) {
-    return a.map(item => item.chars).join("").toLowerCase() === b.map(item => item.chars).join("").toLowerCase();
+    return unformatWords(a) === unformatWords(b);
 }
 
 module.exports = buttify;
