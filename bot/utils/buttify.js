@@ -8,7 +8,9 @@ function buttify(original, buttWord, rate) {
         for (let i = 0; i < rate * 1000 && (!buttWords || compareWords(originWords, buttWords)); i++) { // Set limit to avoid user setting based infinite loop
             buttWords = originWords.map(wordObj => wordObj.type === 1 ? chanceButt(wordObj, buttWord, rate) : copyObj(wordObj));
         }
-        return handleCaps(originWords, buttWords).map(item => item.chars).join("");
+        return handleCaps(originWords, buttWords)
+            .map(item => item.chars)
+            .join("");
     }
     else {
         return original;
@@ -63,45 +65,27 @@ type will be a Number:
 1 - word
 2 - misc
 */
-function formatWords(str) {
+function formatWords(str = "") {
     let result = [];
-    let stack = { chars: "" };
-    let specialList = str.matchAll(/(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))|(<:[0-9a-z_]+:[0-9]+>)/gi);
-    let special = specialList.next();
-    for (let i = 0; i < str.length; i++) {
-        let code = str[i].toUpperCase().charCodeAt(0);
-        if (!special.done && i >= special.value.index + special.value[0].length) {
-            special = specialList.next();
-        }
-        if (code >= 65 && code <= 90 && (special.done || i < special.value.index)) {
-            if (!stack.type) {
-                stack.type = 1;
-            }
-            else if (stack.type !== 1) {
-                result.push(stack);
-                stack = {
+    str
+        .match(/(https?:\/\/(www\.)?[-\w@:%.\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-\w()@:%\+.~#?&//=]*))|(<a?:\w{2,32}:\d{18}>)|([^a-zA-Z])|([a-zA-Z]+)/g)
+        .forEach(chunk => {
+            if (/^[a-z]+$/i.test(chunk)) {
+                result.push({
                     type: 1,
-                    chars: ""
-                };
+                    chars: chunk
+                });
             }
-        }
-        else {
-            if (!stack.type) {
-                stack.type = 2;
-            }
-            else if (stack.type !== 2) {
-                result.push(stack);
-                stack = {
+            else if (!result.length || result[result.length - 1].type === 1) {
+                result.push({
                     type: 2,
-                    chars: ""
-                };
+                    chars: chunk
+                });
             }
-        }
-        stack.chars += str[i];
-    }
-    if (stack.chars.length) {
-        result.push(stack);
-    }
+            else {
+                result[result.length - 1].chars += chunk;
+            }
+        });
     return result;
 }
 
@@ -114,9 +98,17 @@ function copyObj(obj) {
     return foo;
 }
 
+// Words to strings
+function unformatWords(words) {
+    return words
+        .map(item => item.chars)
+        .join("")
+        .toLowerCase();
+}
+
 // Compare word objects
 function compareWords(a, b) {
-    return a.map(item => item.chars).join("").toLowerCase() === b.map(item => item.chars).join("").toLowerCase();
+    return unformatWords(a) === unformatWords(b);
 }
 
 module.exports = buttify;
