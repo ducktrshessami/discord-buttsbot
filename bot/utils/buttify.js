@@ -65,7 +65,7 @@ type will be a Number:
 1 - word
 2 - misc
 */
-function formatWords(str = "") {
+function formatWords(str) {
     let result = [];
     str
         .match(/(https?:\/\/(www\.)?[-\w@:%.\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-\w()@:%\+.~#?&//=]*))|(<a?:\w{2,32}:\d{18}>)|([^a-zA-Z])|([a-zA-Z]+)/g)
