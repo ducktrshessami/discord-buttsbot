@@ -15,17 +15,24 @@
   },
   "homepage": "https://github.com/ducktrshessami/buttsbot#readme",
   "dependencies": {
-    "discord-bot": "github:ducktrshessami/discord-bot",
-    "express": "^4.17.3",
-    "express-cycle": "github:ducktrshessami/express-cycle",
+    "@discordjs/builders": "^0.15.0",
+    "discord.js": "^13.8.0",
+    "express": "^4.18.1",
+    "express-cycle": "ducktrshessami/express-cycle",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "phin": "^3.6.1",
-    "sequelize": "^6.17.0",
-    "syllablize": "github:ducktrshessami/syllablize"
+    "sequelize": "^6.20.1",
+    "syllablize": "ducktrshessami/syllablize"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.6",
+    "erlpack": "discord/erlpack",
+    "utf-8-validate": "^5.0.9",
+    "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
