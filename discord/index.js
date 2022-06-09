@@ -1,4 +1,5 @@
 const { Client, Intents } = require("discord.js");
+const slashCommands = require("./commands/slash");
 const presenceConfig = require("../config/presence.json");
 
 const client = new Client({
@@ -15,6 +16,23 @@ client
         setInterval(() => client.user.setPresence(getPresence()), presenceConfig.minutes * 60000);
     })
     .on("error", console.error)
+    .on("interactionCreate", async interaction => {
+        try {
+            if (interaction.isCommand()) {
+                const command = slashCommands.get(interaction.commandName);
+                if (command) {
+                    console.log(`[discord] ${interaction.user.id} used /${interaction.commandName}`);
+                    await command.callback(interaction);
+                }
+            }
+            else if (interaction.isButton()) {
+                // help pagination button
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
+    })
     .login()
     .catch(console.error);
 
