@@ -8,7 +8,14 @@ const client = new Client({
         Intents.FLAGS.DIRECT_MESSAGES,
     partials: ["CHANNEL"],
     presence: getPresence()
-})
+});
+
+client.responseEmojis = {
+    smile: process.env.RES_SMILE || ":D",
+    frown: process.env.RES_FROWN || ":(",
+    wink: process.env.RES_WINK || ";)",
+    weird: process.env.RES_WEIRD || "O_o"
+};
 
 client
     .once("ready", () => {
