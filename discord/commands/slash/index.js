@@ -14,7 +14,7 @@ const commands = new Collection(
         )
         .map(file => {
             const cmd = require(path.join(__dirname, file));
-            return [cmd.data.name, cmd]
+            return [cmd.data.name, cmd];
         })
 );
 
