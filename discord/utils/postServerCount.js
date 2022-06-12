@@ -2,7 +2,7 @@ const phin = require("phin");
 
 async function postServerCount(client) {
     if (process.env.TOP_TOKEN) {
-        console.log("Posting server count to Top.gg");
+        console.log("[discord] Posting server count to Top.gg");
         try {
             const res = await phin({
                 url: `https://top.gg/api/bots/${client.user.id}/stats`,
