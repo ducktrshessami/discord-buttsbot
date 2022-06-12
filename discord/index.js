@@ -1,5 +1,7 @@
 const { Client, Intents } = require("discord.js");
+const db = require("../models");
 const slashCommands = require("./commands/slash");
+const postServerCount = require("./utils/postServerCount");
 const presenceConfig = require("../config/presence.json");
 
 const client = new Client({
@@ -23,6 +25,14 @@ client
         setInterval(() => client.user.setPresence(getPresence()), presenceConfig.minutes * 60000);
     })
     .on("error", console.error)
+    .on("guildCreate", guild => {
+        postServerCount(client);
+        db.Guild.findOrCreate({
+            where: { id: guild.id }
+        })
+            .catch(console.error);
+    })
+    .on("guildDelete", () => postServerCount(client))
     .on("interactionCreate", async interaction => {
         try {
             if (interaction.isCommand()) {
