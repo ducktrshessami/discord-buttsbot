@@ -15,17 +15,17 @@ const client = new Client({ intents: [] });
 
 if (fs.existsSync(index)) {
     client.on("ready", () => {
-        console.log(`Logged in as ${client.user.tag}`);
+        console.log(`[discord] Logged in as ${client.user.tag}`);
         let built = fs.readFileSync(index)
             .toString("utf8")
             .replace("{{ client_id }}", client.user.id)
             .replace("{{ permission_value }}", botConfig.permissionValue);
         fs.writeFileSync(index, built);
-        console.log("Successfully built /public/index.html");
+        console.log("[build] Successfully built /public/index.html");
         client.destroy();
-        console.log("Logged out");
+        console.log("[discord] Logged out");
     })
-        .login(process.env.BOT_TOKEN || botConfig.token)
+        .login()
         .catch(err => {
             console.error(err);
             process.exit(1);
