@@ -1,5 +1,6 @@
 const phin = require("phin");
 
+// TODO: Total guild polling with sharding when guild count surpasses 1500
 async function postServerCount(client) {
     if (process.env.TOP_TOKEN) {
         console.log("[discord] Posting server count to Top.gg");
