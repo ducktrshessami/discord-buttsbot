@@ -1,18 +1,24 @@
 // Log a message
 
 function logMessage(message) {
-    let source = message.guild ? `${message.guild.id}/${message.channelId}` : message.channelId;
+    const source = [
+        message.guildId,
+        message.channelId,
+        message.author.id
+    ]
+        .filter(item => item)
+        .join("/");
     if (message.content) {
-        console.log(`[${source}] ${message.author.tag}: ${message.content}`);
+        console.log(`[discord] ${source}: ${message.content}`);
     }
     if (message.components.length) {
-        console.log(`[${source}] ${message.author.tag}: [MESSAGE COMPONENTS]`);
+        console.log(`[discord] ${source}: [MESSAGE COMPONENTS]`);
     }
     if (message.attachments.size) {
-        console.log(`[${source}] ${message.author.tag}: [${message.attachments.size} ATTACHMENTS]`);
+        console.log(`[discord] ${source}: [${message.attachments.size} ATTACHMENTS]`);
     }
     if (message.embeds.length) {
-        console.log(`[${source}] ${message.author.tag}: [${message.embeds.length} EMBEDS]`);
+        console.log(`[discord] ${source}: [${message.embeds.length} EMBEDS]`);
     }
     return message;
 };
