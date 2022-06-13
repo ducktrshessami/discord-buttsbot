@@ -12,7 +12,7 @@ module.exports = {
         let ignoredUser = await db.IgnoreUser.findByPk(interaction.user.id);
         if (ignoredUser) {
             await ignoredUser.destroy();
-            reply = `Okay ${process.bot.config.responseEmojis.smile}`;
+            reply = `Okay ${interaction.client.responseEmojis.smile}`;
         }
         else {
             reply = "I'm not ignoring you!";
