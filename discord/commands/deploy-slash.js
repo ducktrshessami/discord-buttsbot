@@ -9,7 +9,7 @@ const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
 const slashCommands = require("./slash");
 
-const env = process.env.NODE_ENV || "development";
+const env = process.env.DISCORD_ENV || "development";
 const commands = slashCommands.map(command => command.data.toJSON());
 const rest = new REST({ version: "9" })
     .setToken(process.env.DISCORD_TOKEN);
