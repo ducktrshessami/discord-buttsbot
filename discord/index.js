@@ -1,6 +1,7 @@
 const { Client, Intents } = require("discord.js");
 const db = require("../models");
 const slashCommands = require("./commands/slash");
+const messageCommands = require("./commands/message");
 const postServerCount = require("./utils/postServerCount");
 const presenceConfig = require("../config/presence.json");
 
@@ -55,14 +56,25 @@ client
             console.error(error);
         }
     })
-    .on("message", async message => {
+    .on("messageCreate", async message => {
         try {
             let usedCommand = false;
             let usedResponse = false;
             const guildModel = await db.Guild.findByPk(message.guildId);
             const usedPrefix = getUsedPrefix(message, guildModel);
             if (usedPrefix) {
-
+                const args = message.content
+                    .slice(usedPrefix.length)
+                    .split(/\s/g);
+                const command = messageCommands.get(args[0]);
+                if (command) {
+                    usedCommand = true;
+                    await command(message, args, guildModel);
+                }
+            }
+            if (!usedCommand) {
+                // responses
+                // buttify
             }
         }
         catch (error) {
