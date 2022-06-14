@@ -13,8 +13,8 @@ const commands = new Collection(
             (file.slice(-3) === ".js")
         )
         .map(file => {
-            const cmd = require(path.join(__dirname, file));
-            return [cmd.name, cmd.callback];
+            const command = require(path.join(__dirname, file));
+            return [command.data.name, command];
         })
 );
 

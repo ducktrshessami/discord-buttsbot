@@ -69,7 +69,7 @@ client
                 const command = messageCommands.get(args[0]);
                 if (command) {
                     usedCommand = true;
-                    await command(message, args, guildModel);
+                    await command.callback(message, args, guildModel);
                 }
             }
             if (!usedCommand) {
