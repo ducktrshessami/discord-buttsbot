@@ -55,11 +55,36 @@ client
             console.error(error);
         }
     })
+    .on("message", async message => {
+        try {
+            let usedCommand = false;
+            let usedResponse = false;
+            const guildModel = await db.Guild.findByPk(message.guildId);
+            const usedPrefix = getUsedPrefix(message, guildModel);
+            if (usedPrefix) {
+
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
+    })
     .login()
     .catch(console.error);
 
 function getPresence() {
     return presenceConfig.presences[Math.floor(Math.random() * presenceConfig.presences.length)];
+}
+
+function getUsedPrefix(message, guildModel) {
+    if (guildModel.prefix && message.content.startsWith(guildModel.prefix)) {
+        return guildModel.prefix;
+    }
+    else {
+        const selector = new RegExp(`^<@!?${message.client.user.id}>\\s+`);
+        return message.content.match(selector)
+            ?.at(0) || null;
+    }
 }
 
 module.exports = client;
