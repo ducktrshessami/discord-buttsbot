@@ -1,5 +1,6 @@
 const { Permissions } = require("discord.js");
 const db = require("../../../models");
+const logMessage = require("../../utils/logMessage");
 
 module.exports = {
     data: {
