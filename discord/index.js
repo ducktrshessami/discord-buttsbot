@@ -93,7 +93,7 @@ function getUsedPrefix(message, guildModel) {
         return guildModel.prefix;
     }
     else {
-        const selector = new RegExp(`^<@!?${message.client.user.id}>\\s+`);
+        const selector = new RegExp(`^<@!?${message.client.user.id}>\\s*`);
         return message.content.match(selector)
             ?.at(0) || null;
     }
