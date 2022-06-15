@@ -12,6 +12,20 @@ module.exports = {
         requirePermissions: Permissions.FLAGS.MANAGE_GUILD
     },
     callback: async function (message, args, guildModel) {
-
+        let reply;
+        const newValue = parseInt(args[1]);
+        if (newValue) {
+            if (newValue > 0) {
+                const { frequency } = await guildModel.update({ frequency: newValue });
+                reply = `Buttify frequency changed to one in every \`${frequency}\` messages!`;
+            }
+            else {
+                reply = "Positive whole numbers only please!";
+            }
+        }
+        else {
+            reply = `I buttify roughly one in every \`${guildModel.frequency}\` messages!`;
+        }
+        logMessage(await message.reply(reply));
     }
 };
