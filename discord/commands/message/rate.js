@@ -1,4 +1,5 @@
 const { Permissions } = require("discord.js");
+const logMessage = require("../../utils/logMessage");
 
 module.exports = {
     data: {
@@ -8,6 +9,20 @@ module.exports = {
         requirePermissions: Permissions.FLAGS.MANAGE_GUILD
     },
     callback: async function (message, args, guildModel) {
-
+        let reply;
+        const newValue = parseInt(args[1]);
+        if (!isNaN(newValue)) {
+            if (newValue > 0) {
+                const { rate } = await guildModel.update({ rate: newValue });
+                reply = `Buttify rate changed to one in every \`${rate}\` syllables per buttified message!`;
+            }
+            else {
+                reply = "Positive whole numbers only please!";
+            }
+        }
+        else {
+            reply = `I buttify roughly one in every \`${guildModel.rate}\` syllables per buttified message!`;
+        }
+        logMessage(await message.reply(reply));
     }
 };
