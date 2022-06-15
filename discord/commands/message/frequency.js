@@ -1,5 +1,4 @@
 const { Permissions } = require("discord.js");
-const db = require("../../../models");
 const logMessage = require("../../utils/logMessage");
 const defaultButt = require("../../../config/default.json");
 
