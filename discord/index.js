@@ -3,6 +3,7 @@ const db = require("../models");
 const slashCommands = require("./commands/slash");
 const messageCommands = require("./commands/message");
 const postServerCount = require("./utils/postServerCount");
+const logMessage = require("./utils/logMessage");
 const presenceConfig = require("../config/presence.json");
 
 const client = new Client({
@@ -69,7 +70,24 @@ client
                 const command = messageCommands.get(args[0]);
                 if (command) {
                     usedCommand = true;
-                    await command.callback(message, args, guildModel);
+                    if ((command.data.requireGuild || command.data.requirePermissions) && !message.inGuild()) {
+                        logMessage(await message.reply("This command only works in servers!"));
+                    }
+                    else if (
+                        command.data.requirePermissions &&
+                        message.inGuild() &&
+                        !message.channel.permissionsFor(message.member)
+                            .has(command.data.requirePermissions)
+                    ) {
+                        const missing = message.channel.permissionsFor(message.member)
+                            .missing(command.data.requirePermissions)
+                            .map(permission => `\`${permission}\``)
+                            .join(", ");
+                        logMessage(await message.reply(`You are missing the following permissions:\n${missing}`));
+                    }
+                    else {
+                        await command.callback(message, args, guildModel);
+                    }
                 }
             }
             if (!usedCommand) {
