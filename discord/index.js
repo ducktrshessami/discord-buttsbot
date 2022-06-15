@@ -89,7 +89,7 @@ function getPresence() {
 }
 
 function getUsedPrefix(message, guildModel) {
-    if (guildModel.prefix && message.content.startsWith(guildModel.prefix)) {
+    if (guildModel?.prefix && message.content.startsWith(guildModel.prefix)) {
         return guildModel.prefix;
     }
     else {
