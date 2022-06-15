@@ -10,7 +10,7 @@ module.exports = {
     callback: async function (interaction) {
         logMessage(await interaction.reply({
             fetchReply: true,
-            content: `Invite me to another server!`,
+            content: "Invite me to another server!",
             components: [new MessageActionRow({
                 components: [new MessageButton({
                     style: "LINK",
