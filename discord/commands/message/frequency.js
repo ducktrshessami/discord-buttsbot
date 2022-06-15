@@ -13,7 +13,7 @@ module.exports = {
     callback: async function (message, args, guildModel) {
         let reply;
         const newValue = parseInt(args[1]);
-        if (newValue) {
+        if (!isNaN(newValue)) {
             if (newValue > 0) {
                 const { frequency } = await guildModel.update({ frequency: newValue });
                 reply = `Buttify frequency changed to one in every \`${frequency}\` messages!`;
