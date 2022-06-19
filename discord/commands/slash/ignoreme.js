@@ -8,7 +8,7 @@ module.exports = {
         .setDescription("I will never buttify anything you say."),
     callback: async function (interaction) {
         await interaction.deferReply();
-        let [_, created] = await db.IgnoreUser.findOrCreate({
+        const [_, created] = await db.IgnoreUser.findOrCreate({
             where: { id: interaction.user.id }
         });
         logMessage(await interaction.editReply(created ? `Okay ${interaction.client.responseEmojis.frown}` : "I'm already ignoring you."));
