@@ -14,7 +14,6 @@ module.exports = {
     callback: async function (message, args, guildModel) {
         let reply;
         const newValue = args[1]?.toLowerCase();
-        const guildModel = await db.Guild.findByPk(message.guildId);
         if (newValue) {
             if (/\s/g.test(newValue)) {
                 reply = "No spaces, please!";
