@@ -17,7 +17,9 @@ module.exports = {
         ),
     callback: async function (interaction) {
         let reply;
-        const newValue = interaction.options.getString("value");
+        const newValue = interaction.options
+            .getString("value")
+            ?.toLowerCase();
         await interaction.deferReply();
         const guildModel = await db.Guild.findByPk(interaction.guildId);
         if (newValue) {
@@ -25,7 +27,7 @@ module.exports = {
                 reply = "No spaces, please!";
             }
             else {
-                const { word } = await guildModel.update({ word: newValue.toLowerCase() });
+                const { word } = await guildModel.update({ word: newValue });
                 reply = `Buttification word changed to \`${word}\`!`;
             }
         }
