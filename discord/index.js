@@ -4,6 +4,7 @@ const slashCommands = require("./commands/slash");
 const messageCommands = require("./commands/message");
 const postServerCount = require("./utils/postServerCount");
 const logMessage = require("./utils/logMessage");
+const getCommandListPage = require("./utils/getCommandListPage");
 const presenceConfig = require("../config/presence.json");
 
 const client = new Client({
@@ -50,7 +51,7 @@ client
                 }
             }
             else if (interaction.isButton()) {
-                // help pagination button
+                logMessage(await interaction.update(getCommandListPage(!interaction.customId.match(/elevated/ig))));
             }
         }
         catch (error) {
