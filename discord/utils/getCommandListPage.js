@@ -22,7 +22,7 @@ function getCommandListPage(elevated) {
     const embed = new MessageEmbed({
         title: elevated ? "Management" : "General",
         color: embedColor,
-        description: elevated ? general : management
+        description: elevated ? management : general
     });
     const prev = new MessageButton({
         customId: elevated ? "helpPrevElevated" : "helpPrevGeneral",
@@ -35,6 +35,7 @@ function getCommandListPage(elevated) {
         style: "PRIMARY"
     });
     return {
+        fetchReply: true,
         embeds: [embed],
         components: [new MessageActionRow({
             components: [prev, next]
