@@ -51,7 +51,7 @@ client
                 }
             }
             else if (interaction.isButton()) {
-                logMessage(await interaction.update(getCommandListPage(!interaction.customId.match(/elevated/ig))));
+                logMessage(await interaction.update(await getCommandListPage(!interaction.customId.match(/elevated/ig))));
             }
         }
         catch (error) {
