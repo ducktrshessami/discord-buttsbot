@@ -29,7 +29,7 @@ module.exports = {
                 (command.data.requirePermissions ? ` Also you need the ${permissionText(command.data.requirePermissions)}!` : "")
         }
         else {
-            reply = getCommandListPage(false);
+            reply = await getCommandListPage(false);
         }
         logMessage(await interaction.editReply(reply));
     }

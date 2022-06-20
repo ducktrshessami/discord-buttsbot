@@ -1,24 +1,33 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
-const messageCommands = require("../commands/message");
 const { embedColor } = require("../../config/bot.json");
 
-const generalLines = [];
-const managementLines = [];
+let general;
+let management;
+let built = false;
 
-messageCommands.forEach(command => {
-    const line = `**${command.data.name}:** ${command.data.description}`;
-    if (command.data.requirePermissions) {
-        managementLines.push(line);
+async function buildLines() {
+    const generalLines = [];
+    const managementLines = [];
+    const { default: messageCommands } = await import("../commands/message/index.js");
+
+    messageCommands.forEach(command => {
+        const line = `**${command.data.name}:** ${command.data.description}`;
+        if (command.data.requirePermissions) {
+            managementLines.push(line);
+        }
+        else {
+            generalLines.push(line);
+        }
+    });
+
+    general = generalLines.join("\n");
+    management = managementLines.join("\n");
+}
+
+async function getCommandListPage(elevated) {
+    if (!built) {
+        await buildLines();
     }
-    else {
-        generalLines.push(line);
-    }
-});
-
-const general = generalLines.join("\n");
-const management = managementLines.join("\n");
-
-function getCommandListPage(elevated) {
     const embed = new MessageEmbed({
         title: elevated ? "Management" : "General",
         color: embedColor,
