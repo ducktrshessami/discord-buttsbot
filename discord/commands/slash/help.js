@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const getCommandListPage = require("../../utils/getCommandListPage");
 const logMessage = require("../../utils/logMessage");
+const permissionText = require("../../utils/permissionText");
 const messageCommands = require("../message");
 
 module.exports = {
@@ -22,7 +23,10 @@ module.exports = {
         const commandName = interaction.options.getString("command");
         if (commandName) {
             const command = messageCommands.get(commandName);
-            // individual command info
+            reply = `\`@${interaction.client.user.username} ${command.data.name} ${command.data.args || ""}`.trim() +
+                `\`\n**${command.data.name}:** ${command.data.description}\n${command.data.subtitle || ""}`.trim() +
+                (command.data.requireGuild || command.data.requirePermissions ? "\nYou can only use this command in a server." : "") +
+                (command.data.requirePermissions ? ` Also you need the ${permissionText(command.data.requirePermissions)}!` : "")
         }
         else {
             reply = getCommandListPage(false);
