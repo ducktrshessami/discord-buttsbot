@@ -30,7 +30,7 @@ function getCommandListPage(elevated) {
         style: "SECONDARY"
     });
     const next = new MessageButton({
-        customId: elevated ? "helpPrevElevated" : "helpPrevGeneral",
+        customId: elevated ? "helpNextElevated" : "helpNextGeneral",
         label: "Next",
         style: "PRIMARY"
     });
