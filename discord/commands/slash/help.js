@@ -1,4 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
+const getCommandListPage = require("../../utils/getCommandListPage");
+const logMessage = require("../../utils/logMessage");
 const messageCommands = require("../message");
 
 module.exports = {
@@ -15,6 +17,16 @@ module.exports = {
                 })))
         ),
     callback: async function (interaction) {
-
+        let reply;
+        await interaction.deferReply();
+        const commandName = interaction.options.getString("command");
+        if (commandName) {
+            const command = messageCommands.get(commandName);
+            // individual command info
+        }
+        else {
+            reply = getCommandListPage(false);
+        }
+        logMessage(await interaction.editReply(reply));
     }
 };
