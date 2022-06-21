@@ -1,4 +1,4 @@
-const { Client, Intents } = require("discord.js");
+const { Client, Intents, Permissions } = require("discord.js");
 const db = require("../models");
 const slashCommands = require("./commands/slash");
 const messageCommands = require("./commands/message");
@@ -61,40 +61,47 @@ client
     })
     .on("messageCreate", async message => {
         try {
-            let usedCommand = false;
-            let usedResponse = false;
-            const guildModel = await db.Guild.findByPk(message.guildId);
-            const usedPrefix = getUsedPrefix(message, guildModel);
-            if (usedPrefix) {
-                const args = message.content
-                    .slice(usedPrefix.length)
-                    .split(/\s/g);
-                const command = messageCommands.get(args[0]);
-                if (command) {
-                    usedCommand = true;
-                    if ((command.data.requireGuild || command.data.requirePermissions) && !message.inGuild()) {
-                        logMessage(await message.reply("This command only works in servers!"));
-                    }
-                    else if (
-                        command.data.requirePermissions &&
-                        message.inGuild() &&
-                        !message.channel.permissionsFor(message.member)
-                            .has(command.data.requirePermissions)
-                    ) {
-                        const missing = message.channel.permissionsFor(message.member)
-                            .missing(command.data.requirePermissions)
-                            .map(permission => `\`${permission}\``)
-                            .join(", ");
-                        logMessage(await message.reply(`You are missing the following permissions:\n${missing}`));
-                    }
-                    else {
-                        await command.callback(message, args, guildModel);
+            if (
+                message.channel.permissionsFor(message.guild.me)
+                    .has(Permissions.FLAGS.SEND_MESSAGES)
+            ) {
+                let usedCommand = false;
+                const guildModel = await db.Guild.findByPk(message.guildId);
+                const usedPrefix = getUsedPrefix(message, guildModel);
+                if (usedPrefix) {
+                    const args = message.content
+                        .slice(usedPrefix.length)
+                        .split(/\s/g);
+                    const command = messageCommands.get(args[0]);
+                    if (command) {
+                        usedCommand = true;
+                        if ((command.data.requireGuild || command.data.requirePermissions) && !message.inGuild()) {
+                            logMessage(await message.reply("This command only works in servers!"));
+                        }
+                        else if (
+                            command.data.requirePermissions &&
+                            message.inGuild() &&
+                            !message.channel.permissionsFor(message.member)
+                                .has(command.data.requirePermissions)
+                        ) {
+                            const missing = message.channel.permissionsFor(message.member)
+                                .missing(command.data.requirePermissions)
+                                .map(permission => `\`${permission}\``)
+                                .join(", ");
+                            logMessage(await message.reply(`You are missing the following permissions:\n${missing}`));
+                        }
+                        else {
+                            await command.callback(message, args, guildModel);
+                        }
                     }
                 }
-            }
-            if (!usedCommand) {
-                // responses
-                // buttify
+                if (!usedCommand) {
+                    let usedResponse = false;
+                    // responses
+                    if (!usedResponse) {
+                        // buttify
+                    }
+                }
             }
         }
         catch (error) {
