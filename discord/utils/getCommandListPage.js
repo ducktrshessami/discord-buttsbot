@@ -3,7 +3,6 @@ const { embedColor } = require("../../config/bot.json");
 
 let general;
 let management;
-let built = false;
 
 async function buildLines() {
     const generalLines = [];
@@ -25,7 +24,7 @@ async function buildLines() {
 }
 
 async function getCommandListPage(elevated) {
-    if (!built) {
+    if (!general || !management) {
         await buildLines();
     }
     const embed = new MessageEmbed({
