@@ -120,7 +120,7 @@ client
                             await sendResponse(message, response);
                         }
                     }
-                    if (!usedResponse) {
+                    if (!usedResponse && await checkButtify(message, guildModel)) {
                         // buttify
                     }
                 }
@@ -154,6 +154,19 @@ async function sendResponse(message, response) {
         setTimeout(() => responseReady.set(response.emoji, true), responseCooldown);
         logMessage(await message.channel.send(client.responseEmojis[response.emoji]));
     }
+}
+
+async function checkButtify(message, guildModel) {
+    const [channelModel, userModel] = await Promise.all([
+        db.IgnoreChannel.findByPk(message.channelId),
+        db.IgnoreUser.findByPk(message.author.id)
+    ]);
+    return !message.author.bot &&
+        message.guildId &&
+        message.cleanContent &&
+        !channelModel &&
+        !userModel &&
+        (Math.random() < (1 / guildModel.frequency));
 }
 
 module.exports = client;
