@@ -184,8 +184,8 @@ function verifyButtify(original, buttified, word) {
         .replaceAll(/[^A-Z]+/gi, "")
         .toLowerCase();
     return originalFormatted !== buttifiedFormatted &&
-        new RegExp(`^${word}s?$`, "i")
-            .test(buttifiedFormatted);
+        !(new RegExp(`^${word}s?$`, "i")
+            .test(buttifiedFormatted));
 }
 
 module.exports = client;
