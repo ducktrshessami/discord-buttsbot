@@ -70,8 +70,11 @@ client
         try {
             if (
                 message.author.id !== client.user.id &&
-                message.channel.permissionsFor(message.guild.me)
-                    .has(Permissions.FLAGS.SEND_MESSAGES)
+                (
+                    !message.inGuild() ||
+                    message.channel.permissionsFor(message.guild.me)
+                        .has(Permissions.FLAGS.SEND_MESSAGES)
+                )
             ) {
                 let usedCommand = false;
                 const guildModel = await db.Guild.findByPk(message.guildId);
@@ -162,7 +165,7 @@ async function checkButtify(message, guildModel) {
         db.IgnoreUser.findByPk(message.author.id)
     ]);
     return !message.author.bot &&
-        message.guildId &&
+        message.inGuild() &&
         message.cleanContent &&
         !channelModel &&
         !userModel &&
