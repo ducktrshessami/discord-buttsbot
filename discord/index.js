@@ -1,11 +1,13 @@
-const { Client, Intents, Permissions } = require("discord.js");
+const { Client, Intents, Permissions, Collection } = require("discord.js");
 const db = require("../models");
 const slashCommands = require("./commands/slash");
 const messageCommands = require("./commands/message");
+const responses = require("./responses");
 const postServerCount = require("./utils/postServerCount");
 const logMessage = require("./utils/logMessage");
 const getCommandListPage = require("./utils/getCommandListPage");
 const presenceConfig = require("../config/presence.json");
+const { responseCooldown } = require("../config/bot.json");
 
 const client = new Client({
     intents: Intents.FLAGS.GUILDS |
@@ -21,6 +23,11 @@ client.responseEmojis = {
     wink: process.env.RES_WINK || ";)",
     weird: process.env.RES_WEIRD || "O_o"
 };
+
+const responseReady = new Collection(
+    Object.keys(client.responseEmojis)
+        .map(emoji => [emoji, true])
+);
 
 client
     .once("ready", () => {
@@ -97,7 +104,21 @@ client
                 }
                 if (!usedCommand) {
                     let usedResponse = false;
-                    // responses
+                    if (
+                        message.mentions.has(client.user.id) ||
+                        message.content
+                            .toLowerCase()
+                            .includes(client.user.username.toLowerCase())
+                    ) {
+                        const words = message.content
+                            .toLowerCase()
+                            .split(/\s/g);
+                        const response = responses.find(r => r.keywords.some(keyword => words.includes(keyword)));
+                        if (response) {
+                            usedResponse = true;
+                            await sendResponse(message, response);
+                        }
+                    }
                     if (!usedResponse) {
                         // buttify
                     }
@@ -123,6 +144,14 @@ function getUsedPrefix(message, guildModel) {
         const selector = new RegExp(`^<@!?${message.client.user.id}>\\s*`);
         return message.content.match(selector)
             ?.at(0) || null;
+    }
+}
+
+async function sendResponse(message, response) {
+    if (responseReady.get(response.emoji)) {
+        responseReady.set(response.emoji, false);
+        setTimeout(() => responseReady.set(response.emoji, true), responseCooldown);
+        logMessage(await message.channel.send(client.responseEmojis[response.emoji]));
     }
 }
 
