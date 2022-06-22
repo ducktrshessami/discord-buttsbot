@@ -6,6 +6,7 @@ const responses = require("./responses");
 const postServerCount = require("./utils/postServerCount");
 const logMessage = require("./utils/logMessage");
 const getCommandListPage = require("./utils/getCommandListPage");
+const buttify = require("./utils/buttify");
 const presenceConfig = require("../config/presence.json");
 const { responseCooldown } = require("../config/bot.json");
 
@@ -170,6 +171,18 @@ async function checkButtify(message, guildModel) {
         !channelModel &&
         !userModel &&
         (Math.random() < (1 / guildModel.frequency));
+}
+
+function verifyButtify(original, buttified, word) {
+    const originalFormatted = original
+        .replaceAll(/[^A-Z]+/gi, "")
+        .toLowerCase();
+    const buttifiedFormatted = buttified
+        .replaceAll(/[^A-Z]+/gi, "")
+        .toLowerCase();
+    return originalFormatted !== buttifiedFormatted &&
+        new RegExp(`^${word}s?$`, "i")
+            .test(buttifiedFormatted);
 }
 
 module.exports = client;
