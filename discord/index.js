@@ -125,7 +125,10 @@ client
                         }
                     }
                     if (!usedResponse && await checkButtify(message, guildModel)) {
-                        // buttify
+                        const buttified = buttify(message.cleanContent, guildModel.word, guildModel.rate);
+                        if (verifyButtify(message.cleanContent, buttified, guildModel.word)) {
+                            logMessage(await message.channel.send(buttified));
+                        }
                     }
                 }
             }
