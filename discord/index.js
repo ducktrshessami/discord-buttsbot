@@ -69,6 +69,7 @@ client
     .on("messageCreate", async message => {
         try {
             if (
+                message.author.id !== client.user.id &&
                 message.channel.permissionsFor(message.guild.me)
                     .has(Permissions.FLAGS.SEND_MESSAGES)
             ) {
