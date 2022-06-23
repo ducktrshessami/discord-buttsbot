@@ -1,6 +1,6 @@
 {
   "name": "buttsbot",
-  "version": "1.6.3",
+  "version": "2.0.0",
   "description": "I'm Buttbot! I say butt!",
   "main": "server.js",
   "repository": {
