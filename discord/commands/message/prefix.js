@@ -13,8 +13,15 @@ module.exports = {
         const newValue = args[1];
         if (newValue) {
             if (message.channel.permissionsFor(message.member).has(Permissions.FLAGS.MANAGE_GUILD)) {
-                const { prefix } = await guildModel.update({ prefix: newValue });
-                reply = `Custom prefix changed to \`${prefix}\`!`;
+                const mentionSelector = new RegExp(`^<@!?${message.client.user.id}>$`);
+                if (mentionSelector.test(newValue)) {
+                    await guildModel.update({ prefix: null });
+                    reply = "Custom prefix cleared!";
+                }
+                else {
+                    const { prefix } = await guildModel.update({ prefix: newValue });
+                    reply = `Custom prefix changed to \`${prefix}\`!`;
+                }
             }
             else {
                 reply = `You are missing the following permissions:\n\`Manage Server\``;
