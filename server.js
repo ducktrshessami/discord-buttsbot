@@ -23,9 +23,9 @@ app.use(express.static(resolve(__dirname, "public")));
 db.sequelize.sync({ force: process.env.DB_FORCE && process.env.DB_FORCE.trim().toLowerCase() !== "false" })
     .then(() => {
         app.listen(PORT, function () {
-            console.log(`Listening on PORT ${PORT}`);
+            console.log(`[express] Listening on PORT ${PORT}`);
             cycler.startLoop();
-            process.bot = require("./bot");
+            require("./discord");
         });
     })
     .catch(err => {
