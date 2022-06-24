@@ -25,7 +25,7 @@ Avatar and presence activities by Entrop
 
 ## Invite to Your Server
 
-### [Invite buttsbot](https://discord.com/api/oauth2/authorize?client_id=780539847764082768&permissions=103079480320&scope=bot%20applications.commands)
+### [Invite buttsbot](https://discord.com/api/oauth2/authorize?client_id=780539847764082768&permissions=265216&scope=bot%20applications.commands)
 
 buttsbot can be invited to your server with the above link.
 
@@ -33,3 +33,5 @@ Use the help command to see what other commands are available:
 ```
 @buttsbot help
 ```
+
+Slash commands are also available! If you can't see them, you may need to reinvite buttsbot with the above invite link.
