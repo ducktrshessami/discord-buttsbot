@@ -14,7 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   ResponseCooldown.init({
-    id: DataTypes.STRING,
+    channelId: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+      allowNull: false
+    },
     smile: DataTypes.DATE,
     frown: DataTypes.DATE,
     wink: DataTypes.DATE,
