@@ -3,6 +3,7 @@ const db = require("../models");
 const slashCommands = require("./commands/slash");
 const messageCommands = require("./commands/message");
 const responses = require("./responses");
+const responseEmojiManager = require("./responseEmojiManager");
 const postServerCount = require("./utils/postServerCount");
 const logMessage = require("./utils/logMessage");
 const getCommandListPage = require("./utils/getCommandListPage");
@@ -17,16 +18,8 @@ const client = new Client({
     partials: ["CHANNEL"],
     presence: getPresence()
 });
-
-client.responseEmojis = {
-    smile: process.env.RES_SMILE || ":D",
-    frown: process.env.RES_FROWN || ":(",
-    wink: process.env.RES_WINK || ";)",
-    weird: process.env.RES_WEIRD || "O_o"
-};
-
 const responseReady = new Collection(
-    Object.keys(client.responseEmojis)
+    Object.keys(responseEmojiManager)
         .map(emoji => [emoji, true])
 );
 
@@ -159,7 +152,7 @@ async function sendResponse(message, response) {
     if (responseReady.get(response.emoji)) {
         responseReady.set(response.emoji, false);
         setTimeout(() => responseReady.set(response.emoji, true), responseCooldown);
-        logMessage(await message.channel.send(client.responseEmojis[response.emoji]));
+        logMessage(await message.channel.send(responseEmojiManager[response.emoji](message.channel)));
     }
 }
 
