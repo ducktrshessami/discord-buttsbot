@@ -1,8 +1,9 @@
 const { Permissions } = require("discord.js");
 
 function checkPermissions(channel, interaction = false) {
-    return channel.permissionsFor(interaction ? channel.guild.roles.everyone : channel.guild.me)
-        .has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS);
+    return !channel.guildId ||
+        channel.permissionsFor(interaction ? channel.guild.roles.everyone : channel.guild.me)
+            .has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS);
 }
 
 module.exports = {
