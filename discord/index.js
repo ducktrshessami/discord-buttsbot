@@ -18,10 +18,6 @@ const client = new Client({
     partials: ["CHANNEL"],
     presence: getPresence()
 });
-const responseReady = new Collection(
-    Object.keys(responseEmojiManager)
-        .map(emoji => [emoji, true])
-);
 
 client
     .once("ready", () => {
@@ -149,10 +145,14 @@ function getUsedPrefix(message, guildModel) {
 }
 
 async function sendResponse(message, response) {
-    if (responseReady.get(response.emoji)) {
-        responseReady.set(response.emoji, false);
-        setTimeout(() => responseReady.set(response.emoji, true), responseCooldown);
+    const [cooldownModel] = await db.ResponseCooldown.findOrCreate({
+        where: { channelId: message.channelId }
+    });
+    if (!cooldownModel[response.emoji] || (message.createdTimestamp - cooldownModel[response.emoji] > responseCooldown)) {
+        const newCooldown = {};
+        newCooldown[response.emoji] = message.createdAt;
         logMessage(await message.channel.send(responseEmojiManager[response.emoji](message.channel)));
+        await cooldownModel.update(newCooldown);
     }
 }
 
