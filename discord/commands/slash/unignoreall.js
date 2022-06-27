@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { Permissions } = require("discord.js");
 const db = require("../../../models");
+const { smile } = require("../../responseEmojiManager");
 const logMessage = require("../../utils/logMessage");
 
 module.exports = {
@@ -14,6 +15,6 @@ module.exports = {
         await db.IgnoreChannel.destroy({
             where: { GuildId: interaction.guildId }
         });
-        logMessage(await interaction.editReply(`Okay ${interaction.client.responseEmojis.smile}`));
+        logMessage(await interaction.editReply(`Okay ${smile(interaction.channel, true)}`));
     }
 };
