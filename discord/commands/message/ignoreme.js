@@ -1,4 +1,5 @@
 const db = require("../../../models");
+const { frown } = require("../../responseEmojiManager");
 const logMessage = require("../../utils/logMessage");
 
 module.exports = {
@@ -10,6 +11,6 @@ module.exports = {
         let [_, created] = await db.IgnoreUser.findOrCreate({
             where: { id: message.author.id }
         });
-        logMessage(await message.reply(created ? `Okay ${message.client.responseEmojis.frown}` : "I'm already ignoring you."));
+        logMessage(await message.reply(created ? `Okay ${frown(message.channel)}` : "I'm already ignoring you."));
     }
 };

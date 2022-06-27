@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { Permissions } = require("discord.js");
 const db = require("../../../models");
+const { smile } = require("../../responseEmojiManager");
 const logMessage = require("../../utils/logMessage");
 
 module.exports = {
@@ -15,7 +16,7 @@ module.exports = {
         const ignoreModel = await db.IgnoreChannel.findByPk(interaction.channelId);
         if (ignoreModel) {
             await ignoreModel.destroy();
-            reply = `Okay ${interaction.client.responseEmojis.smile}`;
+            reply = `Okay ${smile(interaction.channel, true)}`;
         }
         else {
             reply = "I'm not ignoring this channel!";
