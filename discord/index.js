@@ -3,6 +3,7 @@ const db = require("../models");
 const slashCommands = require("./commands/slash");
 const messageCommands = require("./commands/message");
 const responses = require("./responses");
+const responseEmojiManager = require("./responseEmojiManager");
 const postServerCount = require("./utils/postServerCount");
 const logMessage = require("./utils/logMessage");
 const getCommandListPage = require("./utils/getCommandListPage");
@@ -17,18 +18,6 @@ const client = new Client({
     partials: ["CHANNEL"],
     presence: getPresence()
 });
-
-client.responseEmojis = {
-    smile: process.env.RES_SMILE || ":D",
-    frown: process.env.RES_FROWN || ":(",
-    wink: process.env.RES_WINK || ";)",
-    weird: process.env.RES_WEIRD || "O_o"
-};
-
-const responseReady = new Collection(
-    Object.keys(client.responseEmojis)
-        .map(emoji => [emoji, true])
-);
 
 client
     .once("ready", () => {
@@ -156,10 +145,14 @@ function getUsedPrefix(message, guildModel) {
 }
 
 async function sendResponse(message, response) {
-    if (responseReady.get(response.emoji)) {
-        responseReady.set(response.emoji, false);
-        setTimeout(() => responseReady.set(response.emoji, true), responseCooldown);
-        logMessage(await message.channel.send(client.responseEmojis[response.emoji]));
+    const [cooldownModel] = await db.ResponseCooldown.findOrCreate({
+        where: { channelId: message.channelId }
+    });
+    if (!cooldownModel[response.emoji] || (message.createdTimestamp - cooldownModel[response.emoji] > responseCooldown)) {
+        const newCooldown = {};
+        newCooldown[response.emoji] = message.createdAt;
+        logMessage(await message.channel.send(responseEmojiManager[response.emoji](message.channel)));
+        await cooldownModel.update(newCooldown);
     }
 }
 

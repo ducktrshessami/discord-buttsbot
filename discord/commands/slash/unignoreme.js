@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const db = require("../../../models");
+const { smile } = require("../../responseEmojiManager");
 const logMessage = require("../../utils/logMessage");
 
 module.exports = {
@@ -12,7 +13,7 @@ module.exports = {
         const ignoredUser = await db.IgnoreUser.findByPk(interaction.user.id);
         if (ignoredUser) {
             await ignoredUser.destroy();
-            reply = `Okay ${interaction.client.responseEmojis.smile}`;
+            reply = `Okay ${smile(interaction.channel, true)}`;
         }
         else {
             reply = "I'm not ignoring you!";
