@@ -43,7 +43,7 @@ client
             if (interaction.isCommand()) {
                 const command = slashCommands.get(interaction.commandName);
                 if (command) {
-                    console.log(`[discord] ${interaction.user.id} used /${interaction.commandName}`);
+                    console.log(`[discord] ${interaction.user.id} used ${interaction}`);
                     await command.callback(interaction);
                 }
             }
