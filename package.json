@@ -1,5 +1,5 @@
 {
-  "name": "buttsbot",
+  "name": "discord-buttsbot",
   "version": "2.3.0",
   "description": "I'm Buttbot! I say butt!",
   "main": "server.js",
