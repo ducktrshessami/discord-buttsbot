@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("discord.js");
 const getCommandListPage = require("../../utils/getCommandListPage");
 const logMessage = require("../../utils/logMessage");
 const permissionText = require("../../utils/permissionText");
