@@ -1,4 +1,4 @@
-const { Client, Intents, Permissions, Collection } = require("discord.js");
+const { Client, GatewayIntentBits, Partials } = require("discord.js");
 const db = require("../models");
 const slashCommands = require("./commands/slash");
 const messageCommands = require("./commands/message");
@@ -12,10 +12,11 @@ const presenceConfig = require("../config/presence.json");
 const { responseCooldown } = require("../config/bot.json");
 
 const client = new Client({
-    intents: Intents.FLAGS.GUILDS |
-        Intents.FLAGS.GUILD_MESSAGES |
-        Intents.FLAGS.DIRECT_MESSAGES,
-    partials: ["CHANNEL"],
+    intents: GatewayIntentBits.Guilds |
+        GatewayIntentBits.GuildMessages |
+        GatewayIntentBits.DirectMessages |
+        GatewayIntentBits.MessageContent,
+    partials: [Partials.Channel],
     presence: getPresence()
 });
 
