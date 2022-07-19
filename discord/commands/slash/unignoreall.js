@@ -14,6 +14,6 @@ module.exports = {
         await db.IgnoreChannel.destroy({
             where: { GuildId: interaction.guildId }
         });
-        logMessage(await interaction.editReply(`Okay ${smile(interaction.channel, true)}`));
+        logMessage(await interaction.editReply(`Okay ${smile(interaction)}`));
     }
 };

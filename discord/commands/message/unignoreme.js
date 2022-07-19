@@ -12,7 +12,7 @@ module.exports = {
         const ignoredUser = await db.IgnoreUser.findByPk(message.author.id);
         if (ignoredUser) {
             await ignoredUser.destroy();
-            reply = `Okay ${smile(message.channel)}`;
+            reply = `Okay ${smile(message)}`;
         }
         else {
             reply = "I'm not ignoring you!";
