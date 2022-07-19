@@ -1,9 +1,12 @@
-const { Permissions } = require("discord.js");
+const { BaseInteraction, PermissionFlagsBits } = require("discord.js");
 
-function checkPermissions(channel, interaction = false) {
-    return !channel.guildId ||
-        channel.permissionsFor(interaction ? channel.guild.roles.everyone : channel.guild.me)
-            .has(Permissions.FLAGS.USE_EXTERNAL_EMOJIS);
+function checkPermissions(repliable) {
+    return !repliable.guildId || (
+        repliable instanceof BaseInteraction ?
+            repliable.appPermissions.has(PermissionFlagsBits.UseExternalEmojis) :
+            repliable.channel.permissionsFor(repliable.guild.me)
+                .has(PermissionFlagsBits.UseExternalEmojis)
+    )
 }
 
 function responseFactory(envEmote, defaultEmote) {
