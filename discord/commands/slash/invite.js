@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageActionRow, MessageButton } = require("discord.js");
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const logMessage = require("../../utils/logMessage");
 const { permissionValue } = require("../../../config/bot.json");
 
@@ -11,13 +10,15 @@ module.exports = {
         logMessage(await interaction.reply({
             fetchReply: true,
             content: "Invite me to another server!",
-            components: [new MessageActionRow({
-                components: [new MessageButton({
-                    style: "LINK",
-                    label: "Invite",
-                    url: `https://discord.com/api/oauth2/authorize?client_id=${interaction.client.user.id}&permissions=${permissionValue}&scope=bot%20applications.commands`
-                })]
-            })]
+            components: [
+                new ActionRowBuilder()
+                    .setComponents(
+                        new ButtonBuilder()
+                            .setStyle(ButtonStyle.Link)
+                            .setLabel("Invite")
+                            .setURL(`https://discord.com/api/oauth2/authorize?client_id=${interaction.client.user.id}&permissions=${permissionValue}&scope=bot%20applications.commands`)
+                    )
+            ]
         }));
     }
 };
