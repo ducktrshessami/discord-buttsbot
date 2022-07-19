@@ -1,4 +1,4 @@
-const { Permissions } = require("discord.js");
+const { PermissionFlagsBits } = require("discord.js");
 const db = require("../../../models");
 const logMessage = require("../../utils/logMessage");
 
@@ -6,7 +6,7 @@ module.exports = {
     data: {
         name: "ignoreall",
         description: "I won't buttify in any channel.",
-        requirePermissions: Permissions.FLAGS.MANAGE_GUILD
+        requirePermissions: PermissionFlagsBits.ManageGuild
     },
     callback: async function (message) {
         await message.guild.channels.fetchActiveThreads();

@@ -1,5 +1,4 @@
-const { Permissions } = require("discord.js");
-const db = require("../../../models");
+const { PermissionFlagsBits } = require("discord.js");
 const logMessage = require("../../utils/logMessage");
 const defaultButt = require("../../../config/default.json");
 
@@ -9,7 +8,7 @@ module.exports = {
         description: "Use this command to show or change what word I buttify messages with!",
         subtitle: `The default word is ${defaultButt.word}.`,
         args: "[word]",
-        requirePermissions: Permissions.FLAGS.MANAGE_GUILD
+        requirePermissions: PermissionFlagsBits.ManageGuild
     },
     callback: async function (message, args, guildModel) {
         let reply;

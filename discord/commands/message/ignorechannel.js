@@ -1,4 +1,4 @@
-const { Permissions } = require("discord.js");
+const { PermissionFlagsBits } = require("discord.js");
 const db = require("../../../models");
 const logMessage = require("../../utils/logMessage");
 
@@ -6,7 +6,7 @@ module.exports = {
     data: {
         name: "ignorechannel",
         description: "I won't buttify in this channel.",
-        requirePermissions: Permissions.FLAGS.MANAGE_CHANNELS
+        requirePermissions: PermissionFlagsBits.ManageChannels
     },
     callback: async function (message) {
         const [_, created] = await db.IgnoreChannel.findOrCreate({
