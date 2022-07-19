@@ -1,6 +1,6 @@
 {
   "name": "discord-buttsbot",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "I'm Buttbot! I say butt!",
   "main": "server.js",
   "repository": {
