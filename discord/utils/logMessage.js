@@ -11,7 +11,7 @@ function logMessage(message) {
     if (message.content) {
         console.log(`[discord] ${source}: ${message.content}`);
     }
-    if (message.components.length) {
+    if (message.components.reduce((total, row) => total + row.components.length, 0)) {
         console.log(`[discord] ${source}: [MESSAGE COMPONENTS]`);
     }
     if (message.attachments.size) {
