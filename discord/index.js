@@ -60,7 +60,7 @@ client
     })
     .on("interactionCreate", async interaction => {
         try {
-            if (interaction.isCommand()) {
+            if (interaction.isChatInputCommand()) {
                 const command = slashCommands.get(interaction.commandName);
                 if (command) {
                     console.log(`[discord] ${interaction.user.id} used ${interaction}`);
@@ -69,7 +69,7 @@ client
             }
             else if (interaction.isButton()) {
                 await interaction.deferUpdate();
-                logMessage(await interaction.editReply(await getCommandListPage(!interaction.customId.match(/elevated/ig))));
+                await interaction.editReply(await getCommandListPage(!interaction.customId.match(/elevated/ig)));
             }
         }
         catch (error) {
