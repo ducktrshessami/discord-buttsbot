@@ -21,8 +21,12 @@ const client = new Client({
 });
 
 client
+    .on("debug", console.debug)
+    .on("warn", console.warn)
+    .on("error", console.error)
     .once("ready", () => {
         console.log(`[discord] Logged in as ${client.user.tag}`);
+        client.off("debug", console.debug);
         setInterval(() => client.user.setPresence(getPresence()), presenceConfig.minutes * 60000);
         postServerCount(client);
         Promise.all(client.guilds.cache.map(guild => db.Guild.findOrCreate({
@@ -30,7 +34,6 @@ client
         })))
             .catch(console.error);
     })
-    .on("error", console.error)
     .on("guildCreate", guild => {
         postServerCount(client);
         db.Guild.findOrCreate({
