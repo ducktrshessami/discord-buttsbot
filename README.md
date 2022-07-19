@@ -1,6 +1,6 @@
 ![buttsbot Avatar](./assets/images/avatar-small.png)
 
-# buttsbot
+# discord-buttsbot
 
 > I'm Buttbot! I say butt!
 > 
