@@ -1,10 +1,10 @@
-const { Permissions } = require("discord.js");
+const { PermissionFlagsBits } = require("discord.js");
 
 function permissionText(permissions) {
-    if (permissions & Permissions.FLAGS.MANAGE_CHANNELS) {
+    if (permissions & PermissionFlagsBits.ManageChannels) {
         return `\`Manage Channel\` permission`;
     }
-    else if (permissions & Permissions.FLAGS.MANAGE_GUILD) {
+    else if (permissions & PermissionFlagsBits.ManageGuild) {
         return `\`Manage Server\` permission`;
     }
 }
