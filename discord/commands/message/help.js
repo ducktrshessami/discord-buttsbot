@@ -1,7 +1,6 @@
 const getCommandListPage = require("../../utils/getCommandListPage");
 const logMessage = require("../../utils/logMessage");
 const permissionText = require("../../utils/permissionText");
-const messageCommands = require("./index");
 
 module.exports = {
     data: {
@@ -13,6 +12,7 @@ module.exports = {
         let reply;
         const commandName = args[1]?.toLowerCase();
         if (commandName) {
+            const { default: messageCommands } = await import("./index.js");
             const command = messageCommands.get(commandName);
             reply = `\`@${message.client.user.username} ${command.data.name} ${command.data.args || ""}`.trim() +
                 `\`\n**${command.data.name}:** ${command.data.description}\n${command.data.subtitle || ""}`.trim() +
