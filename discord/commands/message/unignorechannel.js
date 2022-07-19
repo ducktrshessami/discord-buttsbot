@@ -14,7 +14,7 @@ module.exports = {
         const ignoreModel = await db.IgnoreChannel.findByPk(message.channelId);
         if (ignoreModel) {
             await ignoreModel.destroy();
-            reply = `Okay ${smile(message.channel)}`;
+            reply = `Okay ${smile(message)}`;
         }
         else {
             reply = "I'm not ignoring this channel!";

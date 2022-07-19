@@ -13,6 +13,6 @@ module.exports = {
         await db.IgnoreChannel.destroy({
             where: { GuildId: message.guildId }
         });
-        logMessage(await message.reply(`Okay ${smile(message.channel)}`));
+        logMessage(await message.reply(`Okay ${smile(message)}`));
     }
 };
