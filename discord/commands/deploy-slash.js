@@ -6,12 +6,12 @@ catch {
 }
 
 const { REST } = require("@discordjs/rest");
-const { Routes } = require("discord-api-types/v9");
+const { Routes } = require("discord.js");
 const slashCommands = require("./slash");
 
 const env = process.env.DISCORD_ENV || "development";
 const commands = slashCommands.map(command => command.data.toJSON());
-const rest = new REST({ version: "9" })
+const rest = new REST({ version: "10" })
     .setToken(process.env.DISCORD_TOKEN);
 
 rest.put(
