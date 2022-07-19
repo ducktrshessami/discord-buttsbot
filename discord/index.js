@@ -82,7 +82,7 @@ client
                 message.author.id !== client.user.id &&
                 (
                     !message.inGuild() ||
-                    message.channel.permissionsFor(message.guild.me)
+                    message.channel.permissionsFor(message.guild.members.me)
                         .has(Permissions.FLAGS.SEND_MESSAGES)
                 )
             ) {
