@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, Partials } = require("discord.js");
+const { Client, GatewayIntentBits, Partials, PermissionFlagsBits } = require("discord.js");
 const db = require("../models");
 const slashCommands = require("./commands/slash");
 const messageCommands = require("./commands/message");
@@ -83,7 +83,7 @@ client
                 (
                     !message.inGuild() ||
                     message.channel.permissionsFor(message.guild.members.me)
-                        .has(Permissions.FLAGS.SEND_MESSAGES)
+                        .has(PermissionFlagsBits.SendMessages)
                 )
             ) {
                 let usedCommand = false;
@@ -96,6 +96,7 @@ client
                     const command = messageCommands.get(args[0]);
                     if (command) {
                         usedCommand = true;
+                        logMessage(message);
                         if ((command.data.requireGuild || command.data.requirePermissions) && !message.inGuild()) {
                             logMessage(await message.reply("This command only works in servers!"));
                         }
@@ -119,7 +120,7 @@ client
                 if (!usedCommand) {
                     let usedResponse = false;
                     if (
-                        message.mentions.has(client.user.id) ||
+                        message.mentions.users.has(client.user.id) ||
                         message.content
                             .toLowerCase()
                             .includes(client.user.username.toLowerCase())
