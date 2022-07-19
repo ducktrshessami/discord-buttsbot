@@ -4,7 +4,7 @@
         {
             "activities": [
                 {
-                    "type": "PLAYING",
+                    "type": 0,
                     "name": "games of love and deceit"
                 }
             ]
@@ -12,7 +12,7 @@
         {
             "activities": [
                 {
-                    "type": "LISTENING",
+                    "type": 2,
                     "name": "beans, the musical fruit"
                 }
             ]
@@ -20,7 +20,7 @@
         {
             "activities": [
                 {
-                    "type": "PLAYING",
+                    "type": 0,
                     "name": "hard to get"
                 }
             ]
