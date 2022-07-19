@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("discord.js");
 const db = require("../../../models");
 const { smile } = require("../../responseEmojiManager");
 const logMessage = require("../../utils/logMessage");

@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { Permissions } = require("discord.js");
+const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
 const db = require("../../../models");
 const logMessage = require("../../utils/logMessage");
 
@@ -8,7 +7,7 @@ module.exports = {
         .setName("ignoreall")
         .setDescription("I won't buttify in any channel.")
         .setDMPermission(false)
-        .setDefaultMemberPermissions(Permissions.FLAGS.MANAGE_GUILD),
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
     callback: async function (interaction) {
         await interaction.deferReply();
         const guild = interaction.guild ?? await interaction.client.guilds.fetch(interaction.guildId);
