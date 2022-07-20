@@ -27,13 +27,14 @@
   "optionalDependencies": {
     "bufferutil": "^4.0.6",
     "erlpack": "discord/erlpack",
-    "minify": "^9.1.0",
     "utf-8-validate": "^5.0.9",
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
     "@discordjs/rest": "^1.0.0",
-    "dotenv": "^16.0.1"
+    "dotenv": "^16.0.1",
+    "minify": "^9.1.0",
+    "svgo": "^2.8.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
