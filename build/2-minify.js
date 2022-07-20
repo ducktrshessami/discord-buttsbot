@@ -6,8 +6,7 @@ const public = path.resolve(__dirname, "..", "public");
 const extensions = [
     "css",
     "html",
-    "svg",
-    "js"
+    "svg"
 ];
 
 async function mini() {
