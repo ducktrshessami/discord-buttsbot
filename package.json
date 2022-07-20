@@ -5,15 +5,14 @@
   "main": "server.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ducktrshessami/buttsbot.git"
+    "url": "git+https://github.com/ducktrshessami/discord-buttsbot.git"
   },
-  "keywords": [],
   "author": "ducktrshessami",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ducktrshessami/buttsbot/issues"
+    "url": "https://github.com/ducktrshessami/discord-buttsbot/issues"
   },
-  "homepage": "https://github.com/ducktrshessami/buttsbot#readme",
+  "homepage": "https://github.com/ducktrshessami/discord-buttsbot#readme",
   "dependencies": {
     "discord.js": "^14.0.3",
     "express": "^4.18.1",
