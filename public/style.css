@@ -14,7 +14,7 @@ h3 {
 }
 
 p {
-    margin: .75rem 0;
+    margin: 0.75rem 0;
 }
 
 hr {
@@ -49,9 +49,9 @@ a:active, a:visited {
     background-color: #5865F2;
     color: #fff !important;
     text-decoration: none;
-    padding: .33rem .5rem;
-    box-shadow: 0 .1ch .2ch #000;
-    transition: background-color .2s;
+    padding: 0.33rem 0.5rem;
+    box-shadow: 0 0.1ch 0.2ch #000;
+    transition: background-color 0.2s;
 }
 
 .invite-button:hover {
@@ -66,7 +66,7 @@ a:active, a:visited {
     content: url("/Discord-Logo-White.svg");
     height: 0.9rem;
     position: relative;
-    top: .05rem;
+    top: 0.05rem;
     margin-left: 0.1ch;
     margin-right: 0.2ch;
 }
@@ -77,5 +77,5 @@ a:active, a:visited {
 }
 
 .link-list>li {
-    margin: .5rem 0;
+    margin: 0.5rem 0;
 }
