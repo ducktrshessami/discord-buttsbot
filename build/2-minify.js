@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { optimize } = require("svgo");
 
 const public = path.resolve(__dirname, "..", "public");
 const extensions = [
@@ -24,7 +25,9 @@ async function mini() {
                     const filePath = path.join(public, file);
                     switch (extension) {
                         case "svg":
-                            // min svg
+                            const content = fs.readFileSync(filePath);
+                            const { data } = optimize(content);
+                            minified = data;
                             break;
                         default:
                             minified = await minify(filePath);
