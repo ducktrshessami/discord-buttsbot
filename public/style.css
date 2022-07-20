@@ -46,7 +46,7 @@ a:active, a:visited {
 .invite-button {
     border: none;
     border-radius: 3px;
-    background-color: #7289da;
+    background-color: #5865F2;
     color: #fff !important;
     text-decoration: none;
     padding: .33rem .5rem;
@@ -55,11 +55,11 @@ a:active, a:visited {
 }
 
 .invite-button:hover {
-    background-color: #8ea1e1;
+    background-color: #7078f3;
 }
 
 .invite-button:hover:focus {
-    background-color: #4e5d94;
+    background-color: #4650c1;
 }
 
 .discord-logo {
