@@ -14,7 +14,7 @@ module.exports = {
         await guild.channels.fetchActiveThreads();
         await db.IgnoreChannel.bulkCreate(
             guild.channels.cache
-                .filter(channel => channel.isText())
+                .filter(channel => channel.isTextBased())
                 .map(channel => ({
                     id: channel.id,
                     GuildId: interaction.guildId
