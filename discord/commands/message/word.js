@@ -14,13 +14,8 @@ module.exports = {
         let reply;
         const newValue = args[1]?.toLowerCase();
         if (newValue) {
-            if (/\s/g.test(newValue)) {
-                reply = "No spaces, please!";
-            }
-            else {
-                const { word } = await guildModel.update({ word: newValue });
-                reply = `Buttification word changed to \`${word}\`!`;
-            }
+            const { word } = await guildModel.update({ word: newValue });
+            reply = `Buttification word changed to \`${word}\`!`;
         }
         else {
             reply = `I buttify messages with the word \`${guildModel.word}\`!`;
