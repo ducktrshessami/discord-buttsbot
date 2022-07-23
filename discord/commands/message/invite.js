@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const logMessage = require("../../utils/logMessage");
 const { permissionValue } = require("../../../config/bot.json");
 
