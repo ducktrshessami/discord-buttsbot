@@ -27,7 +27,7 @@ db.sequelize.sync({ force: process.env.DB_FORCE && process.env.DB_FORCE.trim().t
         return db.ResponseCooldown.destroy({
             where: {
                 updatedAt: {
-                    [db.Sequelize.Op.lt]: new Date(Date.now() - (responseCooldown * 2))
+                    [db.Sequelize.Op.lt]: Date.now() - (responseCooldown * 2)
                 }
             }
         });
