@@ -9,6 +9,7 @@ const express = require("express");
 const cycle = require("express-cycle");
 const { resolve } = require("path");
 const db = require("./models");
+const { responseCooldown } = require("./config/bot.json");
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -22,12 +23,20 @@ app.use(express.static(resolve(__dirname, "public")));
 
 db.sequelize.sync({ force: process.env.DB_FORCE && process.env.DB_FORCE.trim().toLowerCase() !== "false" })
     .then(() => {
-        app.listen(PORT, function () {
-            console.log(`[express] Listening on PORT ${PORT}`);
-            cycler.startLoop();
-            require("./discord");
+        console.log("[server] Pruning old cooldown data");
+        return db.ResponseCooldown.destroy({
+            where: {
+                createdAt: {
+                    [db.Sequelize.Op.lt]: new Date(Date.now() - (responseCooldown * 2))
+                }
+            }
         });
     })
+    .then(() => app.listen(PORT, function () {
+        console.log(`[express] Listening on PORT ${PORT}`);
+        cycler.startLoop();
+        require("./discord");
+    }))
     .catch(err => {
         console.error(err);
         process.exit();
