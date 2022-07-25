@@ -23,7 +23,7 @@ app.use(express.static(resolve(__dirname, "public")));
 
 db.sequelize.sync({ force: process.env.DB_FORCE && process.env.DB_FORCE.trim().toLowerCase() !== "false" })
     .then(() => {
-        console.log("[server] Pruning old cooldown data");
+        console.log("[db] Pruning old cooldown data");
         return db.ResponseCooldown.destroy({
             where: {
                 createdAt: {
