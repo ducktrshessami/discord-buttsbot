@@ -26,7 +26,7 @@ db.sequelize.sync({ force: process.env.DB_FORCE && process.env.DB_FORCE.trim().t
         console.log("[db] Pruning old cooldown data");
         return db.ResponseCooldown.destroy({
             where: {
-                createdAt: {
+                updatedAt: {
                     [db.Sequelize.Op.lt]: new Date(Date.now() - (responseCooldown * 2))
                 }
             }
