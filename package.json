@@ -30,7 +30,7 @@
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
-    "@discordjs/rest": "^1.0.0",
+    "@discordjs/rest": "^1.0.1",
     "dotenv": "^16.0.1",
     "minify": "^9.1.0",
     "svgo": "^2.8.0"
