@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("discord.js");
 const db = require("../../../models");
 const { frown } = require("../../responseEmojiManager");
 const logMessage = require("../../utils/logMessage");
@@ -12,6 +12,6 @@ module.exports = {
         const [_, created] = await db.IgnoreUser.findOrCreate({
             where: { id: interaction.user.id }
         });
-        logMessage(await interaction.editReply(created ? `Okay ${frown(interaction.channel, true)}` : "I'm already ignoring you."));
+        logMessage(await interaction.editReply(created ? `Okay ${frown(interaction)}` : "I'm already ignoring you."));
     }
 };

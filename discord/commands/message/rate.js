@@ -1,4 +1,4 @@
-const { Permissions } = require("discord.js");
+const { PermissionFlagsBits } = require("discord.js");
 const logMessage = require("../../utils/logMessage");
 const defaultButt = require("../../../config/default.json");
 
@@ -8,7 +8,7 @@ module.exports = {
         description: "Use this command to show or change the amount of syllables buttified when I buttify a message!",
         subtitle: `The default rate is ${defaultButt.rate}.`,
         args: "[number]",
-        requirePermissions: Permissions.FLAGS.MANAGE_GUILD
+        requirePermissions: PermissionFlagsBits.ManageGuild
     },
     callback: async function (message, args, guildModel) {
         let reply;

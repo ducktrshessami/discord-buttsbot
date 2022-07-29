@@ -1,4 +1,4 @@
-const { Client, Intents, Permissions, Collection } = require("discord.js");
+const { Client, GatewayIntentBits, Partials, PermissionFlagsBits } = require("discord.js");
 const db = require("../models");
 const slashCommands = require("./commands/slash");
 const messageCommands = require("./commands/message");
@@ -12,16 +12,21 @@ const presenceConfig = require("../config/presence.json");
 const { responseCooldown } = require("../config/bot.json");
 
 const client = new Client({
-    intents: Intents.FLAGS.GUILDS |
-        Intents.FLAGS.GUILD_MESSAGES |
-        Intents.FLAGS.DIRECT_MESSAGES,
-    partials: ["CHANNEL"],
+    intents: GatewayIntentBits.Guilds |
+        GatewayIntentBits.GuildMessages |
+        GatewayIntentBits.DirectMessages |
+        GatewayIntentBits.MessageContent,
+    partials: [Partials.Channel],
     presence: getPresence()
 });
 
 client
+    .on("debug", console.debug)
+    .on("warn", console.warn)
+    .on("error", console.error)
     .once("ready", () => {
         console.log(`[discord] Logged in as ${client.user.tag}`);
+        client.off("debug", console.debug);
         setInterval(() => client.user.setPresence(getPresence()), presenceConfig.minutes * 60000);
         postServerCount(client);
         Promise.all(client.guilds.cache.map(guild => db.Guild.findOrCreate({
@@ -29,7 +34,6 @@ client
         })))
             .catch(console.error);
     })
-    .on("error", console.error)
     .on("guildCreate", guild => {
         postServerCount(client);
         db.Guild.findOrCreate({
@@ -56,7 +60,7 @@ client
     })
     .on("interactionCreate", async interaction => {
         try {
-            if (interaction.isCommand()) {
+            if (interaction.isChatInputCommand()) {
                 const command = slashCommands.get(interaction.commandName);
                 if (command) {
                     console.log(`[discord] ${interaction.user.id} used ${interaction}`);
@@ -65,7 +69,7 @@ client
             }
             else if (interaction.isButton()) {
                 await interaction.deferUpdate();
-                logMessage(await interaction.editReply(await getCommandListPage(!interaction.customId.match(/elevated/ig))));
+                await interaction.editReply(await getCommandListPage(!interaction.customId.match(/elevated/ig)));
             }
         }
         catch (error) {
@@ -78,8 +82,8 @@ client
                 message.author.id !== client.user.id &&
                 (
                     !message.inGuild() ||
-                    message.channel.permissionsFor(message.guild.me)
-                        .has(Permissions.FLAGS.SEND_MESSAGES)
+                    message.channel.permissionsFor(message.guild.members.me)
+                        .has(PermissionFlagsBits.SendMessages)
                 )
             ) {
                 let usedCommand = false;
@@ -92,6 +96,7 @@ client
                     const command = messageCommands.get(args[0]);
                     if (command) {
                         usedCommand = true;
+                        logMessage(message);
                         if ((command.data.requireGuild || command.data.requirePermissions) && !message.inGuild()) {
                             logMessage(await message.reply("This command only works in servers!"));
                         }
@@ -115,7 +120,7 @@ client
                 if (!usedCommand) {
                     let usedResponse = false;
                     if (
-                        message.mentions.has(client.user.id) ||
+                        message.mentions.users.has(client.user.id) ||
                         message.content
                             .toLowerCase()
                             .includes(client.user.username.toLowerCase())
@@ -167,7 +172,7 @@ async function sendResponse(message, response) {
     if (!cooldownModel[response.emoji] || (message.createdTimestamp - cooldownModel[response.emoji] > responseCooldown)) {
         const newCooldown = {};
         newCooldown[response.emoji] = message.createdAt;
-        logMessage(await message.channel.send(responseEmojiManager[response.emoji](message.channel)));
+        logMessage(await message.channel.send(responseEmojiManager[response.emoji](message)));
         await cooldownModel.update(newCooldown);
     }
 }

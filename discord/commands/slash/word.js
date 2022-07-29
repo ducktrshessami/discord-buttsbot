@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { Permissions } = require("discord.js");
+const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
 const db = require("../../../models");
 const logMessage = require("../../utils/logMessage");
 const defaultButt = require("../../../config/default.json");
@@ -9,7 +8,7 @@ module.exports = {
         .setName("word")
         .setDescription("Use this command to show or change what word I buttify messages with!")
         .setDMPermission(false)
-        .setDefaultMemberPermissions(Permissions.FLAGS.MANAGE_GUILD)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
         .addStringOption(option =>
             option
                 .setName("value")

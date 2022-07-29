@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");
 const { embedColor } = require("../../config/bot.json");
 
 let general;
@@ -27,27 +27,24 @@ async function getCommandListPage(elevated) {
     if (!general || !management) {
         await buildLines();
     }
-    const embed = new MessageEmbed({
-        title: elevated ? "Management" : "General",
-        color: embedColor,
-        description: elevated ? management : general
-    });
-    const prev = new MessageButton({
-        customId: elevated ? "helpPrevElevated" : "helpPrevGeneral",
-        label: "Prev",
-        style: "SECONDARY"
-    });
-    const next = new MessageButton({
-        customId: elevated ? "helpNextElevated" : "helpNextGeneral",
-        label: "Next",
-        style: "PRIMARY"
-    });
+    const embed = new EmbedBuilder()
+        .setTitle(elevated ? "Management" : "General")
+        .setColor(embedColor)
+        .setDescription(elevated ? management : general);
+    const prev = new ButtonBuilder()
+        .setCustomId(elevated ? "helpPrevElevated" : "helpPrevGeneral")
+        .setLabel("Prev")
+        .setStyle(ButtonStyle.Secondary);
+    const next = new ButtonBuilder()
+        .setCustomId(elevated ? "helpNextElevated" : "helpNextGeneral")
+        .setLabel("Next")
+        .setStyle(ButtonStyle.Primary);
+    const row = new ActionRowBuilder()
+        .setComponents(prev, next);
     return {
         fetchReply: true,
         embeds: [embed],
-        components: [new MessageActionRow({
-            components: [prev, next]
-        })]
+        components: [row]
     };
 }
 
