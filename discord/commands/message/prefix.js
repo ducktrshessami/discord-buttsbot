@@ -1,4 +1,4 @@
-const { Permissions } = require("discord.js");
+const { PermissionFlagsBits } = require("discord.js");
 const logMessage = require("../../utils/logMessage");
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
         let reply;
         const newValue = args[1];
         if (newValue) {
-            if (message.channel.permissionsFor(message.member).has(Permissions.FLAGS.MANAGE_GUILD)) {
+            if (message.channel.permissionsFor(message.member).has(PermissionFlagsBits.ManageGuild)) {
                 const mentionSelector = new RegExp(`^<@!?${message.client.user.id}>$`);
                 if (mentionSelector.test(newValue)) {
                     await guildModel.update({ prefix: null });

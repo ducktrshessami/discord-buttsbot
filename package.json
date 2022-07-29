@@ -1,28 +1,27 @@
 {
   "name": "discord-buttsbot",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "I'm Buttbot! I say butt!",
   "main": "server.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ducktrshessami/buttsbot.git"
+    "url": "git+https://github.com/ducktrshessami/discord-buttsbot.git"
   },
-  "keywords": [],
   "author": "ducktrshessami",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ducktrshessami/buttsbot/issues"
+    "url": "https://github.com/ducktrshessami/discord-buttsbot/issues"
   },
-  "homepage": "https://github.com/ducktrshessami/buttsbot#readme",
+  "homepage": "https://github.com/ducktrshessami/discord-buttsbot#readme",
   "dependencies": {
-    "discord.js": "^13.9.0",
+    "discord.js": "^14.0.3",
     "express": "^4.18.1",
     "express-cycle": "ducktrshessami/express-cycle",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
-    "phin": "^3.6.1",
     "sequelize": "^6.21.3",
-    "syllablize": "ducktrshessami/syllablize"
+    "syllablize": "ducktrshessami/syllablize",
+    "undici": "^5.8.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.6",
@@ -31,14 +30,15 @@
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
-    "@discordjs/rest": "^1.0.0",
-    "discord-api-types": "^0.36.2",
-    "dotenv": "^16.0.1"
+    "@discordjs/rest": "^1.0.1",
+    "dotenv": "^16.0.1",
+    "minify": "^9.1.0",
+    "svgo": "^2.8.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "build": "node build.js",
+    "build": "node build/index.js",
     "deploy": "node discord/commands/deploy-slash.js"
   },
   "engines": {

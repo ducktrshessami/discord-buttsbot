@@ -11,6 +11,6 @@ module.exports = {
         let [_, created] = await db.IgnoreUser.findOrCreate({
             where: { id: message.author.id }
         });
-        logMessage(await message.reply(created ? `Okay ${frown(message.channel)}` : "I'm already ignoring you."));
+        logMessage(await message.reply(created ? `Okay ${frown(message)}` : "I'm already ignoring you."));
     }
 };

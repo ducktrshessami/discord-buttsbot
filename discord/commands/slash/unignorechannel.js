@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { Permissions } = require("discord.js");
+const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
 const db = require("../../../models");
 const { smile } = require("../../responseEmojiManager");
 const logMessage = require("../../utils/logMessage");
@@ -9,14 +8,14 @@ module.exports = {
         .setName("unignorechannel")
         .setDescription("Undo ignorechannel!")
         .setDMPermission(false)
-        .setDefaultMemberPermissions(Permissions.FLAGS.MANAGE_CHANNELS),
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     callback: async function (interaction) {
         let reply;
         await interaction.deferReply();
         const ignoreModel = await db.IgnoreChannel.findByPk(interaction.channelId);
         if (ignoreModel) {
             await ignoreModel.destroy();
-            reply = `Okay ${smile(interaction.channel, true)}`;
+            reply = `Okay ${smile(interaction)}`;
         }
         else {
             reply = "I'm not ignoring this channel!";
