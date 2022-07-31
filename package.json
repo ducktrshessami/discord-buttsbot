@@ -14,7 +14,7 @@
   },
   "homepage": "https://github.com/ducktrshessami/discord-buttsbot#readme",
   "dependencies": {
-    "discord.js": "^14.0.3",
+    "discord.js": "^14.1.2",
     "express": "^4.18.1",
     "express-cycle": "ducktrshessami/express-cycle",
     "pg": "^8.7.3",
@@ -30,7 +30,6 @@
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
-    "@discordjs/rest": "^1.0.1",
     "dotenv": "^16.0.1",
     "minify": "^9.1.0",
     "svgo": "^2.8.0"
