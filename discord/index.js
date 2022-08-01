@@ -29,9 +29,7 @@ client
         client.off("debug", console.debug);
         setInterval(() => client.user.setPresence(getPresence()), presenceConfig.minutes * 60000);
         postServerCount(client);
-        Promise.all(client.guilds.cache.map(guild => db.Guild.findOrCreate({
-            where: { id: guild.id }
-        })))
+        db.Guild.bulkCreate(client.guilds.cache.map(guild => ({ id: guild.id })), { ignoreDuplicates: true })
             .catch(console.error);
     })
     .on("guildCreate", guild => {
