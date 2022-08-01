@@ -5,8 +5,7 @@ catch {
     console.warn("Not using dotenv. Make sure environment variables are set");
 }
 
-const { REST } = require("@discordjs/rest");
-const { Routes } = require("discord.js");
+const { REST, Routes } = require("discord.js");
 const slashCommands = require("./slash");
 
 const env = process.env.DISCORD_ENV || "development";
