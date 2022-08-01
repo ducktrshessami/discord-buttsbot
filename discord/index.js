@@ -24,22 +24,30 @@ client
     .on("debug", console.debug)
     .on("warn", console.warn)
     .on("error", console.error)
-    .once("ready", () => {
-        console.log(`[discord] Logged in as ${client.user.tag}`);
-        client.off("debug", console.debug);
-        setInterval(() => client.user.setPresence(getPresence()), presenceConfig.minutes * 60000);
-        postServerCount(client);
-        db.Guild.bulkCreate(client.guilds.cache.map(guild => ({ id: guild.id })), { ignoreDuplicates: true })
-            .catch(console.error);
+    .once("ready", async () => {
+        try {
+            console.log(`[discord] Logged in as ${client.user.tag}`);
+            client.off("debug", console.debug);
+            setInterval(() => client.user.setPresence(getPresence()), presenceConfig.minutes * 60000);
+            await db.Guild.bulkCreate(client.guilds.cache.map(guild => ({ id: guild.id })), { ignoreDuplicates: true });
+            await postServerCount(client);
+        }
+        catch (error) {
+            console.error(error);
+        }
     })
-    .on("guildCreate", guild => {
-        postServerCount(client);
-        db.Guild.findOrCreate({
-            where: { id: guild.id }
-        })
-            .catch(console.error);
+    .on("guildCreate", async guild => {
+        try {
+            await db.Guild.findOrCreate({
+                where: { id: guild.id }
+            });
+            await postServerCount(client);
+        }
+        catch (error) {
+            console.error(error);
+        }
     })
-    .on("guildDelete", () => postServerCount(client))
+    .on("guildDelete", () => postServerCount(client).catch(console.error))
     .on("threadCreate", async (thread, newlyCreated) => {
         try {
             if (newlyCreated) {
