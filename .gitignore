@@ -109,3 +109,6 @@ package-lock.json
 # Sequelize local files
 migrations/
 seeders/
+
+# Local sqlite db
+sqlite/
