@@ -7,7 +7,7 @@ const postServerCount = require("./utils/postServerCount");
 const logMessage = require("./utils/logMessage");
 const buttify = require("./utils/buttify");
 const presenceConfig = require("../config/presence.json");
-const { responseCooldown } = require("../config/bot.json");
+const { responseCooldown } = require("../config/discord.json");
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
