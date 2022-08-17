@@ -8,19 +8,18 @@ catch {
 const db = require("./models");
 const { responseCooldown } = require("./config/bot.json");
 
-db.sequelize.sync({ force: process.env.DB_FORCE && process.env.DB_FORCE.trim().toLowerCase() !== "false" })
-    .then(() => {
-        console.log("[db] Pruning old cooldown data");
-        return db.ResponseCooldown.destroy({
-            where: {
-                updatedAt: {
-                    [db.Sequelize.Op.lt]: Date.now() - (responseCooldown * 2)
-                }
+async function main() {
+    await db.sequelize.sync({ force: process.env.DB_FORCE && process.env.DB_FORCE.trim().toLowerCase() !== "false" });
+    console.log("[db] Pruning old cooldown data");
+    await db.ResponseCooldown.destroy({
+        where: {
+            updatedAt: {
+                [db.Sequelize.Op.lt]: Date.now() - (responseCooldown * 2)
             }
-        });
-    })
-    .then(() => require("./discord"))
-    .catch(err => {
-        console.error(err);
-        process.exit();
+        }
     });
+    require("./discord");
+}
+
+main()
+    .catch(console.error);
