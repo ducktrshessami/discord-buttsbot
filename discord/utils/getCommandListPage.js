@@ -1,5 +1,5 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");
-const { embedColor } = require("../../config/bot.json");
+const { embedColor } = require("../../config/discord.json");
 
 let general;
 let management;

@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const logMessage = require("../../utils/logMessage");
-const { permissionValue } = require("../../../config/bot.json");
+const { permissionValue } = require("../../../config/discord.json");
 
 module.exports = {
     data: new SlashCommandBuilder()

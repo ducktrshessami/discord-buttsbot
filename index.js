@@ -6,7 +6,7 @@ catch {
 }
 
 const db = require("./models");
-const { responseCooldown } = require("./config/bot.json");
+const { responseCooldown } = require("./config/discord.json");
 
 async function main() {
     console.log("[db] Syncing tables with models");
