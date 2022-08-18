@@ -1,11 +1,10 @@
-const { Client, GatewayIntentBits, Partials, PermissionFlagsBits } = require("discord.js");
+const { Client, GatewayIntentBits, Partials, PermissionFlagsBits, MessageFlags } = require("discord.js");
 const db = require("../models");
 const commands = require("./commands");
 const responses = require("./responses");
 const responseEmojiManager = require("./responseEmojiManager");
 const postServerCount = require("./utils/postServerCount");
 const logMessage = require("./utils/logMessage");
-const getCommandListPage = require("./utils/getCommandListPage");
 const buttify = require("./utils/buttify");
 const presenceConfig = require("../config/presence.json");
 const { responseCooldown } = require("../config/bot.json");
@@ -73,8 +72,16 @@ client
                 }
             }
             else if (interaction.isButton()) {
-                await interaction.deferUpdate();
-                await interaction.editReply(await getCommandListPage(!interaction.customId.match(/elevated/ig)));
+                const message = await interaction.update({
+                    fetchReply: true,
+                    content: ">>> Text commands (also known as message commands or prefix commands) are no longer supported.\nAlthough possible for buttsbot to continue using them, I've opted to respect Discord's wishes.\nYou can read more about this here: Welcome to the new era of Discord apps\n - buttmin",
+                    embeds: [],
+                    components: []
+                });
+                await message.edit({
+                    content: ">>> Text commands (also known as message commands or prefix commands) are no longer supported.\nAlthough possible for buttsbot to continue using them, I've opted to respect Discord's wishes.\nYou can read more about this here: [Welcome to the new era of Discord apps](https://discord.com/blog/welcome-to-the-new-era-of-discord-apps/)\n - buttmin",
+                    flags: MessageFlags.SuppressEmbeds
+                });
             }
         }
         catch (error) {
