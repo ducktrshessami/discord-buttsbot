@@ -21,7 +21,7 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.21.3",
     "syllablize": "ducktrshessami/syllablize",
-    "undici": "^5.8.0"
+    "undici": "^5.9.1"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.6",
