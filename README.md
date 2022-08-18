@@ -29,9 +29,4 @@ Avatar and presence activities by Entrop
 
 buttsbot can be invited to your server with the above link.
 
-Use the help command to see what other commands are available:
-```
-@buttsbot help
-```
-
-Slash commands are also available! If you can't see them, you may need to reinvite buttsbot with the above invite link.
+This bot can be configured with slash commands. If you can't see them, you may need to reinvite buttsbot with the above invite link.
