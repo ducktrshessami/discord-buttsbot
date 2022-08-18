@@ -38,7 +38,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "build": "node build/index.js",
-    "deploy": "node discord/commands/deploy-slash.js"
+    "deploy": "node discord/deploy-commands.js"
   },
   "engines": {
     "node": ">=16.9.0"
