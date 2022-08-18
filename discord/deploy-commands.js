@@ -19,4 +19,5 @@ rest.put(
         Routes.applicationGuildCommands(process.env.DISCORD_CLIENTID, process.env.DISCORD_TESTGUILD),
     { body: commandData }
 )
+    .then(() => console.log("Successfully deployed commands."))
     .catch(console.error);
