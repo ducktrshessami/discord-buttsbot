@@ -6,10 +6,10 @@ catch {
 }
 
 const { REST, Routes } = require("discord.js");
-const slashCommands = require("./slash");
+const commands = require("./commands");
 
 const env = process.env.DISCORD_ENV || "development";
-const commands = slashCommands.map(command => command.data.toJSON());
+const commandData = commands.map(command => command.data.toJSON());
 const rest = new REST({ version: "10" })
     .setToken(process.env.DISCORD_TOKEN);
 
@@ -17,6 +17,7 @@ rest.put(
     env === "production" ?
         Routes.applicationCommands(process.env.DISCORD_CLIENTID) :
         Routes.applicationGuildCommands(process.env.DISCORD_CLIENTID, process.env.DISCORD_TESTGUILD),
-    { body: commands }
+    { body: commandData }
 )
+    .then(() => console.log("Successfully deployed commands."))
     .catch(console.error);
