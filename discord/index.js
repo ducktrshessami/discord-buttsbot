@@ -1,6 +1,6 @@
 const { Client, GatewayIntentBits, Partials, PermissionFlagsBits } = require("discord.js");
 const db = require("../models");
-const slashCommands = require("./commands/slash");
+const commands = require("./commands");
 const responses = require("./responses");
 const responseEmojiManager = require("./responseEmojiManager");
 const postServerCount = require("./utils/postServerCount");
@@ -66,7 +66,7 @@ client
     .on("interactionCreate", async interaction => {
         try {
             if (interaction.isChatInputCommand()) {
-                const command = slashCommands.get(interaction.commandName);
+                const command = commands.get(interaction.commandName);
                 if (command) {
                     console.log(`[discord] ${interaction.user.id} used ${interaction}`);
                     await command.callback(interaction);
