@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require("discord.js");
-const getCommandListPage = require("../../utils/getCommandListPage");
-const logMessage = require("../../utils/logMessage");
-const permissionText = require("../../utils/permissionText");
+const getCommandListPage = require("../utils/getCommandListPage");
+const logMessage = require("../utils/logMessage");
+const permissionText = require("../utils/permissionText");
 const messageCommands = require("../message");
 
 module.exports = {
