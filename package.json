@@ -2,7 +2,7 @@
   "name": "discord-buttsbot",
   "version": "2.4.2",
   "description": "I'm Buttbot! I say butt!",
-  "main": "server.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ducktrshessami/discord-buttsbot.git"
@@ -15,8 +15,6 @@
   "homepage": "https://github.com/ducktrshessami/discord-buttsbot#readme",
   "dependencies": {
     "discord.js": "^14.1.2",
-    "express": "^4.18.1",
-    "express-cycle": "ducktrshessami/express-cycle",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.21.3",
@@ -30,14 +28,11 @@
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
-    "dotenv": "^16.0.1",
-    "minify": "^9.1.0",
-    "svgo": "^2.8.0"
+    "dotenv": "^16.0.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "build": "node build/index.js",
+    "start": "node index.js",
     "deploy": "node discord/deploy-commands.js"
   },
   "engines": {
