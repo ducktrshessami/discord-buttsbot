@@ -2,7 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { Nessie, DataTypes } = require("nessie");
+const { Nessie } = require("nessie");
 const basename = path.basename(__filename);
 
 const db = new Nessie({
@@ -18,7 +18,7 @@ fs
     .filter(file => {
         return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
     })
-    .forEach(file => require(path.join(__dirname, file))(db, DataTypes));
+    .forEach(file => require(path.join(__dirname, file))(db));
 
 Object.keys(db.models).forEach(modelName => {
     if (db.models[modelName].associate) {
