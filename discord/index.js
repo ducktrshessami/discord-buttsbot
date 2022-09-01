@@ -149,7 +149,7 @@ async function sendResponse(message, response) {
         where: { channelId: message.channelId }
     });
     if (!cooldownModel.dataValues[response.emoji] || (message.createdTimestamp - cooldownModel.dataValues[response.emoji] > responseCooldown)) {
-        const newCooldown = {};
+        const newCooldown = { updatedAt: Date.now() };
         newCooldown[response.emoji] = message.createdTimestamp;
         logMessage(await message.channel.send(responseEmojiManager[response.emoji](message)));
         await cooldownModel.update(newCooldown);
