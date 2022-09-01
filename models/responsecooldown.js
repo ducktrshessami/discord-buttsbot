@@ -22,6 +22,9 @@ module.exports = (nessie) => {
         wink: DataTypes.NUMBER,
         weird: DataTypes.NUMBER,
         updatedAt: DataTypes.NUMBER
-    }, { nessie });
+    }, {
+        nessie,
+        tableName: "ButtsbotResponseCooldowns"
+    });
     return ResponseCooldown;
 };

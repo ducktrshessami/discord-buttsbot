@@ -17,6 +17,9 @@ module.exports = (nessie) => {
             primaryKey: true,
             allowNull: false
         }
-    }, { nessie });
+    }, {
+        nessie,
+        tableName: "ButtsbotIgnoreChannels"
+    });
     return IgnoreChannel;
 };
