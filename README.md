@@ -18,10 +18,9 @@ Avatar and presence activities by Entrop
 
 ### Powered by:
 
-- [Heroku](https://www.heroku.com/)
+- [Oracle Cloud Infrastructure](https://www.oracle.com/cloud/)
 - [discord.js](https://discord.js.org/#/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [Sequelize](https://sequelize.org/)
+- [nessie](https://github.com/ducktrshessami/node-nessie)
 
 ## Invite to Your Server
 
