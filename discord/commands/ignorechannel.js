@@ -10,7 +10,7 @@ module.exports = {
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     callback: async function (interaction) {
         await interaction.deferReply();
-        const [_, created] = await db.IgnoreChannel.findOrCreate({
+        const [_, created] = await db.models.IgnoreChannel.findOrCreate({
             where: { id: interaction.channelId },
             defaults: { GuildId: interaction.guildId }
         });
