@@ -1,5 +1,5 @@
 "use strict";
-const { Model, DataTypes } = require("nessie");
+const { Model, DataTypes, OnDeleteBehavior } = require("nessie");
 module.exports = (nessie) => {
     class IgnoreChannel extends Model {
         /**

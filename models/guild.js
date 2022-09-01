@@ -1,5 +1,5 @@
 "use strict";
-const { Model, OnDeleteBehavior, DataTypes } = require("nessie");
+const { Model, DataTypes } = require("nessie");
 const defaultConfig = require("../config/default.json");
 module.exports = (nessie) => {
     class Guild extends Model {
