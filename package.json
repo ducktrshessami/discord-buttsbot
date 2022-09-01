@@ -15,7 +15,7 @@
   "homepage": "https://github.com/ducktrshessami/discord-buttsbot#readme",
   "dependencies": {
     "discord.js": "^14.3.0",
-    "nessie": "ducktrshessami/node-nessie#v0.3.0-alpha",
+    "nessie": "ducktrshessami/node-nessie#v0.4.0-alpha",
     "syllablize": "ducktrshessami/syllablize",
     "undici": "^5.10.0"
   },
