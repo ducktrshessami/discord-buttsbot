@@ -30,6 +30,9 @@ module.exports = (nessie) => {
             type: DataTypes.NUMBER,
             defaultValue: defaultConfig.rate
         }
-    }, { nessie });
+    }, {
+        nessie,
+        tableName: "ButtsbotGuilds"
+    });
     return Guild;
 };
