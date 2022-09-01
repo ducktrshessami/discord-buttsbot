@@ -1,6 +1,6 @@
 const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
-const db = require("../../../models");
-const logMessage = require("../../utils/logMessage");
+const db = require("../../models");
+const logMessage = require("../utils/logMessage");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,7 +10,7 @@ module.exports = {
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     callback: async function (interaction) {
         await interaction.deferReply();
-        const [_, created] = await db.IgnoreChannel.findOrCreate({
+        const [_, created] = await db.models.IgnoreChannel.findOrCreate({
             where: { id: interaction.channelId },
             defaults: { GuildId: interaction.guildId }
         });

@@ -1,7 +1,7 @@
 const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
-const db = require("../../../models");
-const { smile } = require("../../responseEmojiManager");
-const logMessage = require("../../utils/logMessage");
+const db = require("../../models");
+const { smile } = require("../responseEmojiManager");
+const logMessage = require("../utils/logMessage");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,7 +12,9 @@ module.exports = {
     callback: async function (interaction) {
         let reply;
         await interaction.deferReply();
-        const ignoreModel = await db.IgnoreChannel.findByPk(interaction.channelId);
+        const ignoreModel = await db.models.IgnoreChannel.findOne({
+            where: { id: interaction.channelId }
+        });
         if (ignoreModel) {
             await ignoreModel.destroy();
             reply = `Okay ${smile(interaction)}`;

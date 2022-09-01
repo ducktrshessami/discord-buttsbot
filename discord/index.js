@@ -1,15 +1,13 @@
-const { Client, GatewayIntentBits, Partials, PermissionFlagsBits } = require("discord.js");
+const { Client, GatewayIntentBits, Partials, PermissionFlagsBits, MessageFlags } = require("discord.js");
 const db = require("../models");
-const slashCommands = require("./commands/slash");
-const messageCommands = require("./commands/message");
+const commands = require("./commands");
 const responses = require("./responses");
 const responseEmojiManager = require("./responseEmojiManager");
 const postServerCount = require("./utils/postServerCount");
 const logMessage = require("./utils/logMessage");
-const getCommandListPage = require("./utils/getCommandListPage");
 const buttify = require("./utils/buttify");
 const presenceConfig = require("../config/presence.json");
-const { responseCooldown } = require("../config/bot.json");
+const { responseCooldown } = require("../config/discord.json");
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
@@ -29,7 +27,7 @@ client
             console.log(`[discord] Logged in as ${client.user.tag}`);
             client.off("debug", console.debug);
             setInterval(() => client.user.setPresence(getPresence()), presenceConfig.minutes * 60000);
-            await db.Guild.bulkCreate(client.guilds.cache.map(guild => ({ id: guild.id })), { ignoreDuplicates: true });
+            await db.models.Guild.bulkCreate(client.guilds.cache.map(guild => ({ id: guild.id })), { ignoreDuplicates: true });
             await postServerCount(client);
         }
         catch (error) {
@@ -38,7 +36,7 @@ client
     })
     .on("guildCreate", async guild => {
         try {
-            await db.Guild.findOrCreate({
+            await db.models.Guild.findOrCreate({
                 where: { id: guild.id }
             });
             await postServerCount(client);
@@ -51,9 +49,11 @@ client
     .on("threadCreate", async (thread, newlyCreated) => {
         try {
             if (newlyCreated) {
-                const parentIgnore = await db.IgnoreChannel.findByPk(thread.parentId);
+                const parentIgnore = await db.models.IgnoreChannel.findOne({
+                    where: { id: thread.parentId }
+                });
                 if (parentIgnore) {
-                    await db.IgnoreChannel.create({
+                    await db.models.IgnoreChannel.create({
                         id: thread.id,
                         GuildId: thread.guildId
                     });
@@ -67,15 +67,23 @@ client
     .on("interactionCreate", async interaction => {
         try {
             if (interaction.isChatInputCommand()) {
-                const command = slashCommands.get(interaction.commandName);
+                const command = commands.get(interaction.commandName);
                 if (command) {
                     console.log(`[discord] ${interaction.user.id} used ${interaction}`);
                     await command.callback(interaction);
                 }
             }
             else if (interaction.isButton()) {
-                await interaction.deferUpdate();
-                await interaction.editReply(await getCommandListPage(!interaction.customId.match(/elevated/ig)));
+                const message = await interaction.update({
+                    fetchReply: true,
+                    content: ">>> Text commands (also known as message commands or prefix commands) are no longer supported.\nAlthough possible for buttsbot to continue using them, I've opted to respect Discord's wishes.\nYou can read more about this here: Welcome to the new era of Discord apps\n - buttmin",
+                    embeds: [],
+                    components: []
+                });
+                await message.edit({
+                    content: ">>> Text commands (also known as message commands or prefix commands) are no longer supported.\nAlthough possible for buttsbot to continue using them, I've opted to respect Discord's wishes.\nYou can read more about this here: [Welcome to the new era of Discord apps](https://discord.com/blog/welcome-to-the-new-era-of-discord-apps/)\n - buttmin",
+                    flags: MessageFlags.SuppressEmbeds
+                });
             }
         }
         catch (error) {
@@ -92,59 +100,35 @@ client
                         .has(PermissionFlagsBits.SendMessages)
                 )
             ) {
-                let usedCommand = false;
-                const guildModel = await db.Guild.findByPk(message.guildId);
-                const usedPrefix = getUsedPrefix(message, guildModel);
-                if (usedPrefix) {
-                    const args = message.content
-                        .slice(usedPrefix.length)
+                if (new RegExp(`^<@!?${client.user.id}>\\s*help$`).test(message.content)) {
+                    await message.reply({
+                        content: ">>> Text commands (also known as message commands or prefix commands) are no longer supported.\nAlthough possible for buttsbot to continue using them, I've opted to respect Discord's wishes.\nYou can read more about this here: https://discord.com/blog/welcome-to-the-new-era-of-discord-apps/\n - buttmin",
+                        flags: MessageFlags.SuppressEmbeds
+                    });
+                    return;
+                }
+                if (
+                    message.mentions.users.has(client.user.id) ||
+                    message.content
+                        .toLowerCase()
+                        .includes(client.user.username.toLowerCase())
+                ) {
+                    const words = message.content
+                        .toLowerCase()
                         .split(/\s/g);
-                    const command = messageCommands.get(args[0]);
-                    if (command) {
-                        usedCommand = true;
-                        logMessage(message);
-                        if ((command.data.requireGuild || command.data.requirePermissions) && !message.inGuild()) {
-                            logMessage(await message.reply("This command only works in servers!"));
-                        }
-                        else if (
-                            command.data.requirePermissions &&
-                            message.inGuild() &&
-                            !message.channel.permissionsFor(message.member)
-                                .has(command.data.requirePermissions)
-                        ) {
-                            const missing = message.channel.permissionsFor(message.member)
-                                .missing(command.data.requirePermissions)
-                                .map(permission => `\`${permission}\``)
-                                .join(", ");
-                            logMessage(await message.reply(`You are missing the following permissions:\n${missing}`));
-                        }
-                        else {
-                            await command.callback(message, args, guildModel);
-                        }
+                    const response = responses.find(r => r.keywords.some(keyword => words.includes(keyword)));
+                    if (response) {
+                        await sendResponse(message, response);
+                        return;
                     }
                 }
-                if (!usedCommand) {
-                    let usedResponse = false;
-                    if (
-                        message.mentions.users.has(client.user.id) ||
-                        message.content
-                            .toLowerCase()
-                            .includes(client.user.username.toLowerCase())
-                    ) {
-                        const words = message.content
-                            .toLowerCase()
-                            .split(/\s/g);
-                        const response = responses.find(r => r.keywords.some(keyword => words.includes(keyword)));
-                        if (response) {
-                            usedResponse = true;
-                            await sendResponse(message, response);
-                        }
-                    }
-                    if (!usedResponse && await checkButtify(message, guildModel)) {
-                        const buttified = buttify(message.cleanContent, guildModel.word, guildModel.rate);
-                        if (verifyButtify(message.cleanContent, buttified, guildModel.word)) {
-                            logMessage(await message.channel.send(buttified));
-                        }
+                const guildModel = await db.models.Guild.findOne({
+                    where: { id: message.guildId }
+                });
+                if (await checkButtify(message, guildModel)) {
+                    const buttified = buttify(message.cleanContent, guildModel.dataValues.word, guildModel.dataValues.rate);
+                    if (verifyButtify(message.cleanContent, buttified, guildModel.dataValues.word)) {
+                        logMessage(await message.channel.send(buttified));
                     }
                 }
             }
@@ -160,24 +144,13 @@ function getPresence() {
     return presenceConfig.presences[Math.floor(Math.random() * presenceConfig.presences.length)];
 }
 
-function getUsedPrefix(message, guildModel) {
-    if (guildModel?.prefix && message.content.startsWith(guildModel.prefix)) {
-        return guildModel.prefix;
-    }
-    else {
-        const selector = new RegExp(`^<@!?${message.client.user.id}>\\s*`);
-        return message.content.match(selector)
-            ?.at(0) || null;
-    }
-}
-
 async function sendResponse(message, response) {
-    const [cooldownModel] = await db.ResponseCooldown.findOrCreate({
+    const [cooldownModel] = await db.models.ResponseCooldown.findOrCreate({
         where: { channelId: message.channelId }
     });
-    if (!cooldownModel[response.emoji] || (message.createdTimestamp - cooldownModel[response.emoji] > responseCooldown)) {
-        const newCooldown = {};
-        newCooldown[response.emoji] = message.createdAt;
+    if (!cooldownModel.dataValues[response.emoji] || (message.createdTimestamp - cooldownModel.dataValues[response.emoji] > responseCooldown)) {
+        const newCooldown = { updatedAt: Date.now() };
+        newCooldown[response.emoji] = message.createdTimestamp;
         logMessage(await message.channel.send(responseEmojiManager[response.emoji](message)));
         await cooldownModel.update(newCooldown);
     }
@@ -185,15 +158,19 @@ async function sendResponse(message, response) {
 
 async function checkButtify(message, guildModel) {
     const [channelModel, userModel] = await Promise.all([
-        db.IgnoreChannel.findByPk(message.channelId),
-        db.IgnoreUser.findByPk(message.author.id)
+        db.models.IgnoreChannel.findOne({
+            where: { id: message.channelId }
+        }),
+        db.models.IgnoreUser.findOne({
+            where: { id: message.author.id }
+        })
     ]);
     return !message.author.bot &&
         message.inGuild() &&
         message.cleanContent &&
         !channelModel &&
         !userModel &&
-        (Math.random() < (1 / guildModel.frequency));
+        (Math.random() < (1 / guildModel.dataValues.frequency));
 }
 
 function verifyButtify(original, buttified, word) {
