@@ -20,18 +20,20 @@ module.exports = {
             .getString("value")
             ?.toLowerCase();
         await interaction.deferReply();
-        const guildModel = await db.Guild.findByPk(interaction.guildId);
+        const guildModel = await db.models.Guild.findOne({
+            where: { id: interaction.guildId }
+        });
         if (newValue) {
             if (/\s/g.test(newValue)) {
                 reply = "No spaces, please!";
             }
             else {
-                const { word } = await guildModel.update({ word: newValue });
-                reply = `Buttification word changed to \`${word}\`!`;
+                const { dataValues } = await guildModel.update({ word: newValue });
+                reply = `Buttification word changed to \`${dataValues.word}\`!`;
             }
         }
         else {
-            reply = `I buttify messages with the word \`${guildModel.word}\`!`;
+            reply = `I buttify messages with the word \`${guildModel.dataValues.word}\`!`;
         }
         logMessage(await interaction.editReply(reply));
     }
