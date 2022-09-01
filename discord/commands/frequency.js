@@ -1,7 +1,7 @@
 const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
-const db = require("../../../models");
-const logMessage = require("../../utils/logMessage");
-const defaultButt = require("../../../config/default.json");
+const db = require("../../models");
+const logMessage = require("../utils/logMessage");
+const defaultButt = require("../../config/default.json");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,13 +19,15 @@ module.exports = {
         let reply;
         const newValue = interaction.options.getInteger("value");
         await interaction.deferReply();
-        const guildModel = await db.Guild.findByPk(interaction.guildId);
+        const guildModel = await db.models.Guild.findOne({
+            where: { id: interaction.guildId }
+        });
         if (newValue) {
-            const { frequency } = await guildModel.update({ frequency: newValue });
-            reply = `Buttify frequency changed to one in every \`${frequency}\` messages!`;
+            const { dataValues } = await guildModel.update({ frequency: newValue });
+            reply = `Buttify frequency changed to one in every \`${dataValues.frequency}\` messages!`;
         }
         else {
-            reply = `I buttify roughly one in every \`${guildModel.frequency}\` messages!`;
+            reply = `I buttify roughly one in every \`${guildModel.dataValues.frequency}\` messages!`;
         }
         logMessage(await interaction.editReply(reply));
     }

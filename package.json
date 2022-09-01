@@ -1,8 +1,8 @@
 {
   "name": "discord-buttsbot",
-  "version": "2.4.2",
+  "version": "3.0.0",
   "description": "I'm Buttbot! I say butt!",
-  "main": "server.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ducktrshessami/discord-buttsbot.git"
@@ -14,14 +14,10 @@
   },
   "homepage": "https://github.com/ducktrshessami/discord-buttsbot#readme",
   "dependencies": {
-    "discord.js": "^14.1.2",
-    "express": "^4.18.1",
-    "express-cycle": "ducktrshessami/express-cycle",
-    "pg": "^8.7.3",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.21.3",
+    "discord.js": "^14.3.0",
+    "nessie": "ducktrshessami/node-nessie#v0.4.0-alpha",
     "syllablize": "ducktrshessami/syllablize",
-    "undici": "^5.9.1"
+    "undici": "^5.10.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.6",
@@ -30,15 +26,12 @@
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
-    "dotenv": "^16.0.1",
-    "minify": "^9.1.0",
-    "svgo": "^2.8.0"
+    "dotenv": "^16.0.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "build": "node build/index.js",
-    "deploy": "node discord/commands/deploy-slash.js"
+    "start": "node index.js",
+    "deploy": "node discord/deploy-commands.js"
   },
   "engines": {
     "node": ">=16.9.0"
