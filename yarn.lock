@@ -158,16 +158,16 @@ nan@^2.14.0, nan@^2.15.0:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.16.0.tgz#664f43e45460fb98faf00edca0bb0d7b8dce7916"
   integrity sha512-UdAqHyFngu7TfQKsCBgAA6pWDkT8MAO7d0jyOecVhN5354xbLqdn8mV9Tat9gepAupm0bt2DbeaSC8vS52MuFA==
 
-nessie@ducktrshessami/node-nessie#v0.2.2-alpha:
-  version "0.2.2"
-  resolved "https://codeload.github.com/ducktrshessami/node-nessie/tar.gz/f5fc22f2fb9f4e3f4a89755273027e84cb06f630"
+nessie@ducktrshessami/node-nessie#v0.3.0-alpha:
+  version "0.3.0"
+  resolved "https://codeload.github.com/ducktrshessami/node-nessie/tar.gz/b71370f2b3fd480a76f11cd9a2d7f55d2050083c"
   dependencies:
     oracledb "^5.4.0"
     pluralize "^8.0.0"
 
-nessie@ducktrshessami/node-nessie#v0.3.0-alpha:
-  version "0.3.0"
-  resolved "https://codeload.github.com/ducktrshessami/node-nessie/tar.gz/b71370f2b3fd480a76f11cd9a2d7f55d2050083c"
+nessie@ducktrshessami/node-nessie#v0.4.0-alpha:
+  version "0.4.0"
+  resolved "https://codeload.github.com/ducktrshessami/node-nessie/tar.gz/6556b576d70de1aee160a111bdfb3d7f4ba81701"
   dependencies:
     oracledb "^5.4.0"
     pluralize "^8.0.0"
