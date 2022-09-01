@@ -9,7 +9,7 @@ module.exports = (nessie) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            models.Guild.hasMany(models.IgnoreChannel, { onDelete: OnDeleteBehavior.CASCADE });
+            models.Guild.hasMany(models.IgnoreChannel);
         }
     };
     Guild.init({

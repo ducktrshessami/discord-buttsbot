@@ -8,7 +8,7 @@ module.exports = (nessie) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            models.IgnoreChannel.belongsTo(models.Guild);
+            models.IgnoreChannel.belongsTo(models.Guild, { onDelete: OnDeleteBehavior.CASCADE });
         }
     };
     IgnoreChannel.init({
