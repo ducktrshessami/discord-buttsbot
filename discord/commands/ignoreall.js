@@ -12,7 +12,7 @@ module.exports = {
         await interaction.deferReply();
         const guild = interaction.guild ?? await interaction.client.guilds.fetch(interaction.guildId);
         await guild.channels.fetchActiveThreads();
-        await db.IgnoreChannel.bulkCreate(
+        await db.models.IgnoreChannel.bulkCreate(
             guild.channels.cache
                 .filter(channel => channel.isTextBased())
                 .map(channel => ({
