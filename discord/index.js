@@ -73,18 +73,6 @@ client
                     await command.callback(interaction);
                 }
             }
-            else if (interaction.isButton()) {
-                const message = await interaction.update({
-                    fetchReply: true,
-                    content: ">>> Text commands (also known as message commands or prefix commands) are no longer supported.\nAlthough possible for buttsbot to continue using them, I've opted to respect Discord's wishes.\nYou can read more about this here: Welcome to the new era of Discord apps\n - buttmin",
-                    embeds: [],
-                    components: []
-                });
-                await message.edit({
-                    content: ">>> Text commands (also known as message commands or prefix commands) are no longer supported.\nAlthough possible for buttsbot to continue using them, I've opted to respect Discord's wishes.\nYou can read more about this here: [Welcome to the new era of Discord apps](https://discord.com/blog/welcome-to-the-new-era-of-discord-apps/)\n - buttmin",
-                    flags: MessageFlags.SuppressEmbeds
-                });
-            }
         }
         catch (error) {
             console.error(error);
