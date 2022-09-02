@@ -100,13 +100,6 @@ client
                         .has(PermissionFlagsBits.SendMessages)
                 )
             ) {
-                if (new RegExp(`^<@!?${client.user.id}>\\s*help$`).test(message.content)) {
-                    await message.reply({
-                        content: ">>> Text commands (also known as message commands or prefix commands) are no longer supported.\nAlthough possible for buttsbot to continue using them, I've opted to respect Discord's wishes.\nYou can read more about this here: https://discord.com/blog/welcome-to-the-new-era-of-discord-apps/\n - buttmin",
-                        flags: MessageFlags.SuppressEmbeds
-                    });
-                    return;
-                }
                 if (
                     message.mentions.users.has(client.user.id) ||
                     message.content
