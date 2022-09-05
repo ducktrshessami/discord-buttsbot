@@ -180,7 +180,8 @@ function verifyButtify(original, buttified, word) {
     const buttifiedFormatted = buttified
         .replaceAll(/[^A-Z]+/gi, "")
         .toLowerCase();
-    return originalFormatted !== buttifiedFormatted &&
+    return buttified.length < 2000 &&
+        originalFormatted !== buttifiedFormatted &&
         !(new RegExp(`^${word}s?$`, "i")
             .test(buttifiedFormatted));
 }
