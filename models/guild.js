@@ -1,7 +1,7 @@
 "use strict";
 const { Model, DataTypes } = require("nessie");
 const defaultConfig = require("../config/default.json");
-module.exports = (nessie) => {
+module.exports = (nessie, env) => {
     class Guild extends Model {
         /**
          * Helper method for defining associations.
@@ -32,7 +32,7 @@ module.exports = (nessie) => {
         }
     }, {
         nessie,
-        tableName: "ButtsbotGuilds"
+        tableName: env === "production" ? "ButtsbotGuilds" : "DEV_ButtsbotGuilds"
     });
     return Guild;
 };

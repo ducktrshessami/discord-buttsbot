@@ -1,6 +1,6 @@
 "use strict";
 const { Model, DataTypes } = require("nessie");
-module.exports = (nessie) => {
+module.exports = (nessie, env) => {
     class ResponseCooldown extends Model {
         /**
          * Helper method for defining associations.
@@ -24,7 +24,7 @@ module.exports = (nessie) => {
         updatedAt: DataTypes.NUMBER
     }, {
         nessie,
-        tableName: "ButtsbotResponseCooldowns"
+        tableName: env === "production" ? "ButtsbotResponseCooldowns" : "DEV_ButtsbotResponseCooldowns"
     });
     return ResponseCooldown;
 };
