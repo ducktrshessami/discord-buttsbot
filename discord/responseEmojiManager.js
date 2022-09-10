@@ -1,10 +1,11 @@
 const { BaseInteraction, PermissionFlagsBits } = require("discord.js");
+const permissionsForDebugutil = require("./utils/permissionsForDebugUtil");
 
 function checkPermissions(repliable) {
     return !repliable.guildId || (
         repliable instanceof BaseInteraction ?
             repliable.appPermissions.has(PermissionFlagsBits.UseExternalEmojis) :
-            repliable.channel.permissionsFor(repliable.guild.members.me)
+            permissionsForDebugutil(repliable.channel)
                 .has(PermissionFlagsBits.UseExternalEmojis)
     )
 }

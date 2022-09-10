@@ -8,6 +8,7 @@ const logMessage = require("./utils/logMessage");
 const buttify = require("./utils/buttify");
 const presenceConfig = require("../config/presence.json");
 const { responseCooldown } = require("../config/discord.json");
+const permissionsForDebugutil = require("./utils/permissionsForDebugUtil");
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
@@ -96,7 +97,7 @@ client
                 message.author.id !== client.user.id &&
                 (
                     !message.inGuild() ||
-                    message.channel.permissionsFor(message.guild.members.me)
+                    permissionsForDebugutil(message.channel)
                         .has(PermissionFlagsBits.SendMessages)
                 )
             ) {
