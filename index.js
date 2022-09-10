@@ -7,12 +7,17 @@ catch {
 
 const db = require("./models");
 const { responseCooldown } = require("./config/discord.json");
+const { Operators } = require("nessie");
 
 async function main() {
     console.log("[db] Syncing tables with models");
-    await db.sync(process.env.DB_FORCE && process.env.DB_FORCE.trim().toLowerCase() !== "false");
+    await db.sync({ force: process.env.DB_FORCE && process.env.DB_FORCE.trim().toLowerCase() !== "false" });
     console.log("[db] Pruning old cooldown data");
-    await db.execute(`DELETE FROM "${db.models.ResponseCooldown.tableName}" WHERE "${db.models.ResponseCooldown.tableName}"."updatedAt" < ${Date.now() - (responseCooldown * 2)}`);
+    await db.models.ResponseCooldown.destroy({
+        where: {
+            updatedAt: { [Operators.lt]: Date.now() - (responseCooldown * 2) }
+        }
+    });
     require("./discord");
 }
 

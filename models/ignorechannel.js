@@ -1,6 +1,6 @@
 "use strict";
 const { Model, DataTypes, OnDeleteBehavior } = require("nessie");
-module.exports = (nessie) => {
+module.exports = (nessie, env) => {
     class IgnoreChannel extends Model {
         /**
          * Helper method for defining associations.
@@ -19,7 +19,7 @@ module.exports = (nessie) => {
         }
     }, {
         nessie,
-        tableName: "ButtsbotIgnoreChannels"
+        tableName: env === "production" ? "ButtsbotIgnoreChannels" : "DEV_ButtsbotIgnoreChannels"
     });
     return IgnoreChannel;
 };
