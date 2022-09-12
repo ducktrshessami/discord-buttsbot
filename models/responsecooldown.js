@@ -4,7 +4,7 @@ module.exports = (nessie, env) => {
     class ResponseCooldown extends Model {
         /**
          * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
+         * This method is not a part of nessie lifecycle.
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
