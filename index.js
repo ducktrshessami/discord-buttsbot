@@ -10,7 +10,7 @@ const { responseCooldown } = require("./config/discord.json");
 
 async function main() {
     console.log("[db] Syncing tables with models");
-    await db.sync({ force: process.env.DB_FORCE && process.env.DB_FORCE.trim().toLowerCase() !== "false" });
+    await db.sequelize.sync({ force: process.env.DB_FORCE && process.env.DB_FORCE.trim().toLowerCase() !== "false" });
     console.log("[db] Pruning old cooldown data");
     await db.ResponseCooldown.destroy({
         where: {
