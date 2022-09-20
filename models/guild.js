@@ -1,7 +1,7 @@
 "use strict";
-const { Model, DataTypes } = require("nessie");
+const { Model } = require("sequelize");
 const defaultConfig = require("../config/default.json");
-module.exports = (nessie, env) => {
+module.exports = (sequelize, DataTypes) => {
     class Guild extends Model {
         /**
          * Helper method for defining associations.
@@ -9,7 +9,7 @@ module.exports = (nessie, env) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            models.Guild.hasMany(models.IgnoreChannel);
+            models.Guild.hasMany(models.IgnoreChannel, { onDelete: "cascade" });
         }
     };
     Guild.init({
@@ -31,8 +31,8 @@ module.exports = (nessie, env) => {
             defaultValue: defaultConfig.rate
         }
     }, {
-        nessie,
-        tableName: env === "production" ? "ButtsbotGuilds" : "DEV_ButtsbotGuilds"
+        sequelize,
+        modelName: "Guild",
     });
     return Guild;
 };
