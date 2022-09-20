@@ -28,7 +28,7 @@ client
             console.log(`[discord] Logged in as ${client.user.tag}`);
             client.off("debug", console.debug);
             setInterval(() => client.user.setPresence(getPresence()), presenceConfig.minutes * 60000);
-            await db.models.Guild.bulkCreate(client.guilds.cache.map(guild => ({ id: guild.id })), { ignoreDuplicates: true });
+            await db.Guild.bulkCreate(client.guilds.cache.map(guild => ({ id: guild.id })), { ignoreDuplicates: true });
             await postServerCount(client);
         }
         catch (error) {
@@ -37,7 +37,7 @@ client
     })
     .on("guildCreate", async guild => {
         try {
-            await db.models.Guild.findOrCreate({
+            await db.Guild.findOrCreate({
                 where: { id: guild.id }
             });
             await postServerCount(client);
@@ -50,11 +50,9 @@ client
     .on("threadCreate", async (thread, newlyCreated) => {
         try {
             if (newlyCreated) {
-                const parentIgnore = await db.models.IgnoreChannel.findOne({
-                    where: { id: thread.parentId }
-                });
+                const parentIgnore = await db.IgnoreChannel.findByPk(thread.parentId);
                 if (parentIgnore) {
-                    await db.models.IgnoreChannel.create({
+                    await db.IgnoreChannel.create({
                         id: thread.id,
                         GuildId: thread.guildId
                     });
@@ -104,12 +102,10 @@ client
                         return;
                     }
                 }
-                const guildModel = await db.models.Guild.findOne({
-                    where: { id: message.guildId }
-                });
+                const guildModel = await db.Guild.findByPk(message.guildId);
                 if (await checkButtify(message, guildModel)) {
-                    const buttified = buttify(message.cleanContent, guildModel.dataValues.word, guildModel.dataValues.rate);
-                    if (verifyButtify(message.cleanContent, buttified, guildModel.dataValues.word)) {
+                    const buttified = buttify(message.cleanContent, guildModel.word, guildModel.rate);
+                    if (verifyButtify(message.cleanContent, buttified, guildModel.word)) {
                         logMessage(await message.channel.send(buttified));
                     }
                 }
@@ -127,12 +123,12 @@ function getPresence() {
 }
 
 async function sendResponse(message, response) {
-    const [cooldownModel] = await db.models.ResponseCooldown.findOrCreate({
+    const [cooldownModel] = await db.ResponseCooldown.findOrCreate({
         where: { channelId: message.channelId }
     });
-    if (!cooldownModel.dataValues[response.emoji] || (message.createdTimestamp - cooldownModel.dataValues[response.emoji] > responseCooldown)) {
-        const newCooldown = { updatedAt: Date.now() };
-        newCooldown[response.emoji] = message.createdTimestamp;
+    if (!cooldownModel[response.emoji] || (message.createdTimestamp - cooldownModel[response.emoji] > responseCooldown)) {
+        const newCooldown = {};
+        newCooldown[response.emoji] = message.createdAt;
         logMessage(await message.channel.send(responseEmojiManager[response.emoji](message)));
         await cooldownModel.update(newCooldown);
     }
@@ -140,19 +136,15 @@ async function sendResponse(message, response) {
 
 async function checkButtify(message, guildModel) {
     const [channelModel, userModel] = await Promise.all([
-        db.models.IgnoreChannel.findOne({
-            where: { id: message.channelId }
-        }),
-        db.models.IgnoreUser.findOne({
-            where: { id: message.author.id }
-        })
+        db.IgnoreChannel.findByPk(message.channelId),
+        db.IgnoreUser.findByPk(message.author.id)
     ]);
     return !message.author.bot &&
         message.inGuild() &&
         message.cleanContent &&
         !channelModel &&
         !userModel &&
-        (Math.random() < (1 / guildModel.dataValues.frequency));
+        (Math.random() < (1 / guildModel.frequency));
 }
 
 function verifyButtify(original, buttified, word) {
