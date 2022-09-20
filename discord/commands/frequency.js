@@ -19,15 +19,13 @@ module.exports = {
         let reply;
         const newValue = interaction.options.getInteger("value");
         await interaction.deferReply();
-        const guildModel = await db.models.Guild.findOne({
-            where: { id: interaction.guildId }
-        });
+        const guildModel = await db.Guild.findByPk(interaction.guildId);
         if (newValue) {
-            const { dataValues } = await guildModel.update({ frequency: newValue });
-            reply = `Buttify frequency changed to one in every \`${dataValues.frequency}\` messages!`;
+            const { frequency } = await guildModel.update({ frequency: newValue });
+            reply = `Buttify frequency changed to one in every \`${frequency}\` messages!`;
         }
         else {
-            reply = `I buttify roughly one in every \`${guildModel.dataValues.frequency}\` messages!`;
+            reply = `I buttify roughly one in every \`${guildModel.frequency}\` messages!`;
         }
         logMessage(await interaction.editReply(reply));
     }
