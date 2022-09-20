@@ -23,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: defaultConfig.word
         },
         frequency: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             defaultValue: defaultConfig.frequency
         },
         rate: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             defaultValue: defaultConfig.rate
         }
     }, {
