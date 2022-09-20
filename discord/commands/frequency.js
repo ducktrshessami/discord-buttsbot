@@ -2,6 +2,7 @@ const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
 const db = require("../../models");
 const logMessage = require("../utils/logMessage");
 const defaultButt = require("../../config/default.json");
+const { frequency: maxFrequency } = require("../../config/max.json");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -9,12 +10,15 @@ module.exports = {
         .setDescription("Use this command to show or change how often I buttify messages!")
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-        .addIntegerOption(option =>
-            option
+        .addIntegerOption(option => {
+            if (maxFrequency > 0) {
+                option.setMaxValue(maxFrequency);
+            }
+            return option
                 .setName("value")
                 .setDescription(`A new frequency to buttify messages! The lower this is, the more I'll buttify! The default is ${defaultButt.frequency}.`)
-                .setMinValue(1)
-        ),
+                .setMinValue(1);
+        }),
     callback: async function (interaction) {
         let reply;
         const newValue = interaction.options.getInteger("value");
