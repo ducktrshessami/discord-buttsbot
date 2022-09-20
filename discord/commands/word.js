@@ -2,7 +2,7 @@ const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
 const db = require("../../models");
 const logMessage = require("../utils/logMessage");
 const defaultButt = require("../../config/default.json");
-const { wordMaxLength } = require("../../config/discord.json");
+const { wordLength } = require("../../config/max.json");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,7 +14,7 @@ module.exports = {
             option
                 .setName("value")
                 .setDescription(`A new word to buttify with! No spaces, please! The default is ${defaultButt.word}!`)
-                .setMaxLength(wordMaxLength)
+                .setMaxLength(wordLength)
         ),
     callback: async function (interaction) {
         let reply;

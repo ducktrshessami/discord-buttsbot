@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 const defaultConfig = require("../config/default.json");
-const { wordMaxLength } = require("../config/discord.json");
+const { wordLength } = require("../config/max.json");
 module.exports = (sequelize, DataTypes) => {
     class Guild extends Model {
         /**
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         word: {
-            type: DataTypes.STRING(wordMaxLength),
+            type: DataTypes.STRING(wordLength),
             defaultValue: defaultConfig.word
         },
         frequency: {
