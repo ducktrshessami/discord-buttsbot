@@ -11,7 +11,7 @@ module.exports = {
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
     callback: async function (interaction) {
         await interaction.deferReply();
-        await db.models.IgnoreChannel.destroy({
+        await db.IgnoreChannel.destroy({
             where: { GuildId: interaction.guildId }
         });
         logMessage(await interaction.editReply(`Okay ${smile(interaction)}`));

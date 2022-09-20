@@ -1,7 +1,8 @@
 "use strict";
-const { Model, DataTypes } = require("nessie");
+const { Model } = require("sequelize");
 const defaultConfig = require("../config/default.json");
-module.exports = (nessie, env) => {
+const { wordLength } = require("../config/max.json");
+module.exports = (sequelize, DataTypes) => {
     class Guild extends Model {
         /**
          * Helper method for defining associations.
@@ -9,7 +10,7 @@ module.exports = (nessie, env) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            models.Guild.hasMany(models.IgnoreChannel);
+            models.Guild.hasMany(models.IgnoreChannel, { onDelete: "cascade" });
         }
     };
     Guild.init({
@@ -19,20 +20,20 @@ module.exports = (nessie, env) => {
             allowNull: false
         },
         word: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(wordLength),
             defaultValue: defaultConfig.word
         },
         frequency: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             defaultValue: defaultConfig.frequency
         },
         rate: {
-            type: DataTypes.NUMBER,
+            type: DataTypes.INTEGER,
             defaultValue: defaultConfig.rate
         }
     }, {
-        nessie,
-        tableName: env === "production" ? "ButtsbotGuilds" : "DEV_ButtsbotGuilds"
+        sequelize,
+        modelName: "Guild",
     });
     return Guild;
 };

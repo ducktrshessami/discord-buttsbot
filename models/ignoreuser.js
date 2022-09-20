@@ -1,6 +1,6 @@
 "use strict";
-const { Model, DataTypes } = require("nessie");
-module.exports = (nessie, env) => {
+const { Model } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
     class IgnoreUser extends Model {
         /**
          * Helper method for defining associations.
@@ -18,8 +18,8 @@ module.exports = (nessie, env) => {
             allowNull: false
         }
     }, {
-        nessie,
-        tableName: env === "production" ? "ButtsbotIgnoreUsers" : "DEV_ButtsbotIgnoreUsers"
+        sequelize,
+        modelName: "IgnoreUser",
     });
     return IgnoreUser;
 };
