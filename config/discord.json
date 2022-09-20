@@ -1,6 +1,5 @@
 {
     "permissionValue": 265216,
     "embedColor": 4505287,
-    "responseCooldown": 30000,
-    "wordMaxLength": 255
+    "responseCooldown": 30000
 }
