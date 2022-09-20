@@ -1,6 +1,6 @@
 "use strict";
-const { Model, DataTypes, OnDeleteBehavior } = require("nessie");
-module.exports = (nessie, env) => {
+const { Model } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
     class IgnoreChannel extends Model {
         /**
          * Helper method for defining associations.
@@ -8,7 +8,7 @@ module.exports = (nessie, env) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            models.IgnoreChannel.belongsTo(models.Guild, { onDelete: OnDeleteBehavior.CASCADE });
+            models.IgnoreChannel.belongsTo(models.Guild);
         }
     };
     IgnoreChannel.init({
@@ -18,8 +18,8 @@ module.exports = (nessie, env) => {
             allowNull: false
         }
     }, {
-        nessie,
-        tableName: env === "production" ? "ButtsbotIgnoreChannels" : "DEV_ButtsbotIgnoreChannels"
+        sequelize,
+        modelName: "IgnoreChannel",
     });
     return IgnoreChannel;
 };

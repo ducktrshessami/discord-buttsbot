@@ -12,9 +12,7 @@ module.exports = {
     callback: async function (interaction) {
         let reply;
         await interaction.deferReply();
-        const ignoreModel = await db.models.IgnoreChannel.findOne({
-            where: { id: interaction.channelId }
-        });
+        const ignoreModel = await db.IgnoreChannel.findByPk(interaction.channelId);
         if (ignoreModel) {
             await ignoreModel.destroy();
             reply = `Okay ${smile(interaction)}`;
