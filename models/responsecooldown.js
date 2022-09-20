@@ -1,6 +1,6 @@
 "use strict";
-const { Model, DataTypes } = require("nessie");
-module.exports = (nessie) => {
+const { Model } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
     class ResponseCooldown extends Model {
         /**
          * Helper method for defining associations.
@@ -17,14 +17,13 @@ module.exports = (nessie) => {
             primaryKey: true,
             allowNull: false
         },
-        smile: DataTypes.NUMBER,
-        frown: DataTypes.NUMBER,
-        wink: DataTypes.NUMBER,
-        weird: DataTypes.NUMBER,
-        updatedAt: DataTypes.NUMBER
+        smile: DataTypes.DATE,
+        frown: DataTypes.DATE,
+        wink: DataTypes.DATE,
+        weird: DataTypes.DATE
     }, {
-        nessie,
-        tableName: "ButtsbotResponseCooldowns"
+        sequelize,
+        modelName: "ResponseCooldown",
     });
     return ResponseCooldown;
 };
