@@ -103,9 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
-# package-lock file
-package-lock.json
-
-# Sequelize local files
-migrations/
-seeders/
+# Local Sqlite db
+sqlite/

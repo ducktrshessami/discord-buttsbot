@@ -27,7 +27,7 @@ client
             console.log(`[discord] Logged in as ${client.user.tag}`);
             client.off("debug", console.debug);
             setInterval(() => client.user.setPresence(getPresence()), presenceConfig.minutes * 60000);
-            await db.models.Guild.bulkCreate(client.guilds.cache.map(guild => ({ id: guild.id })), { ignoreDuplicates: true });
+            await db.Guild.bulkCreate(client.guilds.cache.map(guild => ({ id: guild.id })), { ignoreDuplicates: true });
             await postServerCount(client);
         }
         catch (error) {
@@ -36,7 +36,7 @@ client
     })
     .on("guildCreate", async guild => {
         try {
-            await db.models.Guild.findOrCreate({
+            await db.Guild.findOrCreate({
                 where: { id: guild.id }
             });
             await postServerCount(client);
@@ -49,11 +49,9 @@ client
     .on("threadCreate", async (thread, newlyCreated) => {
         try {
             if (newlyCreated) {
-                const parentIgnore = await db.models.IgnoreChannel.findOne({
-                    where: { id: thread.parentId }
-                });
+                const parentIgnore = await db.IgnoreChannel.findByPk(thread.parentId);
                 if (parentIgnore) {
-                    await db.models.IgnoreChannel.create({
+                    await db.IgnoreChannel.create({
                         id: thread.id,
                         GuildId: thread.guildId
                     });
@@ -73,18 +71,6 @@ client
                     await command.callback(interaction);
                 }
             }
-            else if (interaction.isButton()) {
-                const message = await interaction.update({
-                    fetchReply: true,
-                    content: ">>> Text commands (also known as message commands or prefix commands) are no longer supported.\nAlthough possible for buttsbot to continue using them, I've opted to respect Discord's wishes.\nYou can read more about this here: Welcome to the new era of Discord apps\n - buttmin",
-                    embeds: [],
-                    components: []
-                });
-                await message.edit({
-                    content: ">>> Text commands (also known as message commands or prefix commands) are no longer supported.\nAlthough possible for buttsbot to continue using them, I've opted to respect Discord's wishes.\nYou can read more about this here: [Welcome to the new era of Discord apps](https://discord.com/blog/welcome-to-the-new-era-of-discord-apps/)\n - buttmin",
-                    flags: MessageFlags.SuppressEmbeds
-                });
-            }
         }
         catch (error) {
             console.error(error);
@@ -97,16 +83,9 @@ client
                 (
                     !message.inGuild() ||
                     message.channel.permissionsFor(message.guild.members.me)
-                        .has(PermissionFlagsBits.SendMessages)
+                        ?.has(PermissionFlagsBits.SendMessages)
                 )
             ) {
-                if (new RegExp(`^<@!?${client.user.id}>\\s*help$`).test(message.content)) {
-                    await message.reply({
-                        content: ">>> Text commands (also known as message commands or prefix commands) are no longer supported.\nAlthough possible for buttsbot to continue using them, I've opted to respect Discord's wishes.\nYou can read more about this here: https://discord.com/blog/welcome-to-the-new-era-of-discord-apps/\n - buttmin",
-                        flags: MessageFlags.SuppressEmbeds
-                    });
-                    return;
-                }
                 if (
                     message.mentions.users.has(client.user.id) ||
                     message.content
@@ -122,12 +101,10 @@ client
                         return;
                     }
                 }
-                const guildModel = await db.models.Guild.findOne({
-                    where: { id: message.guildId }
-                });
+                const guildModel = await db.Guild.findByPk(message.guildId);
                 if (await checkButtify(message, guildModel)) {
-                    const buttified = buttify(message.cleanContent, guildModel.dataValues.word, guildModel.dataValues.rate);
-                    if (verifyButtify(message.cleanContent, buttified, guildModel.dataValues.word)) {
+                    const buttified = buttify(message.cleanContent, guildModel.word, guildModel.rate);
+                    if (verifyButtify(message.cleanContent, buttified, guildModel.word)) {
                         logMessage(await message.channel.send(buttified));
                     }
                 }
@@ -145,12 +122,12 @@ function getPresence() {
 }
 
 async function sendResponse(message, response) {
-    const [cooldownModel] = await db.models.ResponseCooldown.findOrCreate({
+    const [cooldownModel] = await db.ResponseCooldown.findOrCreate({
         where: { channelId: message.channelId }
     });
-    if (!cooldownModel.dataValues[response.emoji] || (message.createdTimestamp - cooldownModel.dataValues[response.emoji] > responseCooldown)) {
-        const newCooldown = { updatedAt: Date.now() };
-        newCooldown[response.emoji] = message.createdTimestamp;
+    if (!cooldownModel[response.emoji] || (message.createdTimestamp - cooldownModel[response.emoji] > responseCooldown)) {
+        const newCooldown = {};
+        newCooldown[response.emoji] = message.createdAt;
         logMessage(await message.channel.send(responseEmojiManager[response.emoji](message)));
         await cooldownModel.update(newCooldown);
     }
@@ -158,19 +135,15 @@ async function sendResponse(message, response) {
 
 async function checkButtify(message, guildModel) {
     const [channelModel, userModel] = await Promise.all([
-        db.models.IgnoreChannel.findOne({
-            where: { id: message.channelId }
-        }),
-        db.models.IgnoreUser.findOne({
-            where: { id: message.author.id }
-        })
+        db.IgnoreChannel.findByPk(message.channelId),
+        db.IgnoreUser.findByPk(message.author.id)
     ]);
     return !message.author.bot &&
         message.inGuild() &&
         message.cleanContent &&
         !channelModel &&
         !userModel &&
-        (Math.random() < (1 / guildModel.dataValues.frequency));
+        (Math.random() < (1 / guildModel.frequency));
 }
 
 function verifyButtify(original, buttified, word) {
@@ -180,7 +153,8 @@ function verifyButtify(original, buttified, word) {
     const buttifiedFormatted = buttified
         .replaceAll(/[^A-Z]+/gi, "")
         .toLowerCase();
-    return originalFormatted !== buttifiedFormatted &&
+    return buttified.length < 2000 &&
+        originalFormatted !== buttifiedFormatted &&
         !(new RegExp(`^${word}s?$`, "i")
             .test(buttifiedFormatted));
 }
