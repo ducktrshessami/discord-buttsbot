@@ -46,22 +46,6 @@ client
         }
     })
     .on("guildDelete", () => postServerCount(client).catch(console.error))
-    .on("threadCreate", async (thread, newlyCreated) => {
-        try {
-            if (newlyCreated) {
-                const parentIgnore = await db.IgnoreChannel.findByPk(thread.parentId);
-                if (parentIgnore) {
-                    await db.IgnoreChannel.create({
-                        id: thread.id,
-                        GuildId: thread.guildId
-                    });
-                }
-            }
-        }
-        catch (error) {
-            console.error(error);
-        }
-    })
     .on("interactionCreate", async interaction => {
         try {
             if (interaction.isChatInputCommand()) {
