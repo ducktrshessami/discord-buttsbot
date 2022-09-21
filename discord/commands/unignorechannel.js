@@ -1,4 +1,4 @@
-const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
+const { PermissionFlagsBits, SlashCommandBuilder, ChannelType } = require("discord.js");
 const db = require("../../models");
 const { smile } = require("../responseEmojiManager");
 const logMessage = require("../utils/logMessage");
@@ -8,7 +8,20 @@ module.exports = {
         .setName("unignorechannel")
         .setDescription("Undo ignorechannel!")
         .setDMPermission(false)
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
+        .addChannelOption(option =>
+            option
+                .setName("channel")
+                .setDescription("The channel for me to stop ignoring! Defaults to the channel you use this in.")
+                .addChannelTypes(
+                    ChannelType.GuildText,
+                    ChannelType.GuildAnnouncement,
+                    ChannelType.AnnouncementThread,
+                    ChannelType.PublicThread,
+                    ChannelType.PrivateThread,
+                    ChannelType.GuildVoice
+                )
+        ),
     callback: async function (interaction) {
         let reply;
         await interaction.deferReply();
