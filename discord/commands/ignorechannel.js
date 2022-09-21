@@ -23,10 +23,11 @@ module.exports = {
         ),
     callback: async function (interaction) {
         await interaction.deferReply();
+        const targetChannel = interaction.options.getChannel("channel") ?? interaction.channel;
         const [_, created] = await db.IgnoreChannel.findOrCreate({
-            where: { id: interaction.channelId },
+            where: { id: targetChannel.id },
             defaults: { GuildId: interaction.guildId }
         });
-        logMessage(await interaction.editReply(created ? "Okay." : "I'm already ignoring this channel."));
+        logMessage(await interaction.editReply(created ? "Okay." : `I'm already ignoring ${targetChannel.id === interaction.channelId ? "this channel" : targetChannel.toString()}.`));
     }
 };
