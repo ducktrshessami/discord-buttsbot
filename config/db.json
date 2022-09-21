@@ -1,0 +1,14 @@
+{
+  "development": {
+    "dialect": "sqlite",
+    "storage": "./sqlite/buttsbot_dev.sqlite"
+  },
+  "test": {
+    "dialect": "sqlite",
+    "storage": "./sqlite/buttsbot_test.sqlite"
+  },
+  "production": {
+    "dialect": "sqlite",
+    "storage": "./sqlite/buttsbot_prod.sqlite"
+  }
+}

@@ -5,7 +5,7 @@ function checkPermissions(repliable) {
         repliable instanceof BaseInteraction ?
             repliable.appPermissions.has(PermissionFlagsBits.UseExternalEmojis) :
             repliable.channel.permissionsFor(repliable.guild.members.me)
-                .has(PermissionFlagsBits.UseExternalEmojis)
+                ?.has(PermissionFlagsBits.UseExternalEmojis)
     )
 }
 

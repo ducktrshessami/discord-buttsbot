@@ -2,6 +2,7 @@ const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
 const db = require("../../models");
 const logMessage = require("../utils/logMessage");
 const defaultButt = require("../../config/default.json");
+const { wordLength } = require("../../config/max.json");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -13,6 +14,7 @@ module.exports = {
             option
                 .setName("value")
                 .setDescription(`A new word to buttify with! No spaces, please! The default is ${defaultButt.word}!`)
+                .setMaxLength(wordLength)
         ),
     callback: async function (interaction) {
         let reply;
@@ -20,20 +22,18 @@ module.exports = {
             .getString("value")
             ?.toLowerCase();
         await interaction.deferReply();
-        const guildModel = await db.models.Guild.findOne({
-            where: { id: interaction.guildId }
-        });
+        const guildModel = await db.Guild.findByPk(interaction.guildId);
         if (newValue) {
             if (/\s/g.test(newValue)) {
                 reply = "No spaces, please!";
             }
             else {
-                const { dataValues } = await guildModel.update({ word: newValue });
-                reply = `Buttification word changed to \`${dataValues.word}\`!`;
+                const { word } = await guildModel.update({ word: newValue });
+                reply = `Buttification word changed to \`${word}\`!`;
             }
         }
         else {
-            reply = `I buttify messages with the word \`${guildModel.dataValues.word}\`!`;
+            reply = `I buttify messages with the word \`${guildModel.word}\`!`;
         }
         logMessage(await interaction.editReply(reply));
     }
