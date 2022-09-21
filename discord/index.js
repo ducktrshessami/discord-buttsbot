@@ -118,11 +118,11 @@ async function sendResponse(message, response) {
 }
 
 async function channelIgnored(channel) {
-    let ignored = await db.ignoreChannel.findByPk(channel.id);
+    let ignored = await db.IgnoreChannel.findByPk(channel.id);
     if (channel.parent) {
         ignored ||= await channelIgnored(channel.parent);
     }
-    return ignored;
+    return !!ignored;
 }
 
 async function checkButtify(message, guildModel) {
