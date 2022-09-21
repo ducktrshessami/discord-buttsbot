@@ -117,15 +117,23 @@ async function sendResponse(message, response) {
     }
 }
 
+async function channelIgnored(channel) {
+    let ignored = await db.ignoreChannel.findByPk(channel.id);
+    if (channel.parent) {
+        ignored ||= await channelIgnored(channel.parent);
+    }
+    return ignored;
+}
+
 async function checkButtify(message, guildModel) {
-    const [channelModel, userModel] = await Promise.all([
-        db.IgnoreChannel.findByPk(message.channelId),
+    const [ignoreChannel, userModel] = await Promise.all([
+        channelIgnored(message.channel),
         db.IgnoreUser.findByPk(message.author.id)
     ]);
     return !message.author.bot &&
         message.inGuild() &&
         message.cleanContent &&
-        !channelModel &&
+        !ignoreChannel &&
         !userModel &&
         (Math.random() < (1 / guildModel.frequency));
 }
