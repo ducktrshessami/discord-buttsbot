@@ -19,7 +19,9 @@ module.exports = {
                     ChannelType.AnnouncementThread,
                     ChannelType.PublicThread,
                     ChannelType.PrivateThread,
-                    ChannelType.GuildVoice
+                    ChannelType.GuildVoice,
+                    ChannelType.GuildCategory,
+                    ChannelType.GuildForum
                 )
         ),
     callback: async function (interaction) {
