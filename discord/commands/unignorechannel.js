@@ -25,13 +25,14 @@ module.exports = {
     callback: async function (interaction) {
         let reply;
         await interaction.deferReply();
-        const ignoreModel = await db.IgnoreChannel.findByPk(interaction.channelId);
+        const targetChannel = interaction.options.getChannel("channel") ?? interaction.channel;
+        const ignoreModel = await db.IgnoreChannel.findByPk(targetChannel.id);
         if (ignoreModel) {
             await ignoreModel.destroy();
             reply = `Okay ${smile(interaction)}`;
         }
         else {
-            reply = "I'm not ignoring this channel!";
+            reply = `I'm not ignoring ${targetChannel.id === interaction.channelId ? "this channel" : targetChannel.toString()}!`;
         }
         logMessage(await interaction.editReply(reply));
     }
