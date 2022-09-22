@@ -20,7 +20,8 @@ Avatar and presence activities by Entrop
 
 - [Oracle Cloud Infrastructure](https://www.oracle.com/cloud/)
 - [discord.js](https://discord.js.org/#/)
-- [nessie](https://github.com/ducktrshessami/node-nessie)
+- [SQLite](https://www.sqlite.org/)
+- [Sequelize](https://sequelize.org/)
 
 ## Invite to Your Server
 
