@@ -46,22 +46,6 @@ client
         }
     })
     .on("guildDelete", () => postServerCount(client).catch(console.error))
-    .on("threadCreate", async (thread, newlyCreated) => {
-        try {
-            if (newlyCreated) {
-                const parentIgnore = await db.IgnoreChannel.findByPk(thread.parentId);
-                if (parentIgnore) {
-                    await db.IgnoreChannel.create({
-                        id: thread.id,
-                        GuildId: thread.guildId
-                    });
-                }
-            }
-        }
-        catch (error) {
-            console.error(error);
-        }
-    })
     .on("interactionCreate", async interaction => {
         try {
             if (interaction.isChatInputCommand()) {
@@ -81,9 +65,11 @@ client
             if (
                 message.author.id !== client.user.id &&
                 (
-                    !message.inGuild() ||
-                    message.channel.permissionsFor(message.guild.members.me)
-                        ?.has(PermissionFlagsBits.SendMessages)
+                    !message.inGuild() || (
+                        message.channel.viewable &&
+                        message.channel.permissionsFor(message.guild.members.me)
+                            ?.has(PermissionFlagsBits.SendMessages)
+                    )
                 )
             ) {
                 if (
@@ -133,15 +119,23 @@ async function sendResponse(message, response) {
     }
 }
 
+async function channelIgnored(channel) {
+    let ignored = await db.IgnoreChannel.findByPk(channel.id);
+    if (channel.parent) {
+        ignored ||= await channelIgnored(channel.parent);
+    }
+    return !!ignored;
+}
+
 async function checkButtify(message, guildModel) {
-    const [channelModel, userModel] = await Promise.all([
-        db.IgnoreChannel.findByPk(message.channelId),
+    const [ignoreChannel, userModel] = await Promise.all([
+        channelIgnored(message.channel),
         db.IgnoreUser.findByPk(message.author.id)
     ]);
     return !message.author.bot &&
         message.inGuild() &&
         message.cleanContent &&
-        !channelModel &&
+        !ignoreChannel &&
         !userModel &&
         (Math.random() < (1 / guildModel.frequency));
 }
