@@ -1,4 +1,4 @@
-const { PermissionFlagsBits, SlashCommandBuilder } = require("discord.js");
+const { PermissionFlagsBits, SlashCommandBuilder, ChannelType } = require("discord.js");
 const db = require("../../models");
 const logMessage = require("../utils/logMessage");
 
@@ -14,7 +14,7 @@ module.exports = {
         await guild.channels.fetchActiveThreads();
         await db.IgnoreChannel.bulkCreate(
             guild.channels.cache
-                .filter(channel => channel.isTextBased())
+                .filter(channel => channel.isTextBased() || channel.type === ChannelType.GuildCategory || channel.type === ChannelType.GuildForum)
                 .map(channel => ({
                     id: channel.id,
                     GuildId: interaction.guildId
