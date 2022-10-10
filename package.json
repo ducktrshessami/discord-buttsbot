@@ -14,11 +14,11 @@
   },
   "homepage": "https://github.com/ducktrshessami/discord-buttsbot#readme",
   "dependencies": {
-    "discord.js": "^14.4.0",
-    "sequelize": "^6.23.0",
-    "sqlite3": "^5.1.1",
+    "discord.js": "^14.6.0",
+    "sequelize": "^6.24.0",
+    "sqlite3": "^5.1.2",
     "syllablize": "ducktrshessami/syllablize",
-    "undici": "^5.10.0"
+    "undici": "^5.11.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.6",
@@ -27,7 +27,7 @@
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
-    "dotenv": "^16.0.2"
+    "dotenv": "^16.0.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
