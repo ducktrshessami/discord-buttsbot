@@ -65,9 +65,11 @@ client
             if (
                 message.author.id !== client.user.id &&
                 (
-                    !message.inGuild() ||
-                    message.channel.permissionsFor(message.guild.members.me)
-                        ?.has(PermissionFlagsBits.SendMessages)
+                    !message.inGuild() || (
+                        message.channel.viewable &&
+                        message.channel.permissionsFor(message.guild.members.me)
+                            ?.has(PermissionFlagsBits.SendMessages)
+                    )
                 )
             ) {
                 if (
