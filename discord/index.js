@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, Partials, PermissionFlagsBits, MessageFlags } = require("discord.js");
+const { Client, GatewayIntentBits, Partials, PermissionFlagsBits, Options } = require("discord.js");
 const db = require("../models");
 const commands = require("./commands");
 const responses = require("./responses");
@@ -15,7 +15,8 @@ const client = new Client({
         GatewayIntentBits.DirectMessages |
         GatewayIntentBits.MessageContent,
     partials: [Partials.Channel],
-    presence: getPresence()
+    presence: getPresence(),
+    sweepers: Options.DefaultSweeperSettings
 });
 
 client
