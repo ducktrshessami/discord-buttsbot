@@ -21,11 +21,11 @@ const client = new Client({
         ...Options.DefaultMakeCacheSettings,
         UserManager: {
             maxSize: managerCacheMaxSize,
-            keepOverLimit: user => user.id === client.user.id
+            keepOverLimit: user => user.id === process.env.DISCORD_CLIENTID
         },
         GuildMemberManager: {
             maxSize: managerCacheMaxSize,
-            keepOverLimit: member => member.id === client.user.id
+            keepOverLimit: member => member.id === process.env.DISCORD_CLIENTID
         }
     })
 });
