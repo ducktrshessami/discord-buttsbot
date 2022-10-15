@@ -1,5 +1,7 @@
 {
     "permissionValue": 265216,
     "embedColor": 4505287,
-    "responseCooldown": 30000
+    "responseCooldown": 30000,
+    "managerCacheMaxSize": 100,
+    "dmChannelSweepInterval": 3600
 }
