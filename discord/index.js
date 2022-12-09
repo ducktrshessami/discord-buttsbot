@@ -16,7 +16,16 @@ const client = new Client({
         GatewayIntentBits.MessageContent,
     partials: [Partials.Channel],
     presence: getPresence(),
-    sweepers: Options.DefaultSweeperSettings,
+    sweepers: {
+        threads: {
+            interval: 3600,
+            lifetime: 3600
+        },
+        messages: {
+            interval: 3600,
+            lifetime: 3600
+        }
+    },
     makeCache: Options.cacheWithLimits({
         ...Options.DefaultMakeCacheSettings,
         UserManager: {
