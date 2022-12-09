@@ -27,7 +27,7 @@ const client = new Client({
         }
     },
     makeCache: Options.cacheWithLimits({
-        ...Options.DefaultMakeCacheSettings,
+        MessageManager: managerCacheMaxSize,
         UserManager: {
             maxSize: managerCacheMaxSize,
             keepOverLimit: user => user.id === process.env.DISCORD_CLIENTID
