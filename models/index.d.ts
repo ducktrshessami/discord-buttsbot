@@ -20,5 +20,9 @@ export class IgnoreChannel extends Model<InferAttributes<IgnoreChannel>, InferCr
     GuildId: ForeignKey<Guild["id"]>;
 }
 
+export class IgnoreUser extends Model<InferAttributes<IgnoreUser>, InferCreationAttributes<IgnoreUser>> {
+    id: string;
+}
+
 export const sequelize: Sequelize;
 export { Sequelize } from "sequelize";
