@@ -1,4 +1,10 @@
-const { Client, GatewayIntentBits, Partials, PermissionFlagsBits, Options } = require("discord.js");
+const {
+    Client,
+    GatewayIntentBits,
+    Partials,
+    PermissionFlagsBits,
+    Options
+} = require("discord.js");
 const db = require("../models");
 const commands = require("./commands");
 const responses = require("./responses");
