@@ -99,6 +99,9 @@ client
                     )
                 )
             ) {
+                if (await channelIgnored(message.channel)) {
+                    return;
+                }
                 if (
                     message.mentions.users.has(client.user.id) ||
                     message.content
@@ -155,14 +158,10 @@ async function channelIgnored(channel) {
 }
 
 async function checkButtify(message, guildModel) {
-    const [ignoreChannel, userModel] = await Promise.all([
-        channelIgnored(message.channel),
-        db.IgnoreUser.findByPk(message.author.id)
-    ]);
+    const userModel = await db.IgnoreUser.findByPk(message.author.id);
     return !message.author.bot &&
         message.inGuild() &&
         message.cleanContent &&
-        !ignoreChannel &&
         !userModel &&
         (Math.random() < (1 / guildModel.frequency));
 }
