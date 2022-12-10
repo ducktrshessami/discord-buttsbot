@@ -7,7 +7,13 @@ const postServerCount = require("./utils/postServerCount");
 const logMessage = require("./utils/logMessage");
 const buttify = require("./utils/buttify");
 const presenceConfig = require("../config/presence.json");
-const { responseCooldown, managerCacheMaxSize } = require("../config/discord.json");
+const {
+    managerCacheMaxSize,
+    messageLifetime,
+    responseCooldown,
+    sweepInterval,
+    threadLifetime
+} = require("../config/discord.json");
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
@@ -16,9 +22,18 @@ const client = new Client({
         GatewayIntentBits.MessageContent,
     partials: [Partials.Channel],
     presence: getPresence(),
-    sweepers: Options.DefaultSweeperSettings,
+    sweepers: {
+        threads: {
+            interval: sweepInterval,
+            lifetime: threadLifetime
+        },
+        messages: {
+            interval: sweepInterval,
+            lifetime: messageLifetime
+        }
+    },
     makeCache: Options.cacheWithLimits({
-        ...Options.DefaultMakeCacheSettings,
+        MessageManager: managerCacheMaxSize,
         UserManager: {
             maxSize: managerCacheMaxSize,
             keepOverLimit: user => user.id === process.env.DISCORD_CLIENTID
