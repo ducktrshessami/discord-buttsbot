@@ -1,5 +1,6 @@
 import {
     CreationOptional,
+    ForeignKey,
     InferAttributes,
     InferCreationAttributes,
     Model,
@@ -11,6 +12,12 @@ export class Guild extends Model<InferAttributes<Guild>, InferCreationAttributes
     word: CreationOptional<string>;
     frequency: CreationOptional<number>;
     rate: CreationOptional<number>;
+}
+
+export class IgnoreChannel extends Model<InferAttributes<IgnoreChannel>, InferCreationAttributes<IgnoreChannel>> {
+    id: string;
+
+    GuildId: ForeignKey<Guild["id"]>;
 }
 
 export const sequelize: Sequelize;
