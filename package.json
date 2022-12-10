@@ -3,6 +3,11 @@
   "version": "3.2.1",
   "description": "I'm Buttbot! I say butt!",
   "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "deploy": "node discord/deploy-commands.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ducktrshessami/discord-buttsbot.git"
@@ -14,11 +19,11 @@
   },
   "homepage": "https://github.com/ducktrshessami/discord-buttsbot#readme",
   "dependencies": {
-    "discord.js": "^14.7.0",
-    "sequelize": "^6.25.8",
+    "discord.js": "^14.7.1",
+    "sequelize": "^6.26.0",
     "sqlite3": "^5.1.2",
     "syllablize": "ducktrshessami/syllablize",
-    "undici": "^5.13.0"
+    "undici": "^5.14.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.7",
@@ -28,13 +33,5 @@
   },
   "devDependencies": {
     "dotenv": "^16.0.3"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "deploy": "node discord/deploy-commands.js"
-  },
-  "engines": {
-    "node": ">=16.9.0"
   }
 }
