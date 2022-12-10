@@ -7,7 +7,13 @@ const postServerCount = require("./utils/postServerCount");
 const logMessage = require("./utils/logMessage");
 const buttify = require("./utils/buttify");
 const presenceConfig = require("../config/presence.json");
-const { responseCooldown, managerCacheMaxSize } = require("../config/discord.json");
+const {
+    managerCacheMaxSize,
+    messageLifetime,
+    responseCooldown,
+    sweepInterval,
+    threadLifetime
+} = require("../config/discord.json");
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
@@ -18,12 +24,12 @@ const client = new Client({
     presence: getPresence(),
     sweepers: {
         threads: {
-            interval: 3600,
-            lifetime: 3600
+            interval: sweepInterval,
+            lifetime: threadLifetime
         },
         messages: {
-            interval: 3600,
-            lifetime: 3600
+            interval: sweepInterval,
+            lifetime: messageLifetime
         }
     },
     makeCache: Options.cacheWithLimits({
