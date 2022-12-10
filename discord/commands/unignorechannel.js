@@ -1,4 +1,8 @@
-const { PermissionFlagsBits, SlashCommandBuilder, ChannelType } = require("discord.js");
+const {
+    PermissionFlagsBits,
+    SlashCommandBuilder,
+    ChannelType
+} = require("discord.js");
 const db = require("../../models");
 const { smile } = require("../responseEmojiManager");
 const logMessage = require("../utils/logMessage");
