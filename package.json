@@ -3,6 +3,11 @@
   "version": "3.2.1",
   "description": "I'm Buttbot! I say butt!",
   "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "deploy": "node discord/deploy-commands.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ducktrshessami/discord-buttsbot.git"
@@ -28,13 +33,5 @@
   },
   "devDependencies": {
     "dotenv": "^16.0.3"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "deploy": "node discord/deploy-commands.js"
-  },
-  "engines": {
-    "node": ">=16.9.0"
   }
 }
