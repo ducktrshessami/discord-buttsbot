@@ -4,6 +4,7 @@ import {
     InferAttributes,
     InferCreationAttributes,
     Model,
+    NonAttribute,
     Sequelize
 } from "sequelize";
 
@@ -12,12 +13,15 @@ export class Guild extends Model<InferAttributes<Guild>, InferCreationAttributes
     word: CreationOptional<string>;
     frequency: CreationOptional<number>;
     rate: CreationOptional<number>;
+
+    IgnoreChannels?: NonAttribute<Array<IgnoreChannel>>;
 }
 
 export class IgnoreChannel extends Model<InferAttributes<IgnoreChannel>, InferCreationAttributes<IgnoreChannel>> {
     id: string;
 
     GuildId: ForeignKey<Guild["id"]>;
+    Guild?: NonAttribute<Guild>;
 }
 
 export class IgnoreUser extends Model<InferAttributes<IgnoreUser>, InferCreationAttributes<IgnoreUser>> {
