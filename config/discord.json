@@ -2,5 +2,8 @@
     "permissionValue": 265216,
     "embedColor": 4505287,
     "responseCooldown": 30000,
+    "sweepInterval": 3600,
+    "threadLifetime": 3600,
+    "messageLifetime": 3600,
     "managerCacheMaxSize": 100
 }
