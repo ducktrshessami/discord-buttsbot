@@ -24,5 +24,13 @@ export class IgnoreUser extends Model<InferAttributes<IgnoreUser>, InferCreation
     id: string;
 }
 
+export class ResponseCooldown extends Model<InferAttributes<ResponseCooldown>, InferCreationAttributes<ResponseCooldown>> {
+    channelId: string;
+    smile: CreationOptional<Date>;
+    frown: CreationOptional<Date>;
+    wink: CreationOptional<Date>;
+    weird: CreationOptional<Date>;
+}
+
 export const sequelize: Sequelize;
 export { Sequelize } from "sequelize";
