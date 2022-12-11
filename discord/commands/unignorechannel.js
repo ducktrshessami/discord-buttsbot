@@ -32,9 +32,10 @@ module.exports = {
         let reply;
         await interaction.deferReply();
         const targetChannel = interaction.options.getChannel("channel") ?? interaction.channel;
-        const ignoreModel = await db.IgnoreChannel.findByPk(targetChannel.id);
-        if (ignoreModel) {
-            await ignoreModel.destroy();
+        const deleted = await db.IgnoreChannel.destroy({
+            where: { id: targetChannel.id }
+        });
+        if (deleted) {
             reply = `Okay ${smile(interaction)}`;
         }
         else {
