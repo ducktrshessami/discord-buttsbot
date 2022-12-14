@@ -23,13 +23,15 @@ module.exports = {
         let reply;
         const newValue = interaction.options.getInteger("value");
         await interaction.deferReply();
-        const guildModel = await db.Guild.findByPk(interaction.guildId);
         if (newValue) {
-            const { frequency } = await guildModel.update({ frequency: newValue });
-            reply = `Buttify frequency changed to one in every \`${frequency}\` messages!`;
+            await db.Guild.update({ frequency: newValue }, {
+                where: { id: interaction.guildId }
+            });
+            reply = `Buttify frequency changed to one in every \`${newValue}\` messages!`;
         }
         else {
-            reply = `I buttify roughly one in every \`${guildModel.frequency}\` messages!`;
+            const { frequency } = await db.Guild.findByPk(interaction.guildId);
+            reply = `I buttify roughly one in every \`${frequency}\` messages!`;
         }
         logMessage(await interaction.editReply(reply));
     }
