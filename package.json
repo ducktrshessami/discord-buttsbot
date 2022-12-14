@@ -1,6 +1,6 @@
 {
   "name": "discord-buttsbot",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "I'm Buttbot! I say butt!",
   "main": "index.js",
   "scripts": {
