@@ -10,9 +10,10 @@ module.exports = {
     callback: async function (interaction) {
         let reply;
         await interaction.deferReply();
-        const ignoredUser = await db.IgnoreUser.findByPk(interaction.user.id);
-        if (ignoredUser) {
-            await ignoredUser.destroy();
+        const deleted = await db.IgnoreUser.destroy({
+            where: { id: interaction.user.id }
+        });
+        if (deleted) {
             reply = `Okay ${smile(interaction)}`;
         }
         else {
