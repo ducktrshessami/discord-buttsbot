@@ -23,7 +23,7 @@
     "sequelize": "^6.28.0",
     "sqlite3": "^5.1.4",
     "syllablize": "ducktrshessami/syllablize",
-    "undici": "^5.18.0"
+    "undici": "^5.19.1"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.7",
