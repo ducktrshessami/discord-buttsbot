@@ -19,16 +19,16 @@
   },
   "homepage": "https://github.com/ducktrshessami/discord-buttsbot#readme",
   "dependencies": {
-    "discord.js": "^14.7.1",
-    "sequelize": "^6.28.0",
-    "sqlite3": "^5.1.4",
+    "discord.js": "^14.8.0",
+    "sequelize": "^6.29.3",
+    "sqlite3": "^5.1.5",
     "syllablize": "ducktrshessami/syllablize",
-    "undici": "^5.19.1"
+    "undici": "^5.21.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.7",
     "erlpack": "discord/erlpack",
-    "utf-8-validate": "^6.0.2",
+    "utf-8-validate": "^6.0.3",
     "zlib-sync": "^0.1.8"
   },
   "devDependencies": {
