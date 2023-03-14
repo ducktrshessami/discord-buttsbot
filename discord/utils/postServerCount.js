@@ -4,8 +4,12 @@ const { STATUS_CODES } = require("http");
 async function postServerCount(client) {
     if (process.env.TOP_TOKEN && client.isReady()) {
         // console.log("[discord] Polling server count");
-        // const results = await client.shard.fetchClientValues("guilds.cache.size");
-        // const guildCount = results.reduce((total, count) => total + count, 0);
+        // const results = await client.shard.broadcastEval(client => client.isReady() ? client.guilds.cache.size : null);
+        // const guildCount = results.reduce((total, count) => (total === null || count === null) ? null : (total + count), 0);
+        // if (guildCount === null) {
+        //     console.log("[discord] Not all shards are ready. Not posting server count to Top.gg");
+        // }
+        // else {
         const guildCount = client.guilds.cache.size;
         console.log("[discord] Posting server count to Top.gg");
         const res = await request(`https://top.gg/api/bots/${client.user.id}/stats`, {
@@ -19,6 +23,7 @@ async function postServerCount(client) {
         if (res.statusCode < 200 || res.statusCode >= 300) {
             throw new Error(`${res.statusCode} ${STATUS_CODES[res.statusCode]}`);
         }
+        // }
     }
 }
 
