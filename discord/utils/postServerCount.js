@@ -2,7 +2,7 @@ const { request } = require("undici");
 const { STATUS_CODES } = require("http");
 
 async function postServerCount(client) {
-    if (process.env.TOP_TOKEN) {
+    if (process.env.TOP_TOKEN && client.isReady()) {
         // console.log("[discord] Polling server count");
         // const results = await client.shard.fetchClientValues("guilds.cache.size");
         // const guildCount = results.reduce((total, count) => total + count, 0);
