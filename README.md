@@ -18,7 +18,7 @@ Avatar and presence activities by Entrop
 
 ### Powered by:
 
-- [Oracle Cloud Infrastructure](https://www.oracle.com/cloud/)
+- [Google Cloud](https://cloud.google.com/)
 - [discord.js](https://discord.js.org/#/)
 - [SQLite](https://www.sqlite.org/)
 - [Sequelize](https://sequelize.org/)
