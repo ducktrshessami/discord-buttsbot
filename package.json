@@ -20,9 +20,9 @@
   "homepage": "https://github.com/ducktrshessami/discord-buttsbot#readme",
   "dependencies": {
     "discord.js": "^14.8.0",
+    "fast-syllablize": "ducktrshessami/fast-syllablize#v2.0.0",
     "sequelize": "^6.29.3",
     "sqlite3": "^5.1.5",
-    "syllablize": "ducktrshessami/syllablize",
     "undici": "^5.21.0"
   },
   "optionalDependencies": {
