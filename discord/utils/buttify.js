@@ -1,4 +1,4 @@
-const syllablize = require("syllablize");
+const { default: syllablize } = require("fast-syllablize");
 
 // Main
 function buttify(original, buttWord, rate) {
