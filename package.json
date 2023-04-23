@@ -28,6 +28,8 @@
     "zlib-sync": "^0.1.8"
   },
   "devDependencies": {
-    "dotenv": "^16.0.3"
+    "@types/node": "^18.16.0",
+    "dotenv": "^16.0.3",
+    "typescript": "^5.0.4"
   }
 }
