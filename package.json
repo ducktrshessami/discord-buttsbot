@@ -8,7 +8,7 @@
   "author": "ducktrshessami",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist/ && tsc",
     "minify": "node minify.js",
     "minbuild": "yarn build && yarn minify",
     "deploy": "node dist/discord/deploy.js",
