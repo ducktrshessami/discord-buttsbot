@@ -8,6 +8,7 @@ import {
     Sequelize
 } from "sequelize";
 import config from "../config.js";
+import IgnoreChannel from "./IgnoreChannel.js";
 
 export default class Guild extends Model<InferAttributes<Guild>, InferCreationAttributes<Model>> {
     declare id: string;
