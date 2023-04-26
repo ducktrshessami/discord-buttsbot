@@ -54,9 +54,7 @@ const client = new Client({
         try {
             client.off(Events.Debug, console.debug);
             console.log(`[discord] Logged in as ${client.user.tag}`);
-            if (activities.length) {
-                setInterval(() => client.user.setPresence(getPresence()!), PRESENCE_INTERVAL);
-            }
+            setInterval(() => client.user.setPresence(getPresence()), PRESENCE_INTERVAL);
         }
         catch (err) {
             console.error(err);
@@ -67,10 +65,8 @@ export async function login(): Promise<void> {
     await client.login();
 }
 
-function getPresence(): PresenceData | undefined {
-    if (activities.length) {
-        return { activities: [activities[Math.floor(Math.random() * activities.length)]] };
-    }
+function getPresence(): PresenceData {
+    return { activities: [activities[Math.floor(Math.random() * activities.length)]] };
 }
 
 function keepClientUser(userOrMember: User | GuildMember): boolean {
