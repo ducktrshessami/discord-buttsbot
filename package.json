@@ -30,6 +30,7 @@
   "devDependencies": {
     "@types/node": "^18.16.0",
     "dotenv": "^16.0.3",
+    "minify": "^9.2.0",
     "typescript": "^5.0.4"
   }
 }
