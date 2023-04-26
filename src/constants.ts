@@ -10,3 +10,8 @@ export const DISCORD_SWEEPER_INTERVAL = process.env.DISCORD_SWEEPER_INTERVAL ? p
 export const DISCORD_THREAD_LIFETIME = process.env.DISCORD_THREAD_LIFETIME ? parseInt(process.env.DISCORD_THREAD_LIFETIME) : 3600;
 export const DISCORD_MESSAGE_LIFETIME = process.env.DISCORD_MESSAGE_LIFETIME ? parseInt(process.env.DISCORD_MESSAGE_LIFETIME) : 3600;
 export const DISCORD_LIMITED_CACHE_MAX = process.env.DISCORD_LIMITED_CACHE_MAX ? parseInt(process.env.DISCORD_LIMITED_CACHE_MAX) : 100;
+export const DISCORD_RESPONSE_COOLDOWN = envInt("DISCORD_RESPONSE_COOLDOWN", 30000);
+
+function envInt(env: string, defaultValue: number): number {
+    return process.env[env] ? parseInt(process.env[env]!) : defaultValue;
+}
