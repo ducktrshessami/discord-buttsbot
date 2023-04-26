@@ -1,8 +1,8 @@
 import {
     CategoryChannel,
+    Channel,
     ChannelType,
     ForumChannel,
-    GuildBasedChannel,
     GuildTextBasedChannel
 } from "discord.js";
 import {
@@ -24,10 +24,12 @@ export const IgnorableChannelTypes: Array<IgnorableChannel["type"]> = [
     ChannelType.GuildForum
 ];
 
-export function isIgnorable(channel: GuildBasedChannel): channel is IgnorableChannel {
-    return channel.isTextBased() ||
+export function isIgnorable(channel: Channel): channel is IgnorableChannel {
+    return !channel.isDMBased() && (
+        channel.isTextBased() ||
         channel.type === ChannelType.GuildCategory ||
-        channel.type === ChannelType.GuildForum;
+        channel.type === ChannelType.GuildForum
+    );
 }
 
 async function initializeGuild(guildId: string, transaction: Transaction): Promise<void> {
@@ -89,6 +91,17 @@ export async function unignoreAllChannels(guildId: string): Promise<void> {
     await Guild.destroy({
         where: { id: guildId }
     });
+}
+
+export async function channelIgnored(channel: Channel): Promise<boolean> {
+    if (!isIgnorable(channel)) {
+        return false;
+    }
+    let ignored = !!await IgnoreChannel.findByPk(channel.id);
+    if (channel.parent) {
+        ignored ||= await channelIgnored(channel.parent);
+    }
+    return ignored;
 }
 
 export type IgnorableChannel = GuildTextBasedChannel | CategoryChannel | ForumChannel;
