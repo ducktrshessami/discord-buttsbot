@@ -24,6 +24,7 @@ const client = new Client({
         GatewayIntentBits.MessageContent,
     partials: [Partials.Channel],
     presence: getPresence(),
+    allowedMentions: { parse: [] },
     sweepers: {
         threads: {
             interval: DISCORD_SWEEPER_INTERVAL,
