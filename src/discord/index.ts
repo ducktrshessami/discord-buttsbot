@@ -5,6 +5,7 @@ import {
     GuildMember,
     Options,
     Partials,
+    PermissionFlagsBits,
     PresenceData,
     User
 } from "discord.js";
@@ -25,6 +26,8 @@ import {
 } from "../models/index.js";
 import { Op } from "sequelize";
 import commands from "./commands/index.js";
+import { channelIgnored } from "./ignore.js";
+import responses from "./responses/index.js";
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
@@ -91,6 +94,37 @@ const client = new Client({
                 ) {
                     console.log(`[discord] ${interaction.user.id} used ${interaction}`);
                     await command.callback(interaction);
+                }
+            }
+        }
+        catch (err) {
+            console.error(err);
+        }
+    })
+    .on(Events.MessageCreate, async message => {
+        try {
+            if (
+                message.author.id !== message.client.user.id && (
+                    !message.inGuild() || (
+                        message.channel.viewable &&
+                        message.channel
+                            .permissionsFor(message.client.user.id)
+                            ?.has(PermissionFlagsBits.SendMessages)
+                    )
+                ) &&
+                !await channelIgnored(message.channel)
+            ) {
+                if (
+                    message.mentions.users.has(message.client.user.id) ||
+                    message.content
+                        .toLowerCase()
+                        .includes(message.client.user.username.toLowerCase())
+                ) {
+                    const response = responses.find(r => r.pattern.test(message.content));
+                    if (response) {
+                        await response.send(message);
+                        return;
+                    }
                 }
             }
         }
