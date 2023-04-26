@@ -2,11 +2,20 @@ import {
     Client,
     Events,
     GatewayIntentBits,
+    GuildMember,
+    Options,
     Partials,
-    PresenceData
+    PresenceData,
+    User
 } from "discord.js";
 import activities from "./activities.js";
-import { PRESENCE_INTERVAL } from "../constants.js";
+import {
+    DISCORD_LIMITED_CACHE_MAX,
+    DISCORD_MESSAGE_LIFETIME,
+    DISCORD_SWEEPER_INTERVAL,
+    DISCORD_THREAD_LIFETIME,
+    PRESENCE_INTERVAL
+} from "../constants.js";
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
@@ -14,7 +23,28 @@ const client = new Client({
         GatewayIntentBits.DirectMessages |
         GatewayIntentBits.MessageContent,
     partials: [Partials.Channel],
-    presence: getPresence()
+    presence: getPresence(),
+    sweepers: {
+        threads: {
+            interval: DISCORD_SWEEPER_INTERVAL,
+            lifetime: DISCORD_THREAD_LIFETIME
+        },
+        messages: {
+            interval: DISCORD_SWEEPER_INTERVAL,
+            lifetime: DISCORD_MESSAGE_LIFETIME
+        }
+    },
+    makeCache: Options.cacheWithLimits({
+        MessageManager: DISCORD_LIMITED_CACHE_MAX,
+        UserManager: {
+            maxSize: DISCORD_LIMITED_CACHE_MAX,
+            keepOverLimit: keepClientUser
+        },
+        GuildMemberManager: {
+            maxSize: DISCORD_LIMITED_CACHE_MAX,
+            keepOverLimit: keepClientUser
+        }
+    })
 })
     .on(Events.Debug, console.debug)
     .on(Events.Warn, console.warn)
@@ -40,4 +70,8 @@ function getPresence(): PresenceData | undefined {
     if (activities.length) {
         return { activities: [activities[Math.floor(Math.random() * activities.length)]] };
     }
+}
+
+function keepClientUser(userOrMember: User | GuildMember): boolean {
+    return userOrMember.id === process.env.DISCORD_CLIENT_ID;
 }
