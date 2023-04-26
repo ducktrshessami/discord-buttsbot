@@ -16,6 +16,7 @@ import {
     DISCORD_THREAD_LIFETIME,
     PRESENCE_INTERVAL
 } from "../constants.js";
+import { postServerCount } from "./topgg.js";
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
@@ -55,11 +56,20 @@ const client = new Client({
             client.off(Events.Debug, console.debug);
             console.log(`[discord] Logged in as ${client.user.tag}`);
             setInterval(() => client.user.setPresence(getPresence()), PRESENCE_INTERVAL);
+            await postServerCount(client);
         }
         catch (err) {
             console.error(err);
         }
-    });
+    })
+    .on(Events.GuildCreate, guild =>
+        postServerCount(guild.client)
+            .catch(console.error)
+    )
+    .on(Events.GuildDelete, guild =>
+        postServerCount(guild.client)
+            .catch(console.error)
+    );
 
 export async function login(): Promise<void> {
     await client.login();
