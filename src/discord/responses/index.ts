@@ -7,8 +7,8 @@ import { DISCORD_RESPONSE_COOLDOWN } from "../../constants.js";
 import * as ResponseEmojiManager from "../emoji.js";
 
 class EmojiResponse implements RawEmojiResponse {
-    readonly emoji: ResponseEmoji;
-    readonly keywords: Array<string>;
+    emoji: ResponseEmoji;
+    keywords: Array<string>;
 
     constructor(raw: RawEmojiResponse) {
         this.emoji = raw.emoji;
