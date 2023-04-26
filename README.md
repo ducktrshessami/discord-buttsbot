@@ -16,13 +16,6 @@ Emotes used in responses by this deployment are copies of [Twitch](https://www.t
 
 Avatar and presence activities by Entrop
 
-### Powered by:
-
-- [Google Cloud](https://cloud.google.com/)
-- [discord.js](https://discord.js.org/#/)
-- [SQLite](https://www.sqlite.org/)
-- [Sequelize](https://sequelize.org/)
-
 ## Invite to Your Server
 
 ### [Invite buttsbot](https://discord.com/api/oauth2/authorize?client_id=780539847764082768&permissions=265216&scope=bot%20applications.commands)
