@@ -10,14 +10,22 @@ const responses = await Promise.all(
             (file !== indexBasename) &&
             (file.slice(-3) === ".js")
         )
-        .map((file): Promise<EmojiResponse> => {
+        .map(async (file): Promise<EmojiResponse> => {
             const url = new URL(file, import.meta.url);
-            return <Promise<EmojiResponse>>import(url.toString());
+            const response: RawEmojiResponse = await import(url.toString());
+            return {
+                ...response,
+                pattern: new RegExp(`\\b(?:${response.keywords.join("|")})\\b`, "i")
+            };
         })
 );
 export default responses;
 
-interface EmojiResponse {
+interface RawEmojiResponse {
     emoji: string;
     keywords: Array<string>;
+}
+
+interface EmojiResponse extends RawEmojiResponse {
+    pattern: RegExp;
 }
