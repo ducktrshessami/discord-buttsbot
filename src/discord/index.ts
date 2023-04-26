@@ -24,6 +24,7 @@ import {
     sequelize
 } from "../models/index.js";
 import { Op } from "sequelize";
+import commands from "./commands/index.js";
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
@@ -77,7 +78,26 @@ const client = new Client({
     .on(Events.GuildDelete, guild =>
         postServerCount(guild.client)
             .catch(console.error)
-    );
+    )
+    .on(Events.InteractionCreate, async interaction => {
+        try {
+            if (interaction.isChatInputCommand()) {
+                const command = commands.get(interaction.commandName);
+                if (
+                    command && (
+                        command.data.dm_permission !== false ||
+                        interaction.inCachedGuild()
+                    )
+                ) {
+                    console.log(`[discord] ${interaction.user.id} used ${interaction}`);
+                    await command.callback(interaction);
+                }
+            }
+        }
+        catch (err) {
+            console.error(err);
+        }
+    });
 
 export async function login(): Promise<void> {
     await client.login();
