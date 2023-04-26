@@ -13,6 +13,7 @@ export default class ResponseCooldown extends Model<InferAttributes<ResponseCool
     declare frown: CreationOptional<Date>;
     declare wink: CreationOptional<Date>;
     declare weird: CreationOptional<Date>;
+    declare updatedAt: CreationOptional<Date>;
 
     static initialize(sequelize: Sequelize): void {
         this.init({
@@ -23,7 +24,8 @@ export default class ResponseCooldown extends Model<InferAttributes<ResponseCool
             smile: DataTypes.DATE,
             frown: DataTypes.DATE,
             wink: DataTypes.DATE,
-            weird: DataTypes.DATE
+            weird: DataTypes.DATE,
+            updatedAt: DataTypes.DATE
         }, {
             sequelize,
             modelName: "ResponseCooldown"
