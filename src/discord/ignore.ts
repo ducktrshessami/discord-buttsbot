@@ -5,12 +5,8 @@ import {
     ForumChannel,
     GuildTextBasedChannel
 } from "discord.js";
-import {
-    Guild,
-    IgnoreChannel,
-    sequelize
-} from "../models/index.js";
-import { Transaction } from "sequelize";
+import { IgnoreChannel, sequelize } from "../models/index.js";
+import { initializeGuild } from "./guild.js";
 
 export const IgnorableChannelTypes: Array<IgnorableChannel["type"]> = [
     ChannelType.GuildText,
@@ -32,16 +28,13 @@ export function isIgnorable(channel: Channel): channel is IgnorableChannel {
     );
 }
 
-async function initializeGuild(guildId: string, transaction: Transaction): Promise<void> {
-    await Guild.findOrCreate({
-        transaction,
-        where: { id: guildId }
-    });
-}
-
 export async function ignoreChannel(guildId: string, channelId: string): Promise<boolean> {
     return await sequelize.transaction(async transaction => {
-        await initializeGuild(guildId, transaction);
+        await initializeGuild(
+            guildId,
+            void 0,
+            transaction
+        );
         const [_, created] = await IgnoreChannel.findOrCreate({
             transaction,
             where: { id: channelId },
@@ -56,7 +49,11 @@ export async function ignoreChannel(guildId: string, channelId: string): Promise
 
 export async function ignoreChannels(guildId: string, channelIds: Array<string>): Promise<void> {
     await sequelize.transaction(async transaction => {
-        await initializeGuild(guildId, transaction);
+        await initializeGuild(
+            guildId,
+            void 0,
+            transaction
+        );
         await IgnoreChannel.bulkCreate(channelIds.map(channelId => ({
             id: channelId,
             GuildId: guildId
@@ -67,29 +64,15 @@ export async function ignoreChannels(guildId: string, channelIds: Array<string>)
     });
 }
 
-export async function unignoreChannel(guildId: string, channelId: string): Promise<boolean> {
-    return await sequelize.transaction(async transaction => {
-        const unignored = !!await IgnoreChannel.destroy({
-            transaction,
-            where: { id: channelId }
-        });
-        const noIgnores = !await IgnoreChannel.count({
-            transaction,
-            where: { GuildId: guildId }
-        });
-        if (noIgnores) {
-            await Guild.destroy({
-                transaction,
-                where: { id: guildId }
-            });
-        }
-        return unignored;
+export async function unignoreChannel(channelId: string): Promise<boolean> {
+    return !!await IgnoreChannel.destroy({
+        where: { id: channelId }
     });
 }
 
 export async function unignoreAllChannels(guildId: string): Promise<void> {
-    await Guild.destroy({
-        where: { id: guildId }
+    await IgnoreChannel.destroy({
+        where: { GuildId: guildId }
     });
 }
 
