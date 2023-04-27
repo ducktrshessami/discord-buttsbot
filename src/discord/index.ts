@@ -29,6 +29,7 @@ import commands from "./commands/index.js";
 import { channelIgnored } from "./ignore.js";
 import responses from "./responses/index.js";
 import { buttifiable, buttify, verifyButtified } from "./buttify.js";
+import { deleteGuild } from "./guild.js";
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
@@ -79,10 +80,17 @@ const client = new Client({
         postServerCount(guild.client)
             .catch(console.error)
     )
-    .on(Events.GuildDelete, guild =>
-        postServerCount(guild.client)
-            .catch(console.error)
-    )
+    .on(Events.GuildDelete, async guild => {
+        try {
+            if (guild.client.isReady()) {
+                await deleteGuild(guild.id);
+                await postServerCount(guild.client);
+            }
+        }
+        catch (err) {
+            console.error(err);
+        }
+    })
     .on(Events.InteractionCreate, async interaction => {
         try {
             if (interaction.isChatInputCommand()) {

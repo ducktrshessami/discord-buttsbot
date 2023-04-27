@@ -12,3 +12,9 @@ export async function initializeGuild(
         defaults: values
     });
 }
+
+export async function deleteGuild(guildId: string): Promise<void> {
+    await Guild.destroy({
+        where: { id: guildId }
+    });
+}
