@@ -76,10 +76,16 @@ const client = new Client({
             console.error(err);
         }
     })
-    .on(Events.GuildCreate, guild =>
-        postServerCount(guild.client)
-            .catch(console.error)
-    )
+    .on(Events.GuildCreate, async guild => {
+        try {
+            if (guild.client.isReady()) {
+                await postServerCount(guild.client);
+            }
+        }
+        catch (err) {
+            console.error(err);
+        }
+    })
     .on(Events.GuildDelete, async guild => {
         try {
             if (guild.client.isReady()) {
