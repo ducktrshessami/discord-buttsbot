@@ -30,11 +30,7 @@ export function isIgnorable(channel: Channel): channel is IgnorableChannel {
 
 export async function ignoreChannel(guildId: string, channelId: string): Promise<boolean> {
     return await sequelize.transaction(async transaction => {
-        await initializeGuild(
-            guildId,
-            void 0,
-            transaction
-        );
+        await initializeGuild(guildId, transaction);
         const [_, created] = await IgnoreChannel.findOrCreate({
             transaction,
             where: { id: channelId },
@@ -49,11 +45,7 @@ export async function ignoreChannel(guildId: string, channelId: string): Promise
 
 export async function ignoreChannels(guildId: string, channelIds: Array<string>): Promise<void> {
     await sequelize.transaction(async transaction => {
-        await initializeGuild(
-            guildId,
-            void 0,
-            transaction
-        );
+        await initializeGuild(guildId, transaction);
         await IgnoreChannel.bulkCreate(channelIds.map(channelId => ({
             id: channelId,
             GuildId: guildId
