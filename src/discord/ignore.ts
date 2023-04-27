@@ -5,7 +5,11 @@ import {
     ForumChannel,
     GuildTextBasedChannel
 } from "discord.js";
-import { IgnoreChannel, sequelize } from "../models/index.js";
+import {
+    IgnoreChannel,
+    IgnoreUser,
+    sequelize
+} from "../models/index.js";
 import { initializeGuild } from "./guild.js";
 
 export const IgnorableChannelTypes: Array<IgnorableChannel["type"]> = [
@@ -77,6 +81,19 @@ export async function channelIgnored(channel: Channel): Promise<boolean> {
         ignored ||= await channelIgnored(channel.parent);
     }
     return ignored;
+}
+
+export async function ignoreUser(userId: string): Promise<boolean> {
+    const [_, created] = await IgnoreUser.findOrCreate({
+        where: { id: userId }
+    });
+    return created;
+}
+
+export async function unignoreUser(userId: string): Promise<boolean> {
+    return !!await IgnoreUser.destroy({
+        where: { id: userId }
+    });
 }
 
 export type IgnorableChannel = GuildTextBasedChannel | CategoryChannel | ForumChannel;
