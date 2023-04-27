@@ -22,7 +22,7 @@ export const data = new SlashCommandBuilder()
             .setDescription(`A new word to buttify with! No spaces, please! The default is ${config.default.word}!`);
     });
 
-export async function callback(interaction: ChatInputCommandInteraction<"cached">) {
+export async function callback(interaction: ChatInputCommandInteraction<"cached">): Promise<void> {
     await interaction.deferReply();
     const newValue = interaction.options
         .getString("value")
