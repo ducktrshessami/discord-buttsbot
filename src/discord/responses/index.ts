@@ -6,17 +6,13 @@ import { ResponseCooldown } from "../../models/index.js";
 import { DISCORD_RESPONSE_COOLDOWN } from "../../constants.js";
 import * as ResponseEmojiManager from "../emoji.js";
 
-class EmojiResponse implements RawEmojiResponse {
-    emoji: ResponseEmoji;
-    keywords: Array<string>;
+class EmojiResponse {
+    readonly emoji: ResponseEmoji;
+    readonly pattern: RegExp;
 
     constructor(raw: RawEmojiResponse) {
         this.emoji = raw.emoji;
-        this.keywords = raw.keywords;
-    }
-
-    get pattern(): RegExp {
-        return new RegExp(`\\b(?:${this.keywords.join("|")})\\b`, "i");
+        this.pattern = new RegExp(`\\b(?:${raw.keywords.join("|")})\\b`, "i");
     }
 
     async send(message: Message): Promise<void> {
