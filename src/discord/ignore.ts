@@ -12,7 +12,7 @@ import {
 } from "../models/index.js";
 import { initializeGuild } from "./guild.js";
 
-export const IgnorableChannelTypes: Array<IgnorableChannel["type"]> = [
+export const IgnorableChannelTypes: Array<IgnorableChannelType> = [
     ChannelType.GuildText,
     ChannelType.GuildVoice,
     ChannelType.GuildCategory,
@@ -97,3 +97,4 @@ export async function unignoreUser(userId: string): Promise<boolean> {
 }
 
 export type IgnorableChannel = GuildTextBasedChannel | CategoryChannel | ForumChannel;
+export type IgnorableChannelType = IgnorableChannel["type"];
