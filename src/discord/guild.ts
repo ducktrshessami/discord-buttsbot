@@ -1,4 +1,4 @@
-import { Transaction } from "sequelize";
+import { CreationAttributes, Transaction } from "sequelize";
 import { Guild } from "../models/index.js";
 
 export async function initializeGuild(guildId: string, transaction?: Transaction): Promise<void> {
@@ -8,7 +8,7 @@ export async function initializeGuild(guildId: string, transaction?: Transaction
     });
 }
 
-export async function updateGuild(guildId: string, values: Omit<Parameters<typeof Guild.create<Guild>>[0], "id">): Promise<void> {
+export async function updateGuild(guildId: string, values: Omit<CreationAttributes<Guild>, "id">): Promise<void> {
     await Guild.bulkCreate([{
         ...values,
         id: guildId
