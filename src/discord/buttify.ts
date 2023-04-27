@@ -1,12 +1,15 @@
+import { Message } from "discord.js";
 import { syllablize } from "fast-syllablize";
+import { IgnoreUser } from "../models/index.js";
+import config from "../config.js";
 
-const NonWordPattern = /(https?:\/\/(?:www\.)?[-A-Z0-9@:%._\+~#=]{1,256}(?:\.[A-Z0-9()]{1,6})?\b(?:[-A-Z0-9()@:%_\+.~#?&\/=]*)|<?(?:a?:?\w{2,32}:|#|@[!&]?)\d{17,19}>?|[^A-Z]+)/i;
+const NonWordPattern = /(https?:\/\/(?:www\.)?[-A-Z0-9@:%._\+~#=]{1,256}(?:\.[A-Z0-9()]{1,6})?\b(?:[-A-Z0-9()@:%_\+.~#?&\/=]*)|<?(?:a?:?\w{2,32}:|#|@[!&]?)\d{17,19}>?|[^A-Z]+)/ig;
 const WordPattern = /^[A-Z]+$/i;
 const CapsPattern = /^[A-Z]$/;
 const AllCapsPattern = /^[A-Z]{2,}$/;
 const PluralPattern = /[SZ]$/i;
 
-export function chance(n: number): boolean {
+function chance(n: number): boolean {
     return Math.random() < (1 / n);
 }
 
@@ -42,8 +45,8 @@ function buttifyWord(
 
 export function buttify(
     content: string,
-    word: string,
-    rate: number
+    word: string = config.default.word,
+    rate: number = config.default.rate
 ): string {
     return content
         .split(NonWordPattern)
@@ -57,4 +60,24 @@ export function buttify(
                 chars ?? ""
         )
         .join("");
+}
+
+export async function buttifiable(message: Message<true>, frequency: number = config.default.frequency): Promise<boolean> {
+    const userModel = await IgnoreUser.findByPk(message.author.id);
+    return !message.author.bot &&
+        !!message.content &&
+        !userModel &&
+        chance(frequency);
+}
+
+export function verifyButtified(
+    original: string,
+    buttified: string,
+    word: string = config.default.word
+): boolean {
+    if (buttified.length > 2000) {
+        return false;
+    }
+    const buttifiedLower = buttified.toLowerCase();
+    return original.toLowerCase() !== buttifiedLower && buttifiedLower.replaceAll(NonWordPattern, "") === word.toLowerCase();
 }
