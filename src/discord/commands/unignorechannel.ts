@@ -1,5 +1,15 @@
-import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
-import { IgnorableChannelTypes } from "../ignore.js";
+import {
+    ChatInputCommandInteraction,
+    PermissionFlagsBits,
+    SlashCommandBuilder,
+    channelMention
+} from "discord.js";
+import {
+    IgnorableChannelType,
+    IgnorableChannelTypes,
+    unignoreChannel
+} from "../ignore.js";
+import { smile } from "../emoji.js";
 
 export const data = new SlashCommandBuilder()
     .setName("unignorechannel")
@@ -12,3 +22,11 @@ export const data = new SlashCommandBuilder()
             .setDescription("The channel for me to stop ignoring! Defaults to the channel you use this in.")
             .addChannelTypes(...IgnorableChannelTypes)
     );
+
+export async function callback(interaction: ChatInputCommandInteraction<"cached">): Promise<void> {
+    await interaction.deferReply();
+    const channel = interaction.options.getChannel<IgnorableChannelType>("channel");
+    const channelId = channel?.id ?? interaction.channelId;
+    const unignored = await unignoreChannel(channelId);
+    await interaction.editReply(unignored ? `Okay ${smile(interaction)}` : `I'm not ignoring ${channelId === interaction.channelId ? "this channel" : channelMention(channelId)}!`);
+}
