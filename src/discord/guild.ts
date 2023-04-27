@@ -8,6 +8,10 @@ export async function initializeGuild(guildId: string, transaction?: Transaction
     });
 }
 
+export async function getGuild(guildId: string): Promise<Guild | null> {
+    return await Guild.findByPk(guildId);
+}
+
 export async function updateGuild(guildId: string, values: Omit<CreationAttributes<Guild>, "id">): Promise<void> {
     await Guild.bulkCreate([{
         ...values,

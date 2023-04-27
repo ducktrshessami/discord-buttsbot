@@ -28,8 +28,12 @@ import { Op } from "sequelize";
 import commands from "./commands/index.js";
 import { channelIgnored } from "./ignore.js";
 import responses from "./responses/index.js";
-import { buttifiable, buttify, verifyButtified } from "./buttify.js";
-import { deleteGuild } from "./guild.js";
+import {
+    buttifiable,
+    buttify,
+    verifyButtified
+} from "./buttify.js";
+import { deleteGuild, getGuild } from "./guild.js";
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
@@ -144,7 +148,7 @@ const client = new Client({
                 if (!message.inGuild()) {
                     return;
                 }
-                const guildModel = await Guild.findByPk(message.guildId);
+                const guildModel = await getGuild(message.guildId);
                 if (await buttifiable(message, guildModel?.frequency)) {
                     const buttified = buttify(
                         message.content,
