@@ -28,6 +28,7 @@ import { Op } from "sequelize";
 import commands from "./commands/index.js";
 import { channelIgnored } from "./ignore.js";
 import responses from "./responses/index.js";
+import { buttifiable, buttify, verifyButtified } from "./buttify.js";
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
@@ -124,6 +125,26 @@ const client = new Client({
                     if (response) {
                         await response.send(message);
                         return;
+                    }
+                }
+                if (!message.inGuild()) {
+                    return;
+                }
+                const guildModel = await Guild.findByPk(message.guildId);
+                if (await buttifiable(message, guildModel?.frequency)) {
+                    const buttified = buttify(
+                        message.content,
+                        guildModel?.word,
+                        guildModel?.rate
+                    );
+                    if (
+                        verifyButtified(
+                            message.content,
+                            buttified,
+                            guildModel?.word
+                        )
+                    ) {
+                        await message.channel.send(buttified);
                     }
                 }
             }
