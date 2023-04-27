@@ -10,7 +10,7 @@ import {
 import config from "../config.js";
 import IgnoreChannel from "./IgnoreChannel.js";
 
-export default class Guild extends Model<InferAttributes<Guild>, InferCreationAttributes<Model>> {
+export default class Guild extends Model<InferAttributes<Guild>, InferCreationAttributes<Guild>> {
     declare id: string;
     declare word: CreationOptional<string>;
     declare frequency: CreationOptional<number>;
