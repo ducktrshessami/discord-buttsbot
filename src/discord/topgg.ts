@@ -13,8 +13,8 @@ async function pollServerCount(client: Client<true>): Promise<number | null> {
     }
 }
 
-export async function postServerCount(client: Client): Promise<void> {
-    if (process.env.TOP_TOKEN && client.isReady()) {
+export async function postServerCount(client: Client<true>): Promise<void> {
+    if (process.env.TOP_TOKEN) {
         const guildCount = await pollServerCount(client);
         if (guildCount === null) {
             console.log("[discord] Not all shards are ready. Not posting server count to Top.gg");
