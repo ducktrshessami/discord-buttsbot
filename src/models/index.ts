@@ -31,5 +31,6 @@ export {
 };
 
 export async function sync(): Promise<void> {
+    console.log("[db] Syncing models");
     await sequelize.sync({ force: DB_FORCE });
 }

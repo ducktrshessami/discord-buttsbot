@@ -163,6 +163,7 @@ const client = new Client({
     });
 
 export async function login(): Promise<void> {
+    console.log("[discord] Connecting to Discord");
     await client.login();
 }
 
