@@ -5,6 +5,7 @@ import { TOP_ENDPOINT } from "../constants.js";
 
 async function pollServerCount(client: Client<true>): Promise<number | null> {
     if (client.shard) {
+        console.log("[discord] Polling server count from shards");
         const results = await client.shard.broadcastEval(c => c.isReady() ? c.guilds.cache.size : null);
         return results.reduce((total, count) => (total === null || count === null) ? null : (total + count), 0);
     }
@@ -15,6 +16,7 @@ async function pollServerCount(client: Client<true>): Promise<number | null> {
 
 export async function postServerCount(client: Client<true>): Promise<void> {
     if (process.env.TOP_TOKEN) {
+        console.log("[discord] Posting server count to Top.gg");
         const guildCount = await pollServerCount(client);
         if (guildCount === null) {
             console.log("[discord] Not all shards are ready. Not posting server count to Top.gg");
