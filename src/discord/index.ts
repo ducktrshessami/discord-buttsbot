@@ -69,7 +69,6 @@ const client = new Client({
             client.off(Events.Debug, console.debug);
             console.log(`[discord] Logged in as ${client.user.tag}`);
             setInterval(() => client.user.setPresence(getPresence()), PRESENCE_INTERVAL);
-            await pruneDb(client);
             await postServerCount(client);
         }
         catch (err) {
@@ -173,23 +172,4 @@ function getPresence(): PresenceData {
 
 function keepClientUser(userOrMember: User | GuildMember): boolean {
     return userOrMember.id === process.env.DISCORD_CLIENT_ID;
-}
-
-async function pruneDb(client: Client<true>): Promise<void> {
-    await sequelize.transaction(async transaction => {
-        const [guilds] = await Promise.all([
-            Guild.findAll({ transaction }),
-            ResponseCooldown.destroy({
-                transaction,
-                where: {
-                    updatedAt: { [Op.lt]: Date.now() - (DISCORD_RESPONSE_COOLDOWN * 2) }
-                }
-            })
-        ]);
-        await Promise.all(
-            guilds
-                .filter(guild => !client.guilds.cache.has(guild.id))
-                .map(guild => guild.destroy({ transaction }))
-        );
-    });
 }
