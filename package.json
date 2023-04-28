@@ -28,7 +28,7 @@
     "zlib-sync": "^0.1.8"
   },
   "devDependencies": {
-    "@types/node": "^18.16.0",
+    "@types/node": "^18.16.2",
     "dotenv": "^16.0.3",
     "minify": "^9.2.0",
     "typescript": "^5.0.4"
