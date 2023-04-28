@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 import config from "../config.js";
-import { NODE_ENV } from "../constants.js";
+import { DB_FORCE, NODE_ENV } from "../constants.js";
 import Guild from "./Guild.js";
 import IgnoreUser from "./IgnoreUser.js";
 import IgnoreChannel from "./IgnoreChannel.js";
@@ -29,3 +29,7 @@ export {
     IgnoreChannel,
     ResponseCooldown
 };
+
+export async function sync(): Promise<void> {
+    await sequelize.sync({ force: DB_FORCE });
+}
