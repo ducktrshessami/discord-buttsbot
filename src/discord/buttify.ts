@@ -138,7 +138,7 @@ function chance(n: number): boolean {
 }
 
 function attempts(rate: number, syllables: number): number {
-    return Math.ceil(Math.log(1 - ExpectedProbability) / (syllables * Math.log((rate - 1) / rate)));
+    return Math.min(config.limit.attempts, Math.ceil(Math.log(1 - ExpectedProbability) / (syllables * Math.log((rate - 1) / rate))));
 }
 
 export function buttify(
@@ -154,7 +154,7 @@ export function buttify(
     if (buttifiedContent.syllables < 2) {
         return null;
     }
-    const maxAttempts = attempts(rate, buttifiedContent.syllables);
+    const maxAttempts = rate > 1 ? attempts(rate, buttifiedContent.syllables) : 1;
     for (let i = 1; i < maxAttempts && !buttifiedContent.valid; i++) {
         buttifiedContent.buttify();
     }
