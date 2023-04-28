@@ -40,6 +40,10 @@ class ContentItem<Word extends boolean = boolean> {
         return this._buttified;
     }
 
+    get length(): number {
+        return this._current?.length ?? this.chars.length;
+    }
+
     isWord(): this is ContentItem<true> {
         return this.word;
     }
@@ -112,6 +116,14 @@ class ButtifiedContent {
         return this.items.reduce((buttified, item) => buttified + item.buttified, 0);
     }
 
+    get length(): number {
+        return this.items.reduce((length, item) => length + item.length, 0);
+    }
+
+    get valid(): boolean {
+        return !!this.buttified && this.length <= 2000;
+    }
+
     buttify(): string {
         return this.items.reduce((buttified, item) => buttified + item.buttify(), "");
     }
@@ -133,20 +145,20 @@ export function buttify(
     content: string,
     word: string = config.default.word,
     rate: number = config.default.rate
-): string {
+): string | null {
     const buttifiedContent = new ButtifiedContent(
         content,
         word,
         rate
     );
     if (buttifiedContent.syllables < 2) {
-        return content;
+        return null;
     }
     const maxAttempts = attempts(rate, buttifiedContent.syllables);
-    for (let i = 1; i < maxAttempts && !buttifiedContent.buttified; i++) {
+    for (let i = 1; i < maxAttempts && !buttifiedContent.valid; i++) {
         buttifiedContent.buttify();
     }
-    return buttifiedContent.toString();
+    return buttifiedContent.valid ? buttifiedContent.toString() : null;
 }
 
 export async function buttifiable(message: Message<true>, frequency: number = config.default.frequency): Promise<boolean> {
@@ -155,16 +167,4 @@ export async function buttifiable(message: Message<true>, frequency: number = co
         !!message.content &&
         !userModel &&
         chance(frequency);
-}
-
-export function verifyButtified(
-    original: string,
-    buttified: string,
-    word: string = config.default.word
-): boolean {
-    if (buttified.length > 2000) {
-        return false;
-    }
-    const buttifiedLower = buttified.toLowerCase();
-    return original.toLowerCase() !== buttifiedLower && buttifiedLower.replaceAll(NonWordPattern, "") === word.toLowerCase();
 }
