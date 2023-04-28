@@ -1,6 +1,12 @@
 import { CreationAttributes, Transaction } from "sequelize";
 import { Guild } from "../models/index.js";
 
+const UpdatableAttributes = [
+    "frequency",
+    "rate",
+    "word"
+];
+
 export async function initializeGuild(guildId: string, transaction?: Transaction): Promise<void> {
     await Guild.findOrCreate({
         transaction,
@@ -17,11 +23,10 @@ export async function updateGuild(guildId: string, values: Omit<CreationAttribut
         ...values,
         id: guildId
     }], {
-        updateOnDuplicate: [
-            "frequency",
-            "rate",
-            "word"
-        ]
+        updateOnDuplicate: <Array<keyof typeof values>>UpdatableAttributes.filter(attribute =>
+            values[<keyof typeof values>attribute] !== null &&
+            values[<keyof typeof values>attribute] !== undefined
+        )
     });
 }
 
