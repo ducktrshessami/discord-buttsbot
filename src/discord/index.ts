@@ -28,11 +28,7 @@ import { Op } from "sequelize";
 import commands from "./commands/index.js";
 import { channelIgnored } from "./ignore.js";
 import responses from "./responses/index.js";
-import {
-    buttifiable,
-    buttify,
-    verifyButtified
-} from "./buttify.js";
+import { buttifiable, buttify } from "./buttify.js";
 import { deleteGuild, getGuild } from "./guild.js";
 
 const client = new Client({
@@ -155,13 +151,7 @@ const client = new Client({
                         guildModel?.word,
                         guildModel?.rate
                     );
-                    if (
-                        verifyButtified(
-                            message.content,
-                            buttified,
-                            guildModel?.word
-                        )
-                    ) {
+                    if (buttified) {
                         await message.channel.send(buttified);
                     }
                 }
