@@ -16,13 +16,13 @@ class EmojiResponse {
     }
 
     async send(message: Message): Promise<void> {
-        const [cooldownModel] = await ResponseCooldown.findOrCreate({
-            where: { channelId: message.channelId }
-        });
-        if (!cooldownModel[this.emoji] || (message.createdTimestamp - cooldownModel[this.emoji].getTime() > DISCORD_RESPONSE_COOLDOWN)) {
-            const newCooldown = { [this.emoji]: message.createdAt };
+        const cooldownModel = await ResponseCooldown.findByPk(message.channelId);
+        if (!cooldownModel?.[this.emoji] || (message.createdTimestamp - cooldownModel[this.emoji].getTime() > DISCORD_RESPONSE_COOLDOWN)) {
             await message.channel.send(ResponseEmojiManager[this.emoji](message));
-            await cooldownModel.update(newCooldown);
+            await ResponseCooldown.bulkCreate([{
+                channelId: message.channelId,
+                [this.emoji]: message.createdAt
+            }], { updateOnDuplicate: [this.emoji] });
         }
     }
 }
