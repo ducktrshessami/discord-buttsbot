@@ -120,6 +120,7 @@ const client = new Client({
             if (
                 message.author.id !== message.client.user.id && (
                     !message.inGuild() || (
+                        !message.guild.members.me?.isCommunicationDisabled() &&
                         message.channel.viewable &&
                         message.channel
                             .permissionsFor(message.client.user.id)
