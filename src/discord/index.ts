@@ -112,7 +112,8 @@ const client = new Client({
         try {
             if (
                 message.author.id !== message.client.user.id && (
-                    !message.inGuild() || (
+                    !message.inGuild() ||
+                    (message.channel.isThread() && message.channel.sendable) || (
                         !message.guild.members.me?.isCommunicationDisabled() &&
                         message.channel.viewable &&
                         message.channel
