@@ -13,18 +13,11 @@ import activities from "./activities.js";
 import {
     DISCORD_LIMITED_CACHE_MAX,
     DISCORD_MESSAGE_LIFETIME,
-    DISCORD_RESPONSE_COOLDOWN,
     DISCORD_SWEEPER_INTERVAL,
     DISCORD_THREAD_LIFETIME,
     PRESENCE_INTERVAL
 } from "../constants.js";
 import { postServerCount } from "./topgg.js";
-import {
-    Guild,
-    ResponseCooldown,
-    sequelize
-} from "../models/index.js";
-import { Op } from "sequelize";
 import commands from "./commands/index.js";
 import { channelIgnored } from "./ignore.js";
 import responses from "./responses/index.js";
