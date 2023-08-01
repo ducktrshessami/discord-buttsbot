@@ -15,8 +15,8 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "discord.js": "^14.11.0",
-    "fast-syllablize": "ducktrshessami/fast-syllablize#v2.1.1",
+    "discord.js": "^14.12.1",
+    "fast-syllablize": "ducktrshessami/fast-syllablize#v2.1.2",
     "sequelize": "^6.32.1",
     "sqlite3": "^5.1.6",
     "undici": "^5.22.1"
