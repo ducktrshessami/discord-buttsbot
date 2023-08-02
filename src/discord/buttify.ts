@@ -161,10 +161,8 @@ export function buttify(
     return buttifiedContent.valid ? buttifiedContent.toString() : null;
 }
 
-export async function buttifiable(message: Message<true>, frequency: number = config.default.frequency): Promise<boolean> {
-    const userModel = await IgnoreUser.findByPk(message.author.id);
+export function buttifiable(message: Message<true>, frequency: number = config.default.frequency): boolean {
     return !message.author.bot &&
         !!message.content &&
-        !userModel &&
         chance(frequency);
 }
