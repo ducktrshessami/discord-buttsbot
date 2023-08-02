@@ -3,7 +3,8 @@ import {
     Channel,
     ChannelType,
     ForumChannel,
-    GuildTextBasedChannel
+    GuildTextBasedChannel,
+    Message
 } from "discord.js";
 import {
     IgnoreChannel,
@@ -94,6 +95,14 @@ export async function unignoreUser(userId: string): Promise<boolean> {
     return !!await IgnoreUser.destroy({
         where: { id: userId }
     });
+}
+
+export async function ignoreMessage(message: Message): Promise<boolean> {
+    const [channel, user] = await Promise.all([
+        channelIgnored(message.channel),
+        IgnoreUser.findByPk(message.author.id)
+    ]);
+    return channel || !!user;
 }
 
 export type IgnorableChannel = GuildTextBasedChannel | CategoryChannel | ForumChannel;

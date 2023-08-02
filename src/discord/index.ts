@@ -19,7 +19,7 @@ import {
 } from "../constants.js";
 import { postServerCount } from "./topgg.js";
 import commands from "./commands/index.js";
-import { channelIgnored } from "./ignore.js";
+import { ignoreMessage } from "./ignore.js";
 import responses from "./responses/index.js";
 import { buttifiable, buttify } from "./buttify.js";
 import { deleteGuild, getGuild } from "./guild.js";
@@ -121,7 +121,7 @@ const client = new Client({
                             ?.has(PermissionFlagsBits.SendMessages)
                     )
                 ) &&
-                !await channelIgnored(message.channel)
+                !await ignoreMessage(message)
             ) {
                 if (
                     message.mentions.users.has(message.client.user.id) ||
