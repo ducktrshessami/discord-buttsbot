@@ -1,6 +1,5 @@
 import { Message } from "discord.js";
 import { syllablize } from "fast-syllablize";
-import { IgnoreUser } from "../models/index.js";
 import config from "../config.js";
 
 const ExpectedProbability = 0.95;

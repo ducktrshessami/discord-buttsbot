@@ -73,7 +73,7 @@ export async function unignoreAllChannels(guildId: string): Promise<void> {
     });
 }
 
-export async function channelIgnored(channel: Channel): Promise<boolean> {
+async function channelIgnored(channel: Channel): Promise<boolean> {
     if (!isIgnorable(channel)) {
         return false;
     }
