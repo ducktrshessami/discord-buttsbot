@@ -113,13 +113,13 @@ const client = new Client({
             if (
                 message.author.id !== message.client.user.id && (
                     !message.inGuild() ||
-                    (message.channel.isThread() && message.channel.sendable) || (
+                    (message.channel.isThread() ? message.channel.sendable : (
                         !message.guild.members.me?.isCommunicationDisabled() &&
                         message.channel.viewable &&
                         message.channel
                             .permissionsFor(message.client.user.id)
                             ?.has(PermissionFlagsBits.SendMessages)
-                    )
+                    ))
                 ) &&
                 !await ignoreMessage(message)
             ) {
