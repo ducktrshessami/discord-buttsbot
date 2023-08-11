@@ -43,7 +43,9 @@ const client = new Client({
         }
     },
     makeCache: Options.cacheWithLimits({
-        MessageManager: DISCORD_LIMITED_CACHE_MAX,
+        // @ts-expect-error
+        DMMessageManager: 200,
+        GuildMessageManager: 200,
         UserManager: {
             maxSize: DISCORD_LIMITED_CACHE_MAX,
             keepOverLimit: keepClientUser
