@@ -12,6 +12,18 @@ const activities: Array<ActivitiesOptions> = [
     {
         type: ActivityType.Playing,
         name: "hard to get"
+    },
+    {
+        type: ActivityType.Custom,
+        name: "On the streets fighting for the Bowel Movement"
+    },
+    {
+        type: ActivityType.Custom,
+        name: "Tossing a salad"
+    },
+    {
+        type: ActivityType.Custom,
+        name: "Eating a peach"
     }
 ];
 export default activities;
