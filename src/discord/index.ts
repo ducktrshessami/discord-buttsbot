@@ -1,8 +1,10 @@
 import {
+    ChannelType,
     Client,
     Events,
     GatewayIntentBits,
     GuildMember,
+    GuildTextBasedChannel,
     Options,
     Partials,
     PermissionFlagsBits,
@@ -112,14 +114,10 @@ const client = new Client({
         try {
             if (
                 message.author.id !== message.client.user.id && (
-                    !message.inGuild() ||
-                    (message.channel.isThread() ? message.channel.sendable : (
+                    !message.inGuild() || (
                         !message.guild.members.me?.isCommunicationDisabled() &&
-                        message.channel.viewable &&
-                        message.channel
-                            .permissionsFor(message.client.user.id)
-                            ?.has(PermissionFlagsBits.SendMessages)
-                    ))
+                        isSendable(message.channel)
+                    )
                 ) &&
                 !await ignoreMessage(message)
             ) {
@@ -167,4 +165,16 @@ function getPresence(): PresenceData {
 
 function keepClientUser(userOrMember: User | GuildMember): boolean {
     return userOrMember.id === process.env.DISCORD_CLIENT_ID;
+}
+
+function isSendable(channel: GuildTextBasedChannel): boolean {
+    const permissions = channel.permissionsFor(channel.client.user);
+    return !!permissions?.has(PermissionFlagsBits.ViewChannel) && (
+        channel.isThread() ? (
+            !(channel.archived && channel.locked && !channel.manageable) &&
+            (channel.type !== ChannelType.PrivateThread || channel.joined || channel.manageable) &&
+            permissions.has(PermissionFlagsBits.SendMessagesInThreads)
+        ) :
+            permissions.has(PermissionFlagsBits.SendMessages)
+    );
 }
