@@ -1,6 +1,6 @@
 {
   "name": "discord-buttsbot",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "I'm Buttbot! I say butt!",
   "type": "module",
   "main": "dist/index.js",
