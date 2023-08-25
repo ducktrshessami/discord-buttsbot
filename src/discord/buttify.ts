@@ -15,7 +15,7 @@ class ContentItem<Word extends boolean = boolean> {
     private readonly pluralChar: string | null;
     private readonly _syllables: Word extends true ? Array<string> : null;
     private _current: Word extends true ? string : null;
-    private _buttified: number;
+    private _buttified: boolean;
 
     constructor(private readonly content: ButtifiedContent, public readonly chars: string) {
         this.word = <typeof this.word>WordPattern.test(chars);
@@ -27,7 +27,7 @@ class ContentItem<Word extends boolean = boolean> {
             null;
         this._syllables = <typeof this._syllables>(this.word ? syllablize(chars) : null);
         this._current = <typeof this._current>(this.word ? chars : null);
-        this._buttified = 0;
+        this._buttified = false;
         this.buttify();
     }
 
@@ -35,7 +35,7 @@ class ContentItem<Word extends boolean = boolean> {
         return this._syllables?.length ?? 0;
     }
 
-    get buttified(): number {
+    get buttified(): boolean {
         return this._buttified;
     }
 
@@ -51,7 +51,7 @@ class ContentItem<Word extends boolean = boolean> {
         if (!this.isWord()) {
             return this.chars;
         }
-        this._buttified = 0;
+        this._buttified = false;
         this._current = <typeof this._current>this._syllables.reduce(
             (
                 buttified,
@@ -61,7 +61,7 @@ class ContentItem<Word extends boolean = boolean> {
             ) => {
                 if (chance(this.content.rate)) {
                     let word = this.content.word;
-                    this._buttified++;
+                    this._buttified = true;
                     if (this.pluralChar && i === syllables.length - 1) {
                         word += this.pluralChar;
                     }
@@ -111,8 +111,8 @@ class ButtifiedContent {
         return this.items.reduce((syllables, item) => syllables + item.syllables, 0);
     }
 
-    get buttified(): number {
-        return this.items.reduce((buttified, item) => buttified + item.buttified, 0);
+    get buttified(): boolean {
+        return this.items.some(item => item.buttified);
     }
 
     get length(): number {
@@ -120,7 +120,7 @@ class ButtifiedContent {
     }
 
     get valid(): boolean {
-        return !!this.buttified && this.length <= 2000;
+        return this.buttified && this.length <= 2000;
     }
 
     buttify(): string {
