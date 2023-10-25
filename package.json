@@ -17,17 +17,17 @@
   "dependencies": {
     "discord.js": "^14.13.0",
     "fast-syllablize": "ducktrshessami/fast-syllablize#v2.1.4",
-    "sequelize": "^6.32.1",
+    "sequelize": "^6.33.0",
     "sqlite3": "^5.1.6",
-    "undici": "^5.23.0"
+    "undici": "^5.26.5"
   },
   "optionalDependencies": {
-    "bufferutil": "^4.0.7",
+    "bufferutil": "^4.0.8",
     "utf-8-validate": "^6.0.3",
     "zlib-sync": "^0.1.8"
   },
   "devDependencies": {
-    "@types/node": "^20.5.7",
+    "@types/node": "^20.8.9",
     "dotenv": "^16.3.1",
     "minify": "^9.2.0",
     "typescript": "^5.2.2"
