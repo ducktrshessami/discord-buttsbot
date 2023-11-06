@@ -4,11 +4,7 @@ import {
     SlashCommandBuilder,
     channelMention
 } from "discord.js";
-import {
-    IgnorableChannelType,
-    IgnorableChannelTypes,
-    ignoreChannel
-} from "../ignore.js";
+import { IgnorableChannelTypes, ignoreChannel } from "../ignore.js";
 
 export const data = new SlashCommandBuilder()
     .setName("ignorechannel")
@@ -24,7 +20,7 @@ export const data = new SlashCommandBuilder()
 
 export async function callback(interaction: ChatInputCommandInteraction<"cached">): Promise<void> {
     await interaction.deferReply();
-    const channel = interaction.options.getChannel<IgnorableChannelType>("channel");
+    const channel = interaction.options.getChannel("channel", false, IgnorableChannelTypes);
     const channelId = channel?.id ?? interaction.channelId;
     const ignored = await ignoreChannel(interaction.guildId, channelId);
     await interaction.editReply(ignored ? "Okay." : `I'm already ignoring ${channelId === interaction.channelId ? "this channel" : channelMention(channelId)}.`);

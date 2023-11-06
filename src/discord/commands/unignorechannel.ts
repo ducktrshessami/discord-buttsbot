@@ -4,11 +4,7 @@ import {
     SlashCommandBuilder,
     channelMention
 } from "discord.js";
-import {
-    IgnorableChannelType,
-    IgnorableChannelTypes,
-    unignoreChannel
-} from "../ignore.js";
+import { IgnorableChannelTypes, unignoreChannel } from "../ignore.js";
 import { smile } from "../emoji.js";
 
 export const data = new SlashCommandBuilder()
@@ -25,7 +21,7 @@ export const data = new SlashCommandBuilder()
 
 export async function callback(interaction: ChatInputCommandInteraction<"cached">): Promise<void> {
     await interaction.deferReply();
-    const channel = interaction.options.getChannel<IgnorableChannelType>("channel");
+    const channel = interaction.options.getChannel("channel", false, IgnorableChannelTypes);
     const channelId = channel?.id ?? interaction.channelId;
     const unignored = await unignoreChannel(channelId);
     await interaction.editReply(unignored ? `Okay ${smile(interaction)}` : `I'm not ignoring ${channelId === interaction.channelId ? "this channel" : channelMention(channelId)}!`);

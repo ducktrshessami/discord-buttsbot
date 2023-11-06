@@ -15,7 +15,7 @@ import {
 import { initializeGuild } from "./guild.js";
 import { Op } from "sequelize";
 
-export const IgnorableChannelTypes: Array<IgnorableChannelType> = [
+export const IgnorableChannelTypes: Array<IgnorableChannel["type"]> = [
     ChannelType.GuildText,
     ChannelType.GuildVoice,
     ChannelType.GuildCategory,
@@ -115,4 +115,3 @@ export async function ignoreMessage(message: Message): Promise<boolean> {
 }
 
 export type IgnorableChannel = GuildTextBasedChannel | CategoryChannel | ForumChannel;
-export type IgnorableChannelType = IgnorableChannel["type"];
