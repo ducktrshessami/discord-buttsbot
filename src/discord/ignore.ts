@@ -30,11 +30,7 @@ export const IgnorableChannelTypes: Array<IgnorableChannel["type"]> = [
 ];
 
 export function isIgnorable(channel: Channel): channel is IgnorableChannel {
-    return !channel.isDMBased() && (
-        channel.isTextBased() ||
-        channel.type === ChannelType.GuildCategory ||
-        channel.type === ChannelType.GuildForum
-    );
+    return (<Array<ChannelType>>IgnorableChannelTypes).includes(channel.type);
 }
 
 export async function ignoreChannel(guildId: string, channelId: string): Promise<boolean> {
