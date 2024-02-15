@@ -10,26 +10,25 @@
   "scripts": {
     "build": "rm -rf dist/ && tsc",
     "minify": "node minify.js",
-    "minbuild": "yarn build && yarn minify",
+    "minbuild": "npm run build && npm run minify",
     "deploy": "node dist/discord/deploy.js",
     "start": "node dist/index.js"
   },
   "dependencies": {
     "discord.js": "^14.14.1",
-    "fast-syllablize": "ducktrshessami/fast-syllablize#v2.1.4",
-    "sequelize": "^6.35.0",
-    "sqlite3": "^5.1.6",
-    "undici": "^5.27.2"
+    "fast-syllablize": "github:ducktrshessami/fast-syllablize#v2.1.4",
+    "sequelize": "^6.37.0",
+    "sqlite3": "^5.1.7",
+    "undici": "^5.28.3"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8",
-    "utf-8-validate": "^6.0.3",
     "zlib-sync": "^0.1.9"
   },
   "devDependencies": {
-    "@types/node": "^20.9.0",
-    "dotenv": "^16.3.1",
+    "@types/node": "^20.11.17",
+    "dotenv": "^16.4.4",
     "minify": "^9.2.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   }
 }
