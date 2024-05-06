@@ -10,13 +10,13 @@
   "scripts": {
     "build": "rm -rf dist/ && tsc",
     "minify": "node minify.js",
-    "minbuild": "npm run build && npm run minify",
+    "minbuild": "yarn build && yarn minify",
     "deploy": "node dist/discord/deploy.js",
     "start": "node dist/index.js"
   },
   "dependencies": {
     "discord.js": "^14.15.2",
-    "fast-syllablize": "github:ducktrshessami/fast-syllablize#v2.1.4",
+    "fast-syllablize": "ducktrshessami/fast-syllablize#v2.1.4",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
     "undici": "^6.15.0"

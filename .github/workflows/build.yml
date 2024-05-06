@@ -16,6 +16,6 @@ jobs:
       with:
         node-version: lts/*
     - name: install
-      run: npm ci
+      run: yarn --immutable
     - name: build
-      run: npm run minbuild
+      run: yarn minbuild
