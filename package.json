@@ -15,20 +15,20 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "discord.js": "^14.14.1",
+    "discord.js": "^14.15.2",
     "fast-syllablize": "github:ducktrshessami/fast-syllablize#v2.1.4",
-    "sequelize": "^6.37.0",
+    "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
-    "undici": "^5.28.3"
+    "undici": "^6.15.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8",
     "zlib-sync": "^0.1.9"
   },
   "devDependencies": {
-    "@types/node": "^20.11.17",
-    "dotenv": "^16.4.4",
+    "@types/node": "^20.12.8",
+    "dotenv": "^16.4.5",
     "minify": "^9.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.5"
   }
 }
