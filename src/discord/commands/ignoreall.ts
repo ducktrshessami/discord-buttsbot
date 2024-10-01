@@ -1,5 +1,6 @@
 import {
     ChatInputCommandInteraction,
+    InteractionContextType,
     PermissionFlagsBits,
     SlashCommandBuilder
 } from "discord.js";
@@ -8,7 +9,7 @@ import { ignoreChannels, isIgnorable } from "../ignore.js";
 export const data = new SlashCommandBuilder()
     .setName("ignoreall")
     .setDescription("I won't buttify in any channel.")
-    .setDMPermission(false)
+    .setContexts(InteractionContextType.Guild)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
 
 export async function callback(interaction: ChatInputCommandInteraction<"cached">): Promise<void> {
