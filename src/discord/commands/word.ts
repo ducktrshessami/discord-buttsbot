@@ -1,5 +1,6 @@
 import {
     ChatInputCommandInteraction,
+    InteractionContextType,
     PermissionFlagsBits,
     SlashCommandBuilder
 } from "discord.js";
@@ -11,7 +12,7 @@ const WhitespacePattern = /\s/;
 export const data = new SlashCommandBuilder()
     .setName("word")
     .setDescription("Use this command to show or change what word I buttify messages with!")
-    .setDMPermission(false)
+    .setContexts(InteractionContextType.Guild)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .addStringOption(option => {
         if (config.limit.wordLength > 0) {

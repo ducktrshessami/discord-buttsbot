@@ -1,16 +1,17 @@
 import {
     ChatInputCommandInteraction,
+    InteractionContextType,
     PermissionFlagsBits,
     SlashCommandBuilder,
     channelMention
 } from "discord.js";
-import { IgnorableChannelTypes, unignoreChannel } from "../ignore.js";
 import { smile } from "../emoji.js";
+import { IgnorableChannelTypes, unignoreChannel } from "../ignore.js";
 
 export const data = new SlashCommandBuilder()
     .setName("unignorechannel")
     .setDescription("Undo ignorechannel!")
-    .setDMPermission(false)
+    .setContexts(InteractionContextType.Guild)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
     .addChannelOption(option =>
         option

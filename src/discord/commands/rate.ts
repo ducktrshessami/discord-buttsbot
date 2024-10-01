@@ -1,5 +1,6 @@
 import {
     ChatInputCommandInteraction,
+    InteractionContextType,
     PermissionFlagsBits,
     SlashCommandBuilder
 } from "discord.js";
@@ -9,7 +10,7 @@ import { getGuild, updateGuild } from "../guild.js";
 export const data = new SlashCommandBuilder()
     .setName("rate")
     .setDescription("Use this command to show or change the amount of syllables buttified when I buttify a message!")
-    .setDMPermission(false)
+    .setContexts(InteractionContextType.Guild)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .addIntegerOption(option => {
         if (config.limit.rate > 0) {
