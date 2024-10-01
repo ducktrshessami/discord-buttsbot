@@ -1,9 +1,9 @@
-import { Message } from "discord.js";
+import { Message, OmitPartialGroupDMChannel } from "discord.js";
 import { readdirSync } from "fs";
 import { basename } from "path";
 import { fileURLToPath } from "url";
-import { ResponseCooldown } from "../../models/index.js";
 import { DISCORD_RESPONSE_COOLDOWN } from "../../constants.js";
+import { ResponseCooldown } from "../../models/index.js";
 import * as ResponseEmojiManager from "../emoji.js";
 
 class EmojiResponse {
@@ -15,7 +15,7 @@ class EmojiResponse {
         this.pattern = new RegExp(`\\b(?:${raw.keywords.join("|")})\\b`, "i");
     }
 
-    async send(message: Message): Promise<void> {
+    async send(message: OmitPartialGroupDMChannel<Message>): Promise<void> {
         const cooldownModel = await ResponseCooldown.findByPk(message.channelId);
         if (!cooldownModel?.[this.emoji] || (message.createdTimestamp - cooldownModel[this.emoji].getTime() > DISCORD_RESPONSE_COOLDOWN)) {
             await message.channel.send(ResponseEmojiManager[this.emoji](message));
