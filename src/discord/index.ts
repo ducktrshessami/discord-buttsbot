@@ -5,13 +5,13 @@ import {
     GatewayIntentBits,
     GuildMember,
     GuildTextBasedChannel,
+    InteractionContextType,
     Options,
     Partials,
     PermissionFlagsBits,
     PresenceData,
     User
 } from "discord.js";
-import activities from "./activities.js";
 import {
     DISCORD_LIMITED_CACHE_MAX,
     DISCORD_MESSAGE_LIFETIME,
@@ -19,12 +19,13 @@ import {
     DISCORD_THREAD_LIFETIME,
     PRESENCE_INTERVAL
 } from "../constants.js";
-import { postServerCount } from "./topgg.js";
+import activities from "./activities.js";
+import { buttifiable, buttify } from "./buttify.js";
 import commands from "./commands/index.js";
+import { deleteGuild, getGuild } from "./guild.js";
 import { ignoreMessage } from "./ignore.js";
 import responses from "./responses/index.js";
-import { buttifiable, buttify } from "./buttify.js";
-import { deleteGuild, getGuild } from "./guild.js";
+import { postServerCount } from "./topgg.js";
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
@@ -97,8 +98,8 @@ const client = new Client({
                 const command = commands.get(interaction.commandName);
                 if (
                     command && (
-                        command.data.dm_permission !== false ||
-                        interaction.inCachedGuild()
+                        interaction.inCachedGuild() ||
+                        command.data.contexts?.some(context => context !== InteractionContextType.Guild)
                     )
                 ) {
                     console.log(`[discord] ${interaction.user.id} used ${interaction}`);
