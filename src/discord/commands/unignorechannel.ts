@@ -1,24 +1,29 @@
 import {
+    ApplicationCommandOptionType,
+    ApplicationCommandType,
     ChatInputCommandInteraction,
     InteractionContextType,
     PermissionFlagsBits,
-    SlashCommandBuilder,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
     channelMention
 } from "discord.js";
 import { smile } from "../emoji.js";
 import { IgnorableChannelTypes, unignoreChannel } from "../ignore.js";
+import { resolvePermissionString } from "../util.js";
 
-export const data = new SlashCommandBuilder()
-    .setName("unignorechannel")
-    .setDescription("Undo ignorechannel!")
-    .setContexts(InteractionContextType.Guild)
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
-    .addChannelOption(option =>
-        option
-            .setName("channel")
-            .setDescription("The channel for me to stop ignoring! Defaults to the channel you use this in.")
-            .addChannelTypes(...IgnorableChannelTypes)
-    );
+export const data: RESTPostAPIChatInputApplicationCommandsJSONBody = {
+    type: ApplicationCommandType.ChatInput,
+    name: "unignorechannel",
+    description: "Undo ignorechannel!",
+    contexts: [InteractionContextType.Guild],
+    default_member_permissions: resolvePermissionString(PermissionFlagsBits.ManageChannels),
+    options: [{
+        type: ApplicationCommandOptionType.Channel,
+        name: "channel",
+        description: "The channel for me to stop ignoring! Defaults to the channel you use this in.",
+        channel_types: IgnorableChannelTypes
+    }]
+};
 
 export async function callback(interaction: ChatInputCommandInteraction<"cached">): Promise<void> {
     await interaction.deferReply();
