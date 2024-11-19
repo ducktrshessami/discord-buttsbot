@@ -1,26 +1,29 @@
 import {
+    ApplicationCommandOptionType,
+    ApplicationCommandType,
     ChatInputCommandInteraction,
     InteractionContextType,
     PermissionFlagsBits,
-    SlashCommandBuilder
+    RESTPostAPIChatInputApplicationCommandsJSONBody
 } from "discord.js";
 import config from "../../config.js";
 import { getGuild, updateGuild } from "../guild.js";
+import { resolvePermissionString } from "../util.js";
 
-export const data = new SlashCommandBuilder()
-    .setName("frequency")
-    .setDescription("Use this command to show or change how often I buttify messages!")
-    .setContexts(InteractionContextType.Guild)
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-    .addIntegerOption(option => {
-        if (config.limit.frequency > 0) {
-            option.setMaxValue(config.limit.frequency);
-        }
-        return option
-            .setName("value")
-            .setDescription(`A new frequency to buttify messages! The lower this is, the more I'll buttify! The default is ${config.default.frequency}.`)
-            .setMinValue(1);
-    });
+export const data: RESTPostAPIChatInputApplicationCommandsJSONBody = {
+    type: ApplicationCommandType.ChatInput,
+    name: "frequency",
+    description: "Use this command to show or change how often I buttify messages!",
+    contexts: [InteractionContextType.Guild],
+    default_member_permissions: resolvePermissionString(PermissionFlagsBits.ManageGuild),
+    options: [{
+        type: ApplicationCommandOptionType.Integer,
+        name: "value",
+        description: `A new frequency to buttify messages! The lower this is, the more I'll buttify! The default is ${config.default.frequency}.`,
+        min_value: 1,
+        max_value: config.limit.frequency > 0 ? config.limit.frequency : undefined
+    }]
+};
 
 export async function callback(interaction: ChatInputCommandInteraction<"cached">): Promise<void> {
     await interaction.deferReply();

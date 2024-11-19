@@ -1,16 +1,20 @@
 import {
+    ApplicationCommandType,
     ChatInputCommandInteraction,
     InteractionContextType,
     PermissionFlagsBits,
-    SlashCommandBuilder
+    RESTPostAPIChatInputApplicationCommandsJSONBody
 } from "discord.js";
 import { ignoreChannels, isIgnorable } from "../ignore.js";
+import { resolvePermissionString } from "../util.js";
 
-export const data = new SlashCommandBuilder()
-    .setName("ignoreall")
-    .setDescription("I won't buttify in any channel.")
-    .setContexts(InteractionContextType.Guild)
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
+export const data: RESTPostAPIChatInputApplicationCommandsJSONBody = {
+    type: ApplicationCommandType.ChatInput,
+    name: "ignoreall",
+    description: "I won't buttify in any channel.",
+    contexts: [InteractionContextType.Guild],
+    default_member_permissions: resolvePermissionString(PermissionFlagsBits.ManageGuild)
+};
 
 export async function callback(interaction: ChatInputCommandInteraction<"cached">): Promise<void> {
     await interaction.deferReply();

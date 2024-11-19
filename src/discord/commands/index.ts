@@ -1,17 +1,18 @@
 import {
+    ApplicationCommandType,
     AutocompleteInteraction,
     Awaitable,
-    CacheType,
-    ChatInputCommandInteraction,
     Collection,
-    SlashCommandBuilder
+    Interaction,
+    InteractionType,
+    RESTPostAPIApplicationCommandsJSONBody
 } from "discord.js";
 import { readdirSync } from "fs";
 import { basename } from "path";
 import { fileURLToPath } from "url";
 
 const indexBasename = basename(import.meta.url);
-const commands = new Collection<string, SlashCommand>(
+const commands = new Collection<string, Command>(
     await Promise.all(
         readdirSync(fileURLToPath(new URL(".", import.meta.url)))
             .filter(file =>
@@ -19,25 +20,18 @@ const commands = new Collection<string, SlashCommand>(
                 (file !== indexBasename) &&
                 (file.slice(-3) === ".js")
             )
-            .map(async (file): Promise<[string, SlashCommand]> => {
+            .map(async (file): Promise<[string, Command]> => {
                 const url = new URL(file, import.meta.url);
-                const cmd: SlashCommand = await import(url.toString());
+                const cmd: Command = await import(url.toString());
                 return [cmd.data.name, cmd];
             })
     )
 );
 export default commands;
 
-type SlashCommandData = Pick<SlashCommandBuilder,
-    "name" |
-    "name_localizations" |
-    "contexts" |
-    "nsfw" |
-    "toJSON"
->;
-
-interface SlashCommand<InteractionCacheType extends CacheType = CacheType> {
-    data: SlashCommandData;
-    autocomplete?(interaction: AutocompleteInteraction<InteractionCacheType>): Awaitable<void>;
-    callback(interaction: ChatInputCommandInteraction<InteractionCacheType>): Awaitable<void>;
+type CommandInteraction = Extract<Interaction, { type: InteractionType.ApplicationCommand }>;
+interface Command<Type extends ApplicationCommandType = ApplicationCommandType> {
+    data: RESTPostAPIApplicationCommandsJSONBody;
+    autocomplete?(interaction: AutocompleteInteraction): Awaitable<void>;
+    callback(interaction: Extract<CommandInteraction, { commandType: Type }>): Awaitable<void>;
 }

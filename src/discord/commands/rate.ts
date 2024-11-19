@@ -1,26 +1,29 @@
 import {
+    ApplicationCommandOptionType,
+    ApplicationCommandType,
     ChatInputCommandInteraction,
     InteractionContextType,
     PermissionFlagsBits,
-    SlashCommandBuilder
+    RESTPostAPIChatInputApplicationCommandsJSONBody
 } from "discord.js";
 import config from "../../config.js";
 import { getGuild, updateGuild } from "../guild.js";
+import { resolvePermissionString } from "../util.js";
 
-export const data = new SlashCommandBuilder()
-    .setName("rate")
-    .setDescription("Use this command to show or change the amount of syllables buttified when I buttify a message!")
-    .setContexts(InteractionContextType.Guild)
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-    .addIntegerOption(option => {
-        if (config.limit.rate > 0) {
-            option.setMaxValue(config.limit.rate);
-        }
-        return option
-            .setName("value")
-            .setDescription(`A new rate to buttify syllables! The lower this is, the more I'll buttify! The default is ${config.default.rate}.`)
-            .setMinValue(1);
-    });
+export const data: RESTPostAPIChatInputApplicationCommandsJSONBody = {
+    type: ApplicationCommandType.ChatInput,
+    name: "rate",
+    description: "Use this command to show or change the amount of syllables buttified when I buttify a message!",
+    contexts: [InteractionContextType.Guild],
+    default_member_permissions: resolvePermissionString(PermissionFlagsBits.ManageGuild),
+    options: [{
+        type: ApplicationCommandOptionType.Integer,
+        name: "value",
+        description: `A new rate to buttify syllables! The lower this is, the more I'll buttify! The default is ${config.default.rate}.`,
+        min_value: 1,
+        max_value: config.limit.rate > 0 ? config.limit.rate : undefined
+    }]
+};
 
 export async function callback(interaction: ChatInputCommandInteraction<"cached">): Promise<void> {
     await interaction.deferReply();

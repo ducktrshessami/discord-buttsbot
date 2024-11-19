@@ -1,10 +1,22 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import { unignoreUser } from "../ignore.js";
+import {
+    ApplicationCommandType,
+    ChatInputCommandInteraction,
+    InteractionContextType,
+    RESTPostAPIChatInputApplicationCommandsJSONBody
+} from "discord.js";
 import { smile } from "../emoji.js";
+import { unignoreUser } from "../ignore.js";
 
-export const data = new SlashCommandBuilder()
-    .setName("unignoreme")
-    .setDescription("Undo ignoreme!");
+export const data: RESTPostAPIChatInputApplicationCommandsJSONBody = {
+    type: ApplicationCommandType.ChatInput,
+    name: "unignoreme",
+    description: "Undo ignoreme!",
+    contexts: [
+        InteractionContextType.Guild,
+        InteractionContextType.BotDM,
+        InteractionContextType.PrivateChannel
+    ]
+};
 
 export async function callback(interaction: ChatInputCommandInteraction): Promise<void> {
     await interaction.deferReply();
