@@ -12,8 +12,8 @@ export const data: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: "ignoreme",
     description: "I will never buttify anything you say.",
     contexts: [
-        InteractionContextType.BotDM,
         InteractionContextType.Guild,
+        InteractionContextType.BotDM,
         InteractionContextType.PrivateChannel
     ]
 };
