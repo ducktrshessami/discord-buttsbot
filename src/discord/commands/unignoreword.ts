@@ -1,4 +1,10 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, InteractionContextType, PermissionFlagsBits, RESTPostAPIApplicationCommandsJSONBody } from "discord.js";
+import {
+    ApplicationCommandOptionType,
+    ApplicationCommandType,
+    InteractionContextType,
+    PermissionFlagsBits,
+    RESTPostAPIApplicationCommandsJSONBody
+} from "discord.js";
 import { resolvePermissionString } from "../util.js";
 
 export const data: RESTPostAPIApplicationCommandsJSONBody = {
