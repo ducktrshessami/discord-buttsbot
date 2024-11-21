@@ -5,6 +5,7 @@ import {
     PermissionFlagsBits,
     RESTPostAPIApplicationCommandsJSONBody
 } from "discord.js";
+import config from "../../config.js";
 import { resolvePermissionString } from "../util.js";
 
 export const data: RESTPostAPIApplicationCommandsJSONBody = {
@@ -18,6 +19,7 @@ export const data: RESTPostAPIApplicationCommandsJSONBody = {
         name: "word",
         description: "The word for me to stop ignoring!",
         required: true,
-        autocomplete: true
+        autocomplete: true,
+        max_length: config.limit.wordLength > 0 ? config.limit.wordLength : undefined
     }]
 };

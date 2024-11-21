@@ -6,6 +6,7 @@ import {
     PermissionFlagsBits,
     RESTPostAPIApplicationCommandsJSONBody
 } from "discord.js";
+import config from "../../config.js";
 import { ignoreWord } from "../ignore.js";
 import { resolvePermissionString, WhitespacePattern } from "../util.js";
 
@@ -18,8 +19,9 @@ export const data: RESTPostAPIApplicationCommandsJSONBody = {
     options: [{
         type: ApplicationCommandOptionType.String,
         name: "word",
-        description: "The word for me to ignore.",
-        required: true
+        description: "The word for me to ignore. No spaces, please!",
+        required: true,
+        max_length: config.limit.wordLength > 0 ? config.limit.wordLength : undefined
     }]
 };
 
