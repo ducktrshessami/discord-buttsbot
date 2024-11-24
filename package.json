@@ -17,6 +17,7 @@
   "dependencies": {
     "discord.js": "^14.16.3",
     "fast-syllablize": "ducktrshessami/fast-syllablize#v2.1.5",
+    "fastest-levenshtein": "^1.0.16",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
     "undici": "^6.19.8"
