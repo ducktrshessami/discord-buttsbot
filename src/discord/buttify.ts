@@ -18,15 +18,15 @@ class ContentItem<Word extends boolean = boolean> {
     private _buttified: boolean;
 
     constructor(private readonly content: ButtifiedContent, public readonly chars: string) {
-        this.word = <typeof this.word>WordPattern.test(chars);
-        this.allCaps = <typeof this.allCaps>(this.word ? AllCapsPattern.test(chars) : false);
+        this.word = <typeof this.word>(WordPattern.test(this.chars) && !this.content.ignoreWords.includes(this.chars.toLowerCase()));
+        this.allCaps = <typeof this.allCaps>(this.word ? AllCapsPattern.test(this.chars) : false);
         this.pluralChar = this.word &&
             !this.content.pluralWord &&
-            PluralPattern.test(chars[chars.length - 1]) ?
-            chars[chars.length - 1] :
+            PluralPattern.test(this.chars[this.chars.length - 1]) ?
+            this.chars[this.chars.length - 1] :
             null;
-        this._syllables = <typeof this._syllables>(this.word ? syllablize(chars) : null);
-        this._current = <typeof this._current>(this.word ? chars : null);
+        this._syllables = <typeof this._syllables>(this.word ? syllablize(this.chars) : null);
+        this._current = <typeof this._current>(this.word ? this.chars : null);
         this._buttified = false;
         this.buttify();
     }
@@ -94,7 +94,8 @@ class ButtifiedContent {
     constructor(
         readonly original: string,
         readonly word: string,
-        readonly rate: number
+        readonly rate: number,
+        readonly ignoreWords: Array<string>
     ) {
         this.pluralWord = PluralPattern.test(word[word.length - 1]);
         this.items = original
@@ -143,12 +144,14 @@ function attempts(rate: number, syllables: number): number {
 export function buttify(
     content: string,
     word: string = config.default.word,
-    rate: number = config.default.rate
+    rate: number = config.default.rate,
+    ignoreWords: Array<string> = []
 ): string | null {
     const buttifiedContent = new ButtifiedContent(
         content,
         word,
-        rate
+        rate,
+        ignoreWords
     );
     if (buttifiedContent.syllables < 2) {
         return null;

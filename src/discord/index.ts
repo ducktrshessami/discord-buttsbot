@@ -137,12 +137,13 @@ const client = new Client({
                 if (!message.inGuild()) {
                     return;
                 }
-                const guildModel = await getGuild(message.guildId);
+                const guildModel = await getGuild(message.guildId, true);
                 if (buttifiable(message, guildModel?.frequency)) {
                     const buttified = buttify(
                         message.content,
                         guildModel?.word,
-                        guildModel?.rate
+                        guildModel?.rate,
+                        guildModel?.IgnoreWords?.map(ignore => ignore.word)
                     );
                     if (buttified) {
                         await message.channel.send(buttified);
