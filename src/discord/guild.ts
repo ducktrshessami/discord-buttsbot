@@ -22,12 +22,7 @@ export async function updateGuild(guildId: string, values: Omit<CreationAttribut
     await Guild.bulkCreate([{
         ...values,
         id: guildId
-    }], {
-        updateOnDuplicate: <Array<keyof typeof values>>UpdatableAttributes.filter(attribute =>
-            values[<keyof typeof values>attribute] !== null &&
-            values[<keyof typeof values>attribute] !== undefined
-        )
-    });
+    }], { updateOnDuplicate: <Array<keyof typeof values>>UpdatableAttributes.filter(attribute => values[<keyof typeof values>attribute] != null) });
 }
 
 export async function deleteGuild(guildId: string): Promise<void> {
