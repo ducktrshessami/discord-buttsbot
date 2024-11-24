@@ -2,12 +2,14 @@ import {
     ApplicationCommandOptionType,
     ApplicationCommandType,
     AutocompleteInteraction,
+    ChatInputCommandInteraction,
     InteractionContextType,
     PermissionFlagsBits,
     RESTPostAPIApplicationCommandsJSONBody
 } from "discord.js";
 import config from "../../config.js";
-import { getIgnoredWords } from "../ignore.js";
+import { smile } from "../emoji.js";
+import { getIgnoredWords, unignoreWord } from "../ignore.js";
 import { parseQuery, resolvePermissionString } from "../util.js";
 
 export const data: RESTPostAPIApplicationCommandsJSONBody = {
@@ -34,4 +36,13 @@ export async function autocomplete(interaction: AutocompleteInteraction<"cached"
         value: word
     }));
     await interaction.respond(choices);
+}
+
+export async function callback(interaction: ChatInputCommandInteraction<"cached">): Promise<void> {
+    await interaction.deferReply();
+    const word = interaction.options
+        .getString("word", true)
+        .toLowerCase();
+    const unignored = await unignoreWord(word, interaction.guildId);
+    await interaction.editReply(unignored ? `Okay ${smile(interaction)}` : "I'm not ignoring that word.");
 }
