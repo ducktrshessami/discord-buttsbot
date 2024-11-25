@@ -8,9 +8,7 @@ import {
 } from "discord.js";
 import config from "../../config.js";
 import { getGuild, updateGuild } from "../guild.js";
-import { resolvePermissionString } from "../util.js";
-
-const WhitespacePattern = /\s/;
+import { resolvePermissionString, WhitespacePattern } from "../util.js";
 
 export const data: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     type: ApplicationCommandType.ChatInput,

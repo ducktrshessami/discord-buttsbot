@@ -1,5 +1,5 @@
 import { CreationAttributes, Transaction } from "sequelize";
-import { Guild } from "../models/index.js";
+import { Guild, IgnoreWord } from "../models/index.js";
 
 const UpdatableAttributes = [
     "frequency",
@@ -14,8 +14,8 @@ export async function initializeGuild(guildId: string, transaction?: Transaction
     });
 }
 
-export async function getGuild(guildId: string): Promise<Guild | null> {
-    return await Guild.findByPk(guildId);
+export async function getGuild(guildId: string, withIgnoredWords: boolean = false): Promise<Guild | null> {
+    return await Guild.findByPk(guildId, { include: withIgnoredWords ? IgnoreWord : undefined });
 }
 
 export async function updateGuild(guildId: string, values: Omit<CreationAttributes<Guild>, "id">): Promise<void> {
