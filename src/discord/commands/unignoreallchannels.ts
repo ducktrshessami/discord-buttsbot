@@ -11,7 +11,7 @@ import { resolvePermissionString } from "../util.js";
 
 export const data: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     type: ApplicationCommandType.ChatInput,
-    name: "unignoreall",
+    name: "unignoreallchannels",
     description: "I'll buttify in every channel!",
     contexts: [InteractionContextType.Guild],
     default_member_permissions: resolvePermissionString(PermissionFlagsBits.ManageGuild)
