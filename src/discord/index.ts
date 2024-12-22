@@ -94,7 +94,7 @@ const client = new Client({
     })
     .on(Events.InteractionCreate, async interaction => {
         try {
-            if (interaction.isChatInputCommand()) {
+            if ("commandName" in interaction) {
                 const command = commands.get(interaction.commandName);
                 if (
                     command && (
@@ -102,8 +102,13 @@ const client = new Client({
                         command.data.contexts?.some(context => context !== InteractionContextType.Guild)
                     )
                 ) {
-                    console.log(`[discord] ${interaction.user.id} used ${interaction}`);
-                    await command.callback(interaction);
+                    if (interaction.isChatInputCommand()) {
+                        console.log(`[discord] ${interaction.user.id} used ${interaction}`);
+                        await command.callback(interaction);
+                    }
+                    else if (interaction.isAutocomplete() && command.autocomplete) {
+                        await command.autocomplete(interaction);
+                    }
                 }
             }
         }
@@ -137,12 +142,13 @@ const client = new Client({
                 if (!message.inGuild()) {
                     return;
                 }
-                const guildModel = await getGuild(message.guildId);
+                const guildModel = await getGuild(message.guildId, true);
                 if (buttifiable(message, guildModel?.frequency)) {
                     const buttified = buttify(
                         message.content,
                         guildModel?.word,
-                        guildModel?.rate
+                        guildModel?.rate,
+                        guildModel?.IgnoreWords?.map(ignore => ignore.word)
                     );
                     if (buttified) {
                         await message.channel.send(buttified);
