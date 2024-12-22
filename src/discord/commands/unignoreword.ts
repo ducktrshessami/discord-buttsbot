@@ -31,7 +31,7 @@ export const data: RESTPostAPIApplicationCommandsJSONBody = {
 export async function autocomplete(interaction: AutocompleteInteraction<"cached">): Promise<void> {
     const query = interaction.options.getFocused();
     const words = await getIgnoredWords(interaction.guildId);
-    const choices = parseQuery(query, words, word => ({
+    const choices = parseQuery(query.value, words, word => ({
         name: word,
         value: word
     }));
