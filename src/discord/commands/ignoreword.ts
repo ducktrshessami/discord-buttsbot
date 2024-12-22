@@ -30,7 +30,7 @@ export async function callback(interaction: ChatInputCommandInteraction<"cached"
     const word = interaction.options
         .getString("word", true)
         .toLowerCase();
-    if (/[^A-Z]/.test(word)) {
+    if (/[^A-Z]/i.test(word)) {
         await interaction.editReply("Alphabetical characters only, please!");
     }
     else {
