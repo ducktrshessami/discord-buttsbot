@@ -1,8 +1,6 @@
 import { APIApplicationCommandOptionChoice, PermissionResolvable, PermissionsBitField } from "discord.js";
 import { distance } from "fastest-levenshtein";
 
-export const WhitespacePattern = /\s/;
-
 export function resolvePermissionString(...permissions: PermissionResolvable[]): string {
     return PermissionsBitField
         .resolve(permissions)
