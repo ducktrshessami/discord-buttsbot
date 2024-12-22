@@ -8,13 +8,14 @@ import {
     MediaChannel,
     Message
 } from "discord.js";
+import { Op } from "sequelize";
 import {
     IgnoreChannel,
     IgnoreUser,
+    IgnoreWord,
     sequelize
 } from "../models/index.js";
 import { initializeGuild } from "./guild.js";
-import { Op } from "sequelize";
 
 export const IgnorableChannelTypes: Array<IgnorableChannel["type"]> = [
     ChannelType.GuildText,
@@ -110,6 +111,38 @@ export async function ignoreMessage(message: Message): Promise<boolean> {
         IgnoreUser.findByPk(message.author.id)
     ]);
     return channel || !!user;
+}
+
+export async function ignoreWord(word: string, guildId: string): Promise<boolean> {
+    const [_, created] = await IgnoreWord.findOrCreate({
+        where: {
+            word,
+            GuildId: guildId
+        }
+    });
+    return created
+}
+
+export async function getIgnoredWords(guildId: string): Promise<Array<string>> {
+    const ignores = await IgnoreWord.findAll({
+        where: { GuildId: guildId }
+    });
+    return ignores.map(ignore => ignore.word);
+}
+
+export async function unignoreWord(word: string, guildId: string): Promise<boolean> {
+    return !!await IgnoreWord.destroy({
+        where: {
+            word,
+            GuildId: guildId
+        }
+    });
+}
+
+export async function unignoreAllWords(guildId: string): Promise<void> {
+    await IgnoreWord.destroy({
+        where: { GuildId: guildId }
+    });
 }
 
 export type IgnorableChannel = GuildTextBasedChannel | CategoryChannel | ForumChannel | MediaChannel;

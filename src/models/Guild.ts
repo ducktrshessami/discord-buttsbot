@@ -9,6 +9,7 @@ import {
 } from "sequelize";
 import config from "../config.js";
 import IgnoreChannel from "./IgnoreChannel.js";
+import IgnoreWord from "./IgnoreWord.js";
 
 export default class Guild extends Model<InferAttributes<Guild>, InferCreationAttributes<Guild>> {
     declare id: string;
@@ -16,6 +17,7 @@ export default class Guild extends Model<InferAttributes<Guild>, InferCreationAt
     declare frequency: CreationOptional<number>;
     declare rate: CreationOptional<number>;
     declare IgnoreChannels?: NonAttribute<Array<IgnoreChannel>>;
+    declare IgnoreWords?: NonAttribute<Array<IgnoreWord>>;
 
     static initialize(sequelize: Sequelize): void {
         this.init({
