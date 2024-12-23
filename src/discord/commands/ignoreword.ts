@@ -35,6 +35,6 @@ export async function callback(interaction: ChatInputCommandInteraction<"cached"
     }
     else {
         const ignored = await ignoreWord(word, interaction.guildId);
-        await interaction.editReply(ignored ? "Okay." : "I'm already ignoring that word.");
+        await interaction.editReply(ignored ? `Okay, I'll ignore \"${word}\" from now on.` : `I'm already ignoring \"${word}\".`);
     }
 }

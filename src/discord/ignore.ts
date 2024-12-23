@@ -62,6 +62,13 @@ export async function ignoreChannels(guildId: string, channelIds: Array<string>)
     });
 }
 
+export async function getIgnoredChannelIds(guildId: string): Promise<Array<string>> {
+    const ignores = await IgnoreChannel.findAll({
+        where: { GuildId: guildId }
+    });
+    return ignores.map(ignore => ignore.id);
+}
+
 export async function unignoreChannel(channelId: string): Promise<boolean> {
     return !!await IgnoreChannel.destroy({
         where: { id: channelId }
