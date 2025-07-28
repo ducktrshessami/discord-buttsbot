@@ -11,8 +11,8 @@
     "build": "rm -rf dist/ && tsc",
     "minify": "node minify.js",
     "minbuild": "yarn build && yarn minify",
-    "deploy": "node dist/discord/deploy.js",
-    "start": "node dist/index.js"
+    "deploy": "node --env-file-if-exists .env dist/discord/deploy.js",
+    "start": "node --env-file-if-exists .env dist/index.js"
   },
   "dependencies": {
     "discord.js": "^14.19.3",
