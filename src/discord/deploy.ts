@@ -1,8 +1,5 @@
 import { REST, Routes } from "discord.js";
-import dotenv from "../dotenv.js";
 import commands from "./commands/index.js";
-
-await dotenv();
 
 const commandData = commands.map(command => command.data);
 const rest = new REST({ version: "10" })
