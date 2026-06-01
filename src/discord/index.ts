@@ -167,7 +167,7 @@ export async function login(): Promise<void> {
 }
 
 function getPresence(): PresenceData {
-    return { activities: [activities[Math.floor(Math.random() * activities.length)]] };
+    return { activities: [activities[Math.floor(Math.random() * activities.length)]!] };
 }
 
 function keepClientUser(userOrMember: User | GuildMember): boolean {

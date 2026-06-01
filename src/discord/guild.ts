@@ -9,13 +9,13 @@ const UpdatableAttributes = [
 
 export async function initializeGuild(guildId: string, transaction?: Transaction): Promise<void> {
     await Guild.findOrCreate({
-        transaction,
+        transaction: transaction ?? null,
         where: { id: guildId }
     });
 }
 
 export async function getGuild(guildId: string, withIgnoredWords: boolean = false): Promise<Guild | null> {
-    return await Guild.findByPk(guildId, { include: withIgnoredWords ? IgnoreWord : undefined });
+    return await Guild.findByPk(guildId, { include: withIgnoredWords ? IgnoreWord : [] });
 }
 
 export async function updateGuild(guildId: string, values: Omit<CreationAttributes<Guild>, "id">): Promise<void> {

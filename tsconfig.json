@@ -1,12 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ES2021",
-    "module": "Node16",
-    "moduleResolution": "node16",
+    "rootDir": "./src",
     "outDir": "./dist",
+    "module": "nodenext",
+    "target": "esnext",
+    "lib": ["esnext"],
+    "types": ["node"],
+    "sourceMap": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
     "skipLibCheck": true
-  }
+  },
+  "include": ["./src"]
 }

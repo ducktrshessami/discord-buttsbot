@@ -18,12 +18,13 @@ class ContentItem<Word extends boolean = boolean> {
     private _buttified: boolean;
 
     constructor(private readonly content: ButtifiedContent, public readonly chars: string) {
+        const lastChar = this.chars[this.chars.length - 1] ?? "";
         this.word = <typeof this.word>(WordPattern.test(this.chars) && !this.content.ignoreWords.includes(this.chars.toLowerCase()));
         this.allCaps = <typeof this.allCaps>(this.word ? AllCapsPattern.test(this.chars) : false);
         this.pluralChar = this.word &&
             !this.content.pluralWord &&
-            PluralPattern.test(this.chars[this.chars.length - 1]) ?
-            this.chars[this.chars.length - 1] :
+            PluralPattern.test(lastChar) ?
+            lastChar :
             null;
         this._syllables = <typeof this._syllables>(this.word ? syllablize(this.chars) : null);
         this._current = <typeof this._current>(this.word ? this.chars : null);
@@ -69,7 +70,7 @@ class ContentItem<Word extends boolean = boolean> {
                         buttified += word.toUpperCase();
                     }
                     else for (let j = 0; j < word.length; j++) {
-                        buttified += CapsPattern.test(syllable[j]) ? word[j].toUpperCase() : word[j];
+                        buttified += CapsPattern.test(syllable[j]!) ? word[j]!.toUpperCase() : word[j];
                     }
                 }
                 else {
@@ -97,7 +98,7 @@ class ButtifiedContent {
         readonly rate: number,
         readonly ignoreWords: Array<string>
     ) {
-        this.pluralWord = PluralPattern.test(word[word.length - 1]);
+        this.pluralWord = PluralPattern.test(word[word.length - 1] ?? "");
         this.items = original
             .split(NonWordPattern)
             .reduce((items, item) => {
