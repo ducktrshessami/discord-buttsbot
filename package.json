@@ -15,20 +15,20 @@
     "start": "node --env-file-if-exists .env dist/index.js"
   },
   "dependencies": {
-    "discord.js": "^14.24.2",
+    "discord.js": "^14.26.4",
     "fast-syllablize": "ducktrshessami/fast-syllablize#v2.1.5",
     "fastest-levenshtein": "^1.0.16",
-    "sequelize": "^6.37.7",
-    "sqlite3": "^5.1.7",
-    "undici": "^7.16.0"
+    "sequelize": "^6.37.8",
+    "sqlite3": "^6.0.1",
+    "undici": "^8.3.0"
   },
   "optionalDependencies": {
-    "bufferutil": "^4.0.9",
+    "bufferutil": "^4.1.0",
     "zlib-sync": "^0.1.10"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1",
-    "minify": "^9.2.0",
-    "typescript": "^5.9.3"
+    "@types/node": "^25.9.1",
+    "minify": "^15.3.1",
+    "typescript": "^6.0.3"
   }
 }
