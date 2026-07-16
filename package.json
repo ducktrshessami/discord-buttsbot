@@ -19,7 +19,7 @@
     "fast-syllablize": "ducktrshessami/fast-syllablize#v2.1.5",
     "fastest-levenshtein": "^1.0.16",
     "sequelize": "^6.37.8",
-    "sqlite3": "^6.0.1",
+    "sqlite3": "^5.1.7",
     "undici": "^8.7.0"
   },
   "optionalDependencies": {
