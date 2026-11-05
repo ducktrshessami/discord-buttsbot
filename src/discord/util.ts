@@ -1,5 +1,6 @@
-import { APIApplicationCommandOptionChoice, PermissionResolvable, PermissionsBitField } from "discord.js";
+import { APIApplicationCommandOptionChoice, Message, PermissionResolvable, PermissionsBitField } from "discord.js";
 import { distance } from "fastest-levenshtein";
+import { shouldButtify } from "node-buttsbot-core";
 
 export function resolvePermissionString(...permissions: PermissionResolvable[]): string {
     return PermissionsBitField
@@ -77,4 +78,10 @@ export function parseQuery<K, V, T extends string | number>(
         }, []);
     }
     return choices.slice(0, 25);
+}
+
+export function buttifiable(message: Message<true>, frequency?: number): boolean {
+    return !message.author.bot &&
+        !!message.content &&
+        shouldButtify(frequency);
 }

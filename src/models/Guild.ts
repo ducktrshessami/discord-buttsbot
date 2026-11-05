@@ -1,3 +1,4 @@
+import { Defaults } from "node-buttsbot-core";
 import {
     CreationOptional,
     DataTypes,
@@ -27,17 +28,17 @@ export default class Guild extends Model<InferAttributes<Guild>, InferCreationAt
             },
             word: {
                 type: DataTypes.STRING(config.limit.wordLength),
-                defaultValue: config.default.word,
+                defaultValue: Defaults.word,
                 allowNull: false
             },
             frequency: {
                 type: DataTypes.INTEGER,
-                defaultValue: config.default.frequency,
+                defaultValue: Defaults.frequency,
                 allowNull: false
             },
             rate: {
                 type: DataTypes.INTEGER,
-                defaultValue: config.default.rate,
+                defaultValue: Defaults.rate,
                 allowNull: false
             }
         }, {

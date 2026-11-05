@@ -6,6 +6,7 @@ import {
     PermissionFlagsBits,
     RESTPostAPIChatInputApplicationCommandsJSONBody
 } from "discord.js";
+import { Defaults } from "node-buttsbot-core";
 import config from "../../config.js";
 import { getGuild, updateGuild } from "../guild.js";
 import { resolvePermissionString } from "../util.js";
@@ -19,7 +20,7 @@ export const data: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     options: [{
         type: ApplicationCommandOptionType.Integer,
         name: "value",
-        description: `A new frequency to buttify messages! The lower this is, the more I'll buttify! The default is ${config.default.frequency}.`,
+        description: `A new frequency to buttify messages! The lower this is, the more I'll buttify! The default is ${Defaults.frequency}.`,
         min_value: 1,
         max_value: config.limit.frequency > 0 ? config.limit.frequency : undefined
     }]
@@ -34,6 +35,6 @@ export async function callback(interaction: ChatInputCommandInteraction<"cached"
     }
     else {
         const guildModel = await getGuild(interaction.guildId);
-        await interaction.editReply(`I buttify roughly one in every \`${guildModel?.frequency ?? config.default.frequency}\` messages!`);
+        await interaction.editReply(`I buttify roughly one in every \`${guildModel?.frequency ?? Defaults.frequency}\` messages!`);
     }
 }

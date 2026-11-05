@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "discord.js": "^14.27.0",
-    "fast-syllablize": "ducktrshessami/fast-syllablize#v2.1.5",
     "fastest-levenshtein": "^1.0.16",
+    "node-buttsbot-core": "ducktrshessami/node-buttsbot-core#v1.0.0",
     "sequelize": "^6.37.8",
     "sqlite3": "^5.1.7",
     "undici": "^8.7.0"
