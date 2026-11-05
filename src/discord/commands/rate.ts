@@ -6,6 +6,7 @@ import {
     PermissionFlagsBits,
     RESTPostAPIChatInputApplicationCommandsJSONBody
 } from "discord.js";
+import { Defaults } from "node-buttsbot-core";
 import config from "../../config.js";
 import { getGuild, updateGuild } from "../guild.js";
 import { resolvePermissionString } from "../util.js";
@@ -19,7 +20,7 @@ export const data: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     options: [{
         type: ApplicationCommandOptionType.Integer,
         name: "value",
-        description: `A new rate to buttify syllables! The lower this is, the more I'll buttify! The default is ${config.default.rate}.`,
+        description: `A new rate to buttify syllables! The lower this is, the more I'll buttify! The default is ${Defaults.rate}.`,
         min_value: 1,
         max_value: config.limit.rate > 0 ? config.limit.rate : undefined
     }]
@@ -34,6 +35,6 @@ export async function callback(interaction: ChatInputCommandInteraction<"cached"
     }
     else {
         const guildModel = await getGuild(interaction.guildId);
-        await interaction.editReply(`I buttify roughly one in every \`${guildModel?.rate ?? config.default.rate}\` syllables per buttified message!`);
+        await interaction.editReply(`I buttify roughly one in every \`${guildModel?.rate ?? Defaults.rate}\` syllables per buttified message!`);
     }
 }

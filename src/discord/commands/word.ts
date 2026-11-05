@@ -6,6 +6,7 @@ import {
     PermissionFlagsBits,
     RESTPostAPIChatInputApplicationCommandsJSONBody
 } from "discord.js";
+import { Defaults } from "node-buttsbot-core";
 import config from "../../config.js";
 import { getGuild, updateGuild } from "../guild.js";
 import { resolvePermissionString } from "../util.js";
@@ -21,7 +22,7 @@ export const data: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     options: [{
         type: ApplicationCommandOptionType.String,
         name: "value",
-        description: `A new word to buttify with! No spaces, please! The default is ${config.default.word}!`,
+        description: `A new word to buttify with! No spaces, please! The default is ${Defaults.word}!`,
         max_length: config.limit.wordLength > 0 ? config.limit.wordLength : undefined
     }]
 };
@@ -42,6 +43,6 @@ export async function callback(interaction: ChatInputCommandInteraction<"cached"
     }
     else {
         const guildModel = await getGuild(interaction.guildId);
-        await interaction.editReply(`I buttify messages with the word \`${guildModel?.word ?? config.default.word}\`!`);
+        await interaction.editReply(`I buttify messages with the word \`${guildModel?.word ?? Defaults.word}\`!`);
     }
 }

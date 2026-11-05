@@ -12,6 +12,8 @@ import {
     PresenceData,
     User
 } from "discord.js";
+import { buttify } from "node-buttsbot-core";
+import config from "../config.js";
 import {
     DISCORD_LIMITED_CACHE_MAX,
     DISCORD_MESSAGE_LIFETIME,
@@ -20,12 +22,12 @@ import {
     PRESENCE_INTERVAL
 } from "../constants.js";
 import activities from "./activities.js";
-import { buttifiable, buttify } from "./buttify.js";
 import commands from "./commands/index.js";
 import { deleteGuild, getGuild } from "./guild.js";
 import { ignoreMessage } from "./ignore.js";
 import responses from "./responses/index.js";
 import { postServerCount } from "./topgg.js";
+import { buttifiable } from "./util.js";
 
 const client = new Client({
     intents: GatewayIntentBits.Guilds |
@@ -148,7 +150,8 @@ const client = new Client({
                         message.content,
                         guildModel?.word,
                         guildModel?.rate,
-                        guildModel?.IgnoreWords?.map(ignore => ignore.word)
+                        guildModel?.IgnoreWords?.map(ignore => ignore.word),
+                        config.limit.attempts
                     );
                     if (buttified) {
                         await message.channel.send(buttified);
