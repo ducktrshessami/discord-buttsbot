@@ -1,11 +1,11 @@
+import { channelMention } from "@discordjs/formatters";
 import {
     ApplicationCommandOptionType,
     ApplicationCommandType,
     ChatInputCommandInteraction,
     InteractionContextType,
     PermissionFlagsBits,
-    RESTPostAPIChatInputApplicationCommandsJSONBody,
-    channelMention
+    RESTPostAPIChatInputApplicationCommandsJSONBody
 } from "discord.js";
 import { smile } from "../emoji.js";
 import { IgnorableChannelTypes, unignoreChannel } from "../ignore.js";
