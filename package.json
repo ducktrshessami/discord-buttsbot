@@ -15,7 +15,7 @@
     "start": "node --env-file-if-exists .env dist/index.js"
   },
   "dependencies": {
-    "discord.js": "^15.0.0-dev.1779841317-3d6121589",
+    "discord.js": "^15.0.0-dev.1793836959-ddbba3adb",
     "fast-syllablize": "ducktrshessami/fast-syllablize#v2.1.5",
     "fastest-levenshtein": "^1.0.16",
     "sequelize": "^6.37.8",
